@@ -15,6 +15,10 @@
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
 
@@ -43,6 +47,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_UART4_Init();
   MX_USART3_UART_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -53,8 +58,9 @@ int main(void)
   {
     /* USER CODE END WHILE */
       LED_Blink(LED_Name_Debug, 1, 0, 0);
-      rt_thread_mdelay(500);
+      rt_thread_mdelay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
+

@@ -57,24 +57,23 @@ typedef enum
 } TM1629x_SEG_SELECT;
 
 
-typedef enum
-{
-    TM1629A_GROUP_1 = 1,
-    TM1629A_GROUP_2,
-    TM1629A_GROUP_3,
-} TM1629x_GROUP_FOR_THREE;
-
 
 typedef enum
 {
     TM1629A_A = 0,
     TM1629A_B,
-    TM1638_A
 } TM16xxSelect;
 
 
 
-
+/**
+  * @brief  Function ON and OFF enumeration
+  */
+typedef enum
+{
+  OFF = 0u,
+  ON
+} FUNCTION_SWITCH;
 
 
 

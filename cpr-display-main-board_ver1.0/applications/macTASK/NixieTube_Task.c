@@ -86,7 +86,7 @@ void TM1629A_Write_Data(TM16xxSelect chip, rt_uint8_t drig_addr, TM1629x_SEG_SEL
 void TM1629A_Display_Digit(TM16xxSelect chip, TM1629x_SEG_SELECT digit_pos ,rt_uint8_t number);
 
 /**
-  * @brief  Delay function(uint:ms)
+  * @brief  Delay function(uint:us)
   * @param  us 微妙数
   * @retval void
   */

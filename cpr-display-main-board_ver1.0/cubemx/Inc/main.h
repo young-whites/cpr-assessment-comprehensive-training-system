@@ -36,16 +36,21 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+extern SPI_HandleTypeDef hspi2;
+
+extern UART_HandleTypeDef huart4;
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart3;
+/* USER CODE END ET */
+
+/* Exported constants --------------------------------------------------------*/
+/* USER CODE BEGIN EC */
 void SystemClock_Config(void);
 void MX_GPIO_Init(void);
 void MX_USART1_UART_Init(void);
 void MX_UART4_Init(void);
 void MX_USART3_UART_Init(void);
-/* USER CODE END ET */
-
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
-
+void MX_SPI2_Init(void);
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -98,8 +103,12 @@ void MX_USART3_UART_Init(void);
 #define TM1629A_A_CLK_GPIO_Port GPIOE
 #define TM1629A_A_STB_Pin GPIO_PIN_15
 #define TM1629A_A_STB_GPIO_Port GPIOE
+#define nRF24L01_CSN_Pin GPIO_PIN_12
+#define nRF24L01_CSN_GPIO_Port GPIOB
 #define nRF24L01_CE_Pin GPIO_PIN_8
 #define nRF24L01_CE_GPIO_Port GPIOD
+#define nRF24L01_IRQ_Pin GPIO_PIN_9
+#define nRF24L01_IRQ_GPIO_Port GPIOD
 #define LED_PRINTER_Pin GPIO_PIN_10
 #define LED_PRINTER_GPIO_Port GPIOD
 #define LED_RESET_Pin GPIO_PIN_12
