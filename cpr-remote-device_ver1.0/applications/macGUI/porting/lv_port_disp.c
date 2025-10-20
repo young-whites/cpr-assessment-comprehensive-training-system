@@ -15,8 +15,6 @@
     #define MY_DISP_VER_RES    320
 #endif
 
-// 使用内部RAM作为图形缓冲区
-#define USE_INTERNAL_RAM        1
 
 /**********************
  *  STATIC PROTOTYPES
@@ -84,11 +82,8 @@ void lv_port_disp_init(void)
      *! 这样，渲染和刷新可以并行进行，提高效率。
      */
     static lv_disp_draw_buf_t draw_buf_dsc_2;
-#if USE_INTERNAL_RAM
-    // 使用内部 SRAM 作为 draw buffer
     static lv_color_t buf_2_1[MY_DISP_HOR_RES * 10];                        /*A buffer for 10 rows*/
     static lv_color_t buf_2_2[MY_DISP_HOR_RES * 10];                        /*An other buffer for 10 rows*/
-#endif
     lv_disp_draw_buf_init(&draw_buf_dsc_2, buf_2_1, buf_2_2, MY_DISP_HOR_RES * 10);   /*Initialize the display buffer*/
     #endif
 
@@ -122,7 +117,13 @@ void lv_port_disp_init(void)
     disp_drv.flush_cb = disp_flush;
 
     /*Set a display buffer*/
+#if LV_USE_ONE_BUFFER
+    disp_drv.draw_buf = &draw_buf_dsc_1;
+#elif LV_USE_TWO_BUFFER
     disp_drv.draw_buf = &draw_buf_dsc_2;
+#elif LV_USE_DOUBLE_BUFFER
+    disp_drv.draw_buf = &draw_buf_dsc_3;
+#endif
 
     /*Finally register the driver*/
     lv_disp_drv_register(&disp_drv);
@@ -144,16 +145,12 @@ static void disp_init(void)
  *'lv_disp_flush_ready()' has to be called when finished.*/
 static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
 {
-
-#if USE_INTERNAL_RAM
     /* color_p is a buffer pointer; the buffer is provided by LVGL */
     lcd_fill_array(area->x1, area->y1, area->x2, area->y2, color_p);
 
     /*IMPORTANT!!!
      *Inform the graphics library that you are ready with the flushing*/
     lv_disp_flush_ready(disp_drv);
-#endif
-
 }
 
 

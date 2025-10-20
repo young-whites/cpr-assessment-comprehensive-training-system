@@ -9,7 +9,7 @@
  */
 #include "ft6336u_driver.h"
 
-#define USE_PRINTF_POINT_XY 1
+#define USE_PRINTF_POINT_XY 0
 
 FT6336U_IC_REG ft6336u_reg = {
         .ID_G_CIPHER_HIGH       = 0xA3, // 读取：芯片代号高字节
@@ -159,6 +159,10 @@ void FT6336U_Read_Info(struct rt_i2c_bus_device *bus,FT6336U_IC_INFO *info)
     rt_kprintf("PRINTF:%d. Touch Chip vendor_id is 0x%02x \r\n",Record.kprintf_cnt++,info->VENDOR_ID);
     rt_kprintf("\r\n");
     //--------------------------------------------------------------
+
+
+
+
 }
 
 

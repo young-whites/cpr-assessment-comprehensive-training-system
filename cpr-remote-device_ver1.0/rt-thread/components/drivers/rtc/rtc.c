@@ -19,13 +19,14 @@
 #include <rtthread.h>
 #include <drivers/rtc.h>
 
+
 #ifdef RT_USING_RTC
 
 static rt_device_t _rtc_device;
-#ifndef BSP_USING_ONCHIP_RTC
 /*
  * This function initializes rtc_core
  */
+#ifndef BSP_USING_ONCHIP_RTC
 static rt_err_t rt_rtc_init(struct rt_device *dev)
 {
     rt_rtc_dev_t *rtc_core;
@@ -108,7 +109,6 @@ const static struct rt_device_ops rtc_core_ops =
 };
 #endif /* RT_USING_DEVICE_OPS */
 
-
 #ifndef BSP_USING_ONCHIP_RTC
 rt_err_t rt_hw_rtc_register(rt_rtc_dev_t  *rtc,
                             const char    *name,
@@ -140,7 +140,6 @@ rt_err_t rt_hw_rtc_register(rt_rtc_dev_t  *rtc,
     return rt_device_register(device, name, flag);
 }
 #endif
-
 /**
  * Set system date(time not modify, local timezone).
  *

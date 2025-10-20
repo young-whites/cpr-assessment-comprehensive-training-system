@@ -35,10 +35,10 @@ void tft_spi_init(void)
     /* 查找SPI设备 */
     spi_dev_tft = (struct rt_spi_device *)rt_device_find(TFT_SPI_NAME);
     if(spi_dev_tft == NULL){
-        rt_kprintf("PRINTF:%d. SPI Device is not created!\r\n",Record.kprintf_cnt++);
+        rt_kprintf("PRINTF:%d. lcd spi device is not created!\r\n",Record.kprintf_cnt++);
     }
     else{
-        rt_kprintf("PRINTF:%d. SPI Device is successfully!\r\n",Record.kprintf_cnt++);
+        rt_kprintf("PRINTF:%d. lcd spi device is successfully!\r\n",Record.kprintf_cnt++);
     }
     /***
      *! 配置SPI结构体参数

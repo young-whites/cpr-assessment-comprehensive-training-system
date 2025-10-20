@@ -42,6 +42,7 @@
 #define RT_USING_MEMPOOL
 #define RT_USING_SMALL_MEM
 #define RT_USING_SMALL_MEM_AS_HEAP
+#define RT_USING_MEMTRACE
 #define RT_USING_HEAP
 /* end of Memory Management */
 
@@ -87,11 +88,11 @@
 #define RT_USING_SERIAL
 #define RT_USING_SERIAL_V1
 #define RT_SERIAL_RB_BUFSZ 512
+#define RT_USING_HWTIMER
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
 #define RT_USING_ADC
-#define RT_USING_RTC
 #define RT_USING_SPI
 
 /* Using USB */
@@ -124,19 +125,14 @@
 #define RT_USING_ULOG
 #define ULOG_OUTPUT_LVL_D
 #define ULOG_OUTPUT_LVL 7
+#define ULOG_USING_ISR_LOG
 #define ULOG_ASSERT_ENABLE
 #define ULOG_LINE_BUF_SIZE 128
-#define ULOG_USING_ASYNC_OUTPUT
-#define ULOG_ASYNC_OUTPUT_BUF_SIZE 2048
-#define ULOG_ASYNC_OUTPUT_BY_THREAD
-#define ULOG_ASYNC_OUTPUT_THREAD_STACK 1024
-#define ULOG_ASYNC_OUTPUT_THREAD_PRIORITY 30
 
 /* log format */
 
 #define ULOG_USING_COLOR
 #define ULOG_OUTPUT_TIME
-#define ULOG_TIME_USING_TIMESTAMP
 #define ULOG_OUTPUT_LEVEL
 #define ULOG_OUTPUT_TAG
 /* end of log format */

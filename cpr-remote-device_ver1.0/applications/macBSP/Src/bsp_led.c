@@ -285,6 +285,44 @@ int8_t LED_GetNumber(void)
 /*---------------------------------------------------------------------------------------------------------------*/
 /* 以下是按键扫描线程的创建以及回调函数                                                                          */
 /*---------------------------------------------------------------------------------------------------------------*/
+#define LED_USE_SOFT_TIMER  0   // 使用软件定时器
+#define LED_USE_THREAD_TASK 1   // 使用RT-Thread线程
+
+
+
+#if LED_USE_SOFT_TIMER
+/**
+  * @brief  ledTimer Callback Function
+  * @retval void
+  */
+static void ledTimer_callback(void* parameter)
+{
+    LED_DrvScan();
+}
+
+
+
+/**
+  * @brief  ledTimer initialize
+  * @retval int
+  */
+int ledTimer_Init(void)
+{
+    static rt_timer_t ledTimer;
+    /* 创建led软件定时器线程 */
+    ledTimer = rt_timer_create("ledTimer_callback", ledTimer_callback, RT_NULL, 1, RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER);
+    /* 如果句柄创建成功，就开启ledTimer软件定时器 */
+    if(ledTimer != RT_NULL)
+    {
+        rt_kprintf("PRINTF:%d. LEDTimer initialize succeed!\r\n",Record.kprintf_cnt++);
+        LED_Init();
+        rt_timer_start(ledTimer);
+    }
+
+    return RT_EOK;
+}
+#elif LED_USE_THREAD_TASK
+
 /**
   * @brief  This thread entry is used for key scan
   * @retval void
@@ -323,3 +361,4 @@ int LED_Thread_Init(void)
 }
 INIT_APP_EXPORT(LED_Thread_Init);
 
+#endif

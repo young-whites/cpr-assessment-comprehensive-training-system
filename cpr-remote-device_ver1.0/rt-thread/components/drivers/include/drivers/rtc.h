@@ -49,6 +49,7 @@ struct rt_rtc_ops
     rt_err_t (*set_timeval)(struct timeval *tv);
 };
 
+
 typedef struct rt_rtc_device
 {
     struct rt_device parent;

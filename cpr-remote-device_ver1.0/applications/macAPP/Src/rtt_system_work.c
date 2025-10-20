@@ -11,7 +11,7 @@
 
 
 
-
+#if USE_SOFT_STATE_MACHINE
 
 static void Timing_1ms(void)
 {
@@ -37,7 +37,7 @@ static void Timing_50ms(void)
 
 static void Timing_500ms(void)
 {
-    LED_Blink(LED_Name_Green, 1, 0, 0);
+
 }
 
 
@@ -99,7 +99,7 @@ int sysTimer_Init(void)
 }
 
 
-
+#endif
 
 
 

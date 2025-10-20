@@ -5,7 +5,7 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2025-08-18     RT-Thread    first version
+ * 2025-06-29     RT-Thread    first version
  */
 
 #include <rtthread.h>
@@ -40,15 +40,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART1_UART_Init();
-  MX_SPI2_Init();
   MX_SPI1_Init();
+  MX_USART1_UART_Init();
   MX_SPI3_Init();
   MX_ADC1_Init();
-  MX_RTC_Init();
   /* USER CODE BEGIN 2 */
-
-
+  ulog_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -57,9 +54,13 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
-
-      rt_thread_mdelay(500);
+      rt_thread_mdelay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
+
+
+
+
+

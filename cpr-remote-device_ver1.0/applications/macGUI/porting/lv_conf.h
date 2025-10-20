@@ -1,6 +1,6 @@
 /**
  * @file lv_conf.h
- * Configuration file for v8.3.9
+ * Configuration file for v8.3.11
  */
 
 /*
@@ -27,14 +27,14 @@
 #define LV_COLOR_DEPTH 16
 
 /*Swap the 2 bytes of RGB565 color. Useful if the display has an 8-bit interface (e.g. SPI)*/
-#define LV_COLOR_16_SWAP 0
+#define LV_COLOR_16_SWAP 1
 
 /*Enable features to draw on transparent background.
  *It's required if opa, and transform_* style properties are used.
  *Can be also used if the UI is above another layer, e.g. an OSD menu or video player.*/
 #define LV_COLOR_SCREEN_TRANSP 0
 
-/* Adjust color mix functions rounding. GPUs might calculate color mix (blending) differently.
+/* Adjust color mix functions rounding. GPUs might calculate color mix (blending ) differently.
  * 0: round down, 64: round up from x.75, 128: round up from half, 192: round up from x.25, 254: round up */
 #define LV_COLOR_MIX_ROUND_OFS 0
 
@@ -46,10 +46,11 @@
  *=========================*/
 
 /*1: use custom malloc/free, 0: use the built-in `lv_mem_alloc()` and `lv_mem_free()`*/
+#ifndef LV_MEM_CUSTOM
 #define LV_MEM_CUSTOM 0
 #if LV_MEM_CUSTOM == 0
     /*Size of the memory available for `lv_mem_alloc()` in bytes (>= 2kB)*/
-    #define LV_MEM_SIZE (48U * 1024U)          /*[bytes]*/
+    #define LV_MEM_SIZE (10U * 1024U)          /*[bytes]*/
 
     /*Set an address for the memory pool instead of allocating it as a normal array. Can be in external SRAM too.*/
     #define LV_MEM_ADR 0     /*0: unused*/
@@ -65,6 +66,7 @@
     #define LV_MEM_CUSTOM_FREE    free
     #define LV_MEM_CUSTOM_REALLOC realloc
 #endif     /*LV_MEM_CUSTOM*/
+#endif
 
 /*Number of the intermediate memory buffer used during rendering and other internal processing mechanisms.
  *You will see an error log message if there wasn't enough buffers. */
@@ -78,13 +80,16 @@
  *====================*/
 
 /*Default display refresh period. LVG will redraw changed areas with this period time*/
+#ifndef LV_DISP_DEF_REFR_PERIOD
 #define LV_DISP_DEF_REFR_PERIOD 30      /*[ms]*/
+#endif
 
 /*Input device read period in milliseconds*/
 #define LV_INDEV_DEF_READ_PERIOD 30     /*[ms]*/
 
 /*Use a custom tick source that tells the elapsed time in milliseconds.
  *It removes the need to manually update the tick with `lv_tick_inc()`)*/
+#ifndef LV_TICK_CUSTOM
 #define LV_TICK_CUSTOM 0
 #if LV_TICK_CUSTOM
     #define LV_TICK_CUSTOM_INCLUDE "Arduino.h"         /*Header for the system time function*/
@@ -93,6 +98,8 @@
     // #define LV_TICK_CUSTOM_INCLUDE "esp_timer.h"
     // #define LV_TICK_CUSTOM_SYS_TIME_EXPR ((esp_timer_get_time() / 1000LL))
 #endif   /*LV_TICK_CUSTOM*/
+#endif
+
 
 /*Default Dot Per Inch. Used to initialize default sizes such as widgets sized, style paddings.
  *(Not so important, you can adjust it to modify default sizes and spaces)*/
@@ -271,8 +278,13 @@
 #define LV_USE_ASSERT_OBJ           0   /*Check the object's type and existence (e.g. not deleted). (Slow)*/
 
 /*Add a custom handler when assert happens e.g. to restart the MCU*/
+#ifndef LV_ASSERT_HANDLER_INCLUDE
 #define LV_ASSERT_HANDLER_INCLUDE <stdint.h>
+#endif
+
+#ifndef LV_ASSERT_HANDLER
 #define LV_ASSERT_HANDLER while(1);   /*Halt by default*/
+#endif
 
 /*-------------
  * Others
@@ -295,6 +307,7 @@
 #define LV_USE_REFR_DEBUG 0
 
 /*Change the built in (v)snprintf functions*/
+#ifndef LV_SPRINTF_CUSTOM
 #define LV_SPRINTF_CUSTOM 0
 #if LV_SPRINTF_CUSTOM
     #define LV_SPRINTF_INCLUDE <stdio.h>
@@ -303,6 +316,7 @@
 #else   /*LV_SPRINTF_CUSTOM*/
     #define LV_SPRINTF_USE_FLOAT 0
 #endif  /*LV_SPRINTF_CUSTOM*/
+#endif
 
 #define LV_USE_USER_DATA 1
 
@@ -334,7 +348,9 @@
 
 /*Will be added where memories needs to be aligned (with -Os data might not be aligned to boundary by default).
  * E.g. __attribute__((aligned(4)))*/
+#ifndef LV_ATTRIBUTE_MEM_ALIGN
 #define LV_ATTRIBUTE_MEM_ALIGN
+#endif
 
 /*Attribute to mark large constant arrays for example font's bitmaps*/
 #define LV_ATTRIBUTE_LARGE_CONST
@@ -639,6 +655,13 @@
     #define LV_FS_FATFS_CACHE_SIZE 0    /*>0 to cache this number of bytes in lv_fs_read()*/
 #endif
 
+/*API for LittleFS (library needs to be added separately). Uses lfs_file_open, lfs_file_read, etc*/
+#define LV_USE_FS_LITTLEFS 0
+#if LV_USE_FS_LITTLEFS
+    #define LV_FS_LITTLEFS_LETTER '\0'     /*Set an upper cased letter on which the drive will accessible (e.g. 'A')*/
+    #define LV_FS_LITTLEFS_CACHE_SIZE 0    /*>0 to cache this number of bytes in lv_fs_read()*/
+#endif
+
 /*PNG decoder library*/
 #define LV_USE_PNG 0
 
@@ -670,6 +693,13 @@
         #define LV_FREETYPE_CACHE_FT_FACES 0
         #define LV_FREETYPE_CACHE_FT_SIZES 0
     #endif
+#endif
+
+/*Tiny TTF library*/
+#define LV_USE_TINY_TTF 0
+#if LV_USE_TINY_TTF
+    /*Load TTF data from files*/
+    #define LV_TINY_TTF_FILE_SUPPORT 0
 #endif
 
 /*Rlottie library*/
