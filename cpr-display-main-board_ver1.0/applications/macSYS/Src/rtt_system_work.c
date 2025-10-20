@@ -46,6 +46,7 @@ static void Timing_500ms(void)
 static void Timing_1s(void)
 {
     Record.Number_CountDown--;
+    Record.Number_Blow_Error--;
 //    if(Record.Number_CountDown > 9){
 //        Record.Number_CountDown = 0;
 //    }

@@ -24,8 +24,8 @@ typedef struct {
     rt_uint16_t Number_Press_Correct;            // 按压-正确计数
     rt_uint16_t Number_Press_Error;              // 按压-错误计数
 
-    rt_uint16_t Number_Time;                     // 时间
-    rt_uint16_t Number_Blow_Frequency;           // 按压-频率
+    rt_uint16_t Number_Cycle;                    // 循环数
+    rt_uint16_t Number_Blow_Time;                // 按压-时间
     rt_uint16_t Number_Blow_Correct;             // 按压-正确计数
     rt_uint16_t Number_Blow_Error;               // 按压-错误计数
 
