@@ -164,7 +164,7 @@ int nRF24L01_Thread_Init(void)
 
     return RT_EOK;
 }
-INIT_APP_EXPORT(nRF24L01_Thread_Init);
+//INIT_APP_EXPORT(nRF24L01_Thread_Init);
 
 
 
