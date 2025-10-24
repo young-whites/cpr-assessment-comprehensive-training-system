@@ -19,7 +19,6 @@ extern "C" {
 
 typedef struct
 {
-
     lv_obj_t *screen_main;
     bool screen_del;
     lv_obj_t *screen_cont_1;

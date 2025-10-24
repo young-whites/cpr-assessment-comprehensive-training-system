@@ -9,7 +9,7 @@
  */
 #include "bsp_sys.h"
 
-
+#define USE_SELF_LVGL_TASK 1
 
 #if USE_SELF_LVGL_TASK
 

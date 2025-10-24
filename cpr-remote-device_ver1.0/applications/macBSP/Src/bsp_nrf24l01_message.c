@@ -201,7 +201,7 @@ uint8_t nrf24l01_portocol_get_command(const uint8_t *cmdBuf,const uint16_t cmdLe
         CRC16_Value = CrcCalc_Crc16Modbus(CMD_buffer, CMD_Length + 1);
         if(((CRC16_H << 8) | CRC16_L) == CRC16_Value)
         {
-//            nrf24l01_protocol_operation(dev,CMD_buffer);
+            nrf24l01_protocol_operation(CMD_buffer);
             return CMD_TRUE;
         }
     }

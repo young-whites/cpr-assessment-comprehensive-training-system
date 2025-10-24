@@ -49,7 +49,7 @@ int nRF24L01_SPI_Init(nrf24_port_api_t port_api)
     struct rt_spi_configuration nrf24_spi_cfg;
 
     nrf24_spi_cfg.data_width = 8;
-    nrf24_spi_cfg.max_hz = 1*1000*1000; /* 10M,SPI max 10MHz,lora 4-wire spi */
+    nrf24_spi_cfg.max_hz = 1*1000*1000; /* 1M,SPI max 10MHz,lora 4-wire spi */
     nrf24_spi_cfg.mode = RT_SPI_MASTER | RT_SPI_MODE_0 | RT_SPI_MSB;
     rt_spi_configure(port_api->spi_dev_nrf24, &nrf24_spi_cfg); /* 使能参数 */
 

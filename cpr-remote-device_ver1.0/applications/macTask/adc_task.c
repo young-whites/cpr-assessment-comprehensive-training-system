@@ -10,7 +10,7 @@
 #include "bsp_sys.h"
 
 
-
+#if 1
 
 #define ADC1_DEVICE_NAME    "adc1"  /* 设备名称 */
 #define ADC_CH0_CHANNEL     0       /* 充电电流监测通道数据ADC输出通道 */
@@ -149,4 +149,4 @@ int ADC_Thread_Init(void)
 }
 //INIT_APP_EXPORT(ADC_Thread_Init);
 
-
+#endif
