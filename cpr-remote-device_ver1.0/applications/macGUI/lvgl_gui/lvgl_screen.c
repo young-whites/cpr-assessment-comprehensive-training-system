@@ -30,6 +30,11 @@ void setup_scr_screen(lvgl_ui_t *ui)
     lv_obj_set_scrollbar_mode(ui->screen_main, LV_SCROLLBAR_MODE_OFF);
 
     //------------------------------------------------------------------------------------------------------------
+    /***
+     *! 把主屏幕背景设为完全透明
+     *! 透明度 0 = 全透，255 = 不透；此处全透可避免遮挡底层画面
+     *! 仅对主体部分、默认状态生效，其余状态/部件不受影响
+     */
     //Write style for screen, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_bg_opa(ui->screen_main, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
