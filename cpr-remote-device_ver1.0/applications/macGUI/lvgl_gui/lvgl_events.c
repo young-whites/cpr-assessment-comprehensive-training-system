@@ -16,18 +16,26 @@ static void screen_start_btn_event_handler (lv_event_t *e)
 {
     LV_LOG_USER("Clicked");
 
-    static uint32_t cnt = 1;
-    lv_obj_t * btn = lv_event_get_target(e);
-    lv_obj_t * label = lv_obj_get_child(btn, 0);
-    lv_label_set_text_fmt(label, "%"LV_PRIu32, cnt);
-    cnt++;
+    lv_obj_add_flag(guider_lvgl.screen_start_btn, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(guider_lvgl.screen_label_connect_state, LV_OBJ_FLAG_HIDDEN);
 }
+
+
+
+static void screen_label_connect_state_event_handler (lv_event_t *e)
+{
+    LV_LOG_USER("Clicked");
+
+
+}
+
 
 
 
 void events_init_screen (lvgl_ui_t *ui)
 {
     lv_obj_add_event_cb(ui->screen_start_btn, screen_start_btn_event_handler, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_event_cb(ui->screen_label_connect_state, screen_label_connect_state_event_handler, LV_EVENT_CLICKED, ui);
 }
 
 

@@ -12,13 +12,16 @@
 
 #include "bsp_sys.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 
 
-
-
-
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif /* APPLICATIONS_MACGUI_LVGL_GUI_LVGL_SCREEN_H_ */

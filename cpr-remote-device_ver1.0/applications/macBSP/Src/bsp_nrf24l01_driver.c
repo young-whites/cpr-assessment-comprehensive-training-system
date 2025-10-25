@@ -536,11 +536,17 @@ void nRF24L01_Standby_Set(nrf24_t nrf24, nrf24_standby_et mode)
 {
     if(mode == Standby_one)
     {
-
+        nRF24L01_Enter_Power_Up_Mode(nrf24);
+        nrf24->nrf24_ops.nrf24_reset_ce();
     }
     else if(mode == Standby_two)
     {
-
+        nRF24L01_Enter_Power_Up_Mode(nrf24);
+        nrf24->nrf24_ops.nrf24_set_ce();
+    }
+    else if(mode == PowerDown)
+    {
+        nRF24L01_Enter_Power_Down_Mode(nrf24);
     }
 }
 
@@ -656,7 +662,7 @@ int nRF24L01_Run(nrf24_t nrf24)
 
     // 2. 读取status状态标志，并清除中断触发标志位
      nrf24->nrf24_flags.status = nRF24L01_Read_Status_Register(nrf24);
-     nRF24L01_Clear_Status_Register(nrf24, NRF24BITMASK_RX_DR | NRF24BITMASK_TX_DS);
+     nRF24L01_Clear_Status_Register(nrf24, NRF24BITMASK_RX_DR | NRF24BITMASK_TX_DS | NRF24BITMASK_MAX_RT);
 
      // 3. 分析哪条信道接收的数据
      uint8_t pipe = (nrf24->nrf24_flags.status & NRF24BITMASK_RX_P_NO) >> 1;
@@ -707,14 +713,6 @@ int nRF24L01_Run(nrf24_t nrf24)
                  nrf24->nrf24_cb.nrf24l01_rx_ind(nrf24, data_buf, length, pipe);
              }
              ret_flag |= 2;
-
-             if(rt_sem_trytake(nrf24_send_sem) ==  RT_EOK){
-                 if(nrf24->nrf24_cb.nrf24l01_tx_done){
-                     nrf24->nrf24_cb.nrf24l01_tx_done(nrf24,pipe);
-                 }
-                 ret_flag |= 1;
-             }
-
          }
      }
      return ret_flag;

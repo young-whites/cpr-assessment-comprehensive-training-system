@@ -167,10 +167,6 @@ INIT_APP_EXPORT(nRF24L01_Thread_Init);
 
 
 
-
-
-
-const static char *ROLE_TABLE[] = {"PTX", "PRX"};
 static void nrf24l01_tx_done(nrf24_t nrf24, rt_uint8_t pipe)
 {
     /*! Here just want to tell the user when the role is ROLE_PTX

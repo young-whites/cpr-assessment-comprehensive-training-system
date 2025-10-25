@@ -11,6 +11,10 @@
 
 #define APPLICATIONS_MACSYS_INC_BSP_SYS_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* RTT实时操作系统的头文件 */
 #include <rtthread.h>
 #include <drv_common.h>
@@ -42,6 +46,7 @@
 #include "basic_widgets.h"
 #include "lvgl_examples.h"
 // --lvgl_fonts
+#include "lv_font.h"
 // --lvgl_gui
 #include "lvgl_events.h"
 #include "lvgl_gui.h"
@@ -49,6 +54,9 @@
 // --porting
 #include "lv_port_disp.h"
 #include "lv_port_indev.h"
+// --lvgl
+#include "lv_rt_thread_conf.h"
+#include "lv_conf.h"
 /* macSYS 头文件 */
 #include "bsp_typedef.h"
 #include "internal_rtc.h"
@@ -56,7 +64,8 @@
 // 这个宏用于使能lv_printf.c文件中的lv_snprintf()函数
 #define USE_LV_SNPRINTF     0
 
-
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* APPLICATIONS_MACSYS_INC_BSP_SYS_H_ */

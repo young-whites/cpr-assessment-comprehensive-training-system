@@ -13,12 +13,37 @@
 
 #if USE_SELF_LVGL_TASK
 
+
+
+#define DBG_TAG    "LVGL"
+#define DBG_LVL    DBG_INFO
+#include <rtdbg.h>
+
+#ifdef rt_align
+rt_align(RT_ALIGN_SIZE)
+#else
+ALIGN(RT_ALIGN_SIZE)
+#endif
+
+#if LV_USE_LOG
+static void lv_rt_log(const char *buf)
+{
+    LOG_I(buf);
+}
+#endif /* LV_USE_LOG */
+
+
 /**
   * @brief  This thread entry is used for touch check
   * @retval void
   */
 void GUI_Thread_entry(void* parameter)
 {
+
+#if LV_USE_LOG
+    lv_log_register_print_cb(lv_rt_log);
+#endif /* LV_USE_LOG */
+
     lv_init();
 
     lv_port_disp_init();
@@ -54,7 +79,7 @@ int GUI_Thread_Init(void)
 
     return RT_EOK;
 }
-INIT_APP_EXPORT(GUI_Thread_Init);
+INIT_ENV_EXPORT(GUI_Thread_Init);
 
 #endif
 

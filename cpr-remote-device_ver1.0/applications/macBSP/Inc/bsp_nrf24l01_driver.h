@@ -113,15 +113,16 @@ typedef enum
 
 
 /***
- * nRF24L01的收发器模式的枚举
- * ROLE_NONE   : 尚未设置是接收端还是发送端
- * ROLE_PTX    : 作为发送器
- * ROLE_PRX    : 作为接收器
+ * nRF24L01的待机模式的枚举
+ * Standby-Ⅰ   : PWR_UP = 1 且 CE = 0
+ * Standby-Ⅱ  : PWR_UP = 1 且 CE = 1 但 TX FIFO 为空
+ * Power-Down: 低功耗模式
  */
 typedef enum
 {
     Standby_one = 0,
-    Standby_two
+    Standby_two,
+    PowerDown,
 } nrf24_standby_et;
 
 
