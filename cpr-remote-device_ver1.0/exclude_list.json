@@ -1,1 +1,1 @@
-[{"config_name":"Debug","exclude_files":["applications/macGUI/generated","applications/macGUI/custom"]}]
+[{"config_name":"Debug","exclude_files":["applications/macGUI/generated","applications/macGUI/custom","GUI Code"]}]

@@ -201,7 +201,7 @@ uint8_t nrf24l01_portocol_get_command(const uint8_t *cmdBuf,const uint16_t cmdLe
         CRC16_Value = CrcCalc_Crc16Modbus(CMD_buffer, CMD_Length + 1);
         if(((CRC16_H << 8) | CRC16_L) == CRC16_Value)
         {
-//            nrf24l01_protocol_operation(dev,CMD_buffer);
+            nrf24l01_protocol_operation(CMD_buffer);
             return CMD_TRUE;
         }
     }
@@ -230,7 +230,12 @@ void nrf24l01_protocol_operation(uint8_t* CmdBuf)
             switch(*(CmdBuf + 5))
             {
                 //----------------------------------------------------------------------------------------------------
+                case FRAME_NRF24_CONNECT_CTRL_PANEL_CMD:
+                {
+                    LOG_I("Receive: Connect cmd.");
 
+
+                }break;
                 //----------------------------------------------------------------------------------------------------
 
                 default:    break;
@@ -253,8 +258,6 @@ void nrf24l01_protocol_operation(uint8_t* CmdBuf)
  * @param   order   指令码
  * @retval  None
  */
-extern rt_uint8_t largeid_buf[8];
-extern rt_uint8_t smallid_buf[8];
 void nrf24l01_order_to_pipe(uint8_t order, nrf24_pipe_et pipe_num)
 {
     uint8_t emptyBuf[20] = {0};
@@ -262,15 +265,13 @@ void nrf24l01_order_to_pipe(uint8_t order, nrf24_pipe_et pipe_num)
     uint8_t package_len = 0;
     switch(order)
     {
-        // 发送连接测试指令-需要应答： 55 AA 05 00 04 31 02 90 3D
-        case Order_nRF24L01_Connect_Control_Panel:
+        //  回复请求连接指令： 55 AA 05 00 04 31 01 91 7D
+        case Order_nRF24L01_ACK_Connect_Control_Panel:
         {
             rt_memset(emptyBuf, 0, sizeof(emptyBuf));
             emptyBuf[0] = FRAME_NRF24_CONNECT_CTRL_PANEL_CMD;
-            package_len = nrf24l01_build_frame(FRAME_TYPE_ACT,FRAME_STATE_ASK,emptyBuf,1,frame_package);
-            nRF24L01_Send_Packet(_nrf24, frame_package, package_len, pipe_num, nRF24_SEND_NEED_ACK);
-            _nrf24->nrf24_ops.nrf24_set_ce();
-            rt_thread_mdelay(1);
+            package_len = nrf24l01_build_frame(FRAME_TYPE_ACT,FRAME_STATE_ACK,emptyBuf,1,frame_package);
+            nRF24L01_Send_Packet(_nrf24, frame_package, package_len, pipe_num, nRF24_SEND_NO_ACK);
         }break;
 
 

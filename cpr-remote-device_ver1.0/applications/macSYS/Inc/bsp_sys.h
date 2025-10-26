@@ -35,12 +35,14 @@ extern "C" {
 #include "bsp_led.h"
 #include <bsp_nrf24l01_driver.h>
 #include <bsp_nrf24l01_spi.h>
+#include "bsp_nrf24l01_message.h"
 #include "ft6336u_driver.h"
 #include "ft6336u_iic.h"
 #include "lcd_driver.h"
 #include "lcd_driver.h"
 #include "st7789_driver.h"
 #include "st7789_spi.h"
+
 /* macGUI 路径下头文件 */
 // --lvgl_demos
 #include "basic_widgets.h"

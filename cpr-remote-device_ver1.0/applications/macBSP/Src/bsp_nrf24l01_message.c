@@ -230,7 +230,11 @@ void nrf24l01_protocol_operation(uint8_t* CmdBuf)
             switch(*(CmdBuf + 5))
             {
                 //----------------------------------------------------------------------------------------------------
+                case FRAME_NRF24_CONNECT_CTRL_PANEL_CMD:
+                {
+                    LOG_I("Receive: Connect succeed.");
 
+                }break;
                 //----------------------------------------------------------------------------------------------------
 
                 default:    break;
@@ -264,15 +268,12 @@ void nrf24l01_order_to_pipe(uint8_t order, uint8_t pipe_num)
     {
         // 0x31指令集-----------------------------------------------------------------------------------------------------------------
 
-        case Order_nRF24L01_Connect_Control_Panel:
+        case Order_nRF24L01_ASK_Connect_Control_Panel:
         {
             rt_memset(emptyBuf, 0, sizeof(emptyBuf));
             emptyBuf[0] = FRAME_NRF24_CONNECT_CTRL_PANEL_CMD;
             package_len = nrf24l01_build_frame(FRAME_TYPE_ACT,FRAME_STATE_ASK,emptyBuf,1,frame_package);
-            nRF24L01_Send_Packet(_nrf24, frame_package, package_len, 0, nRF24_SEND_NEED_ACK);
-            _nrf24->nrf24_ops.nrf24_set_ce();
-            rt_thread_mdelay(1);
-
+            nRF24L01_Send_Packet(_nrf24, frame_package, package_len, 0, nRF24_SEND_NO_ACK);
         }break;
 
 

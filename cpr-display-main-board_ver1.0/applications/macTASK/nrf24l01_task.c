@@ -129,15 +129,11 @@ void nRF24L01_Thread_entry(void* parameter)
     LOG_I("LOG:%d. Successfully initialized",Record.ulog_cnt++);
     rt_kprintf("\r\n\r\n");
     rt_kprintf("----------------------------------\r\n");
-    rt_kprintf("[nrf24/demo] running transmitter.\r\n");
-
-    nrf24l01_order_to_pipe(Order_nRF24L01_Connect_Control_Panel, NRF24_PIPE_0);
-
+    rt_kprintf("[nrf24/demo] running receiver.\r\n");
 
     for(;;)
     {
-//        nRF24L01_Run(_nrf24);
-//        nrf24l01_order_to_pipe(Order_nRF24L01_Connect_Control_Panel, NRF24_PIPE_0);
+        nRF24L01_Run(_nrf24);
         rt_thread_mdelay(500);
     }
 }
@@ -164,7 +160,7 @@ int nRF24L01_Thread_Init(void)
 
     return RT_EOK;
 }
-//INIT_APP_EXPORT(nRF24L01_Thread_Init);
+INIT_APP_EXPORT(nRF24L01_Thread_Init);
 
 
 
@@ -192,10 +188,6 @@ static void nrf24l01_tx_done(nrf24_t nrf24, rt_uint8_t pipe)
         else{
             rt_kprintf("tx_done ok");
         }
-    }
-    else
-    {
-        rt_kprintf("tx_done ok");
     }
 }
 

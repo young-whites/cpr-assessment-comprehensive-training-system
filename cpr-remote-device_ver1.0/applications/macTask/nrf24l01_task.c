@@ -134,6 +134,11 @@ void nRF24L01_Thread_entry(void* parameter)
 
     for(;;)
     {
+        if(Record.nrf_if_connected == 0){
+            LOG_I("Wait for connecting.");
+            nrf24l01_order_to_pipe(Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
+        }
+
         nRF24L01_Run(_nrf24);
 
         rt_thread_mdelay(500);

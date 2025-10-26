@@ -31,8 +31,8 @@
 #define       FRAME_TYPE_SET                                     (0x32)      // 帧类型:参数设置
 #define       FRAME_TYPE_GET                                     (0x33)      // 帧类型:参数获取
 #define       FRAME_TYPE_POST                                    (0x66)      // 帧类型:主动上报
-#define       FRAME_STATE_ASK                                    (0x02)      // 帧状态:上位请求
-#define       FRAME_STATE_ACK                                    (0x01)      // 帧状态:下位应答
+#define       FRAME_STATE_ASK                                    (0x01)      // 帧状态:上位请求
+#define       FRAME_STATE_ACK                                    (0x02)      // 帧状态:下位应答
 #define       FRAME_STATE_ERR                                    (0x00)      // 帧状态:校验出错
 
 
@@ -67,7 +67,7 @@ typedef enum
   */
 typedef enum
 {
-    Order_nRF24L01_Connect_Control_Panel = 0,
+    Order_nRF24L01_ASK_Connect_Control_Panel = 0,
 
 
 }nRF24L01_Order_StructType;
@@ -76,7 +76,8 @@ typedef enum
 
 uint16_t CrcCalc_Crc16Modbus(uint8_t *dat, uint8_t len);
 rt_uint8_t nrf24l01_build_frame(uint8_t cmd_type, uint8_t cmd_status,uint8_t *data, uint8_t data_len,uint8_t *out_frame);
-
+void nrf24l01_protocol_operation(uint8_t* CmdBuf);
+void nrf24l01_order_to_pipe(uint8_t order, uint8_t pipe_num);
 
 
 

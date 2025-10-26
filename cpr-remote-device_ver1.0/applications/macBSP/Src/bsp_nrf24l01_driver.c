@@ -432,6 +432,31 @@ void nRF24L01_Enter_Power_Up_Mode(nrf24_t nrf24)
 }
 
 
+
+/***
+ * @brief 设置nRF24L01的待机模式
+ * @note
+ */
+void nRF24L01_Standby_Set(nrf24_t nrf24, nrf24_standby_et mode)
+{
+    if(mode == Standby_one)
+    {
+        nRF24L01_Enter_Power_Up_Mode(nrf24);
+        nrf24->nrf24_ops.nrf24_reset_ce();
+    }
+    else if(mode == Standby_two)
+    {
+        nRF24L01_Enter_Power_Up_Mode(nrf24);
+        nrf24->nrf24_ops.nrf24_set_ce();
+    }
+    else if(mode == PowerDown)
+    {
+        nRF24L01_Enter_Power_Down_Mode(nrf24);
+    }
+}
+
+
+
 /***
  * @brief 发送一包数据，若未收到 ACK，会重发（最多 RETR 次）
  */
@@ -528,61 +553,33 @@ void NRF24L01_Set_TxAddr(nrf24_t nrf24, rt_uint8_t *addr_buf, rt_uint8_t length)
 
 
 
-/***
- * @brief 设置nRF24L01的待机模式
- * @note
- */
-void nRF24L01_Standby_Set(nrf24_t nrf24, nrf24_standby_et mode)
-{
-    if(mode == Standby_one)
-    {
-        nRF24L01_Enter_Power_Up_Mode(nrf24);
-        nrf24->nrf24_ops.nrf24_reset_ce();
-    }
-    else if(mode == Standby_two)
-    {
-        nRF24L01_Enter_Power_Up_Mode(nrf24);
-        nrf24->nrf24_ops.nrf24_set_ce();
-    }
-    else if(mode == PowerDown)
-    {
-        nRF24L01_Enter_Power_Down_Mode(nrf24);
-    }
-}
-
-
-
-
 /**
  * @brief  把用户数据写到 TX FIFO（PTX 模式）或 ACK Payload 缓冲区（PRX 模式），并立即触发发送或等待对方读取
  *
  */
-int nRF24L01_Send_Packet(nrf24_t nrf24, uint8_t *data, uint8_t len, uint8_t pipe, nrf24_send_mode_et mode)
+int nRF24L01_Send_Packet(nrf24_t nrf24, uint8_t *data, uint8_t len, uint8_t pipe, ack_mode_et ack_mode)
 {
     if (len > 32){
         LOG_E("[nRF24L01]Packet datas too large. \r\n");
         return RT_ERROR;
     }
 
-    // 如果是发送端（PTX）
-    if (nrf24->nrf24_cfg.config.prim_rx == ROLE_PTX){
-        if(mode == nRF24_SEND_NEED_ACK){
-            nRF24L01_Write_Tx_Payload_Ack(nrf24, data, len);
-        }
-        else if(mode == nRF24_SEND_DONT_NEED_ACK){
-            nRF24L01_Write_Tx_Payload_NoAck(nrf24, data, len);
-        }
 
+   // 如果是发送端（PTX）
+    if (nrf24->nrf24_cfg.config.prim_rx == ROLE_PTX && ack_mode == nRF24_SEND_NEED_ACK){
+        nRF24L01_Write_Tx_Payload_Ack(nrf24, data, len);
+    }
+    else if(nrf24->nrf24_cfg.config.prim_rx == ROLE_PTX && ack_mode == nRF24_SEND_NO_ACK){
+        nRF24L01_Write_Tx_Payload_NoAck(nrf24, data, len);
     }
     // 如果是接收端（PRX）
-    else{
+    else if(nrf24->nrf24_cfg.config.prim_rx == ROLE_PRX && ack_mode == nRF24_RECE_IN_ACK){
         nRF24L01_Write_Tx_Payload_InAck(nrf24, pipe, data, len);
         rt_sem_release(nrf24_send_sem);
     }
 
     return RT_EOK;
 }
-
 
 
 /**

@@ -99,17 +99,6 @@ typedef enum
 } nrf24_adr_et;
 
 
-/***
- * nRF24L01的发送模式枚举
- * ADR_1Mbps : 距离更远，抗干扰好
- * ADR_2Mbps : 延迟更低，带宽更高
- */
-typedef enum
-{
-    nRF24_SEND_NEED_ACK = 0,
-    nRF24_SEND_DONT_NEED_ACK
-} nrf24_send_mode_et;
-
 
 
 /***
@@ -124,6 +113,20 @@ typedef enum
     Standby_two,
     PowerDown,
 } nrf24_standby_et;
+
+
+/***
+ * nRF24L01 的应答模式
+ * NEED_ACK :  发送后，需要应答，否则一直重发
+ * NO_ACK   :  发送后，无需应答
+ * IN_ACK   :  接收后，发送应答
+ */
+typedef enum
+{
+    nRF24_SEND_NEED_ACK,
+    nRF24_SEND_NO_ACK,
+    nRF24_RECE_IN_ACK,
+} ack_mode_et;
 
 
 /***
@@ -327,7 +330,7 @@ void nRF24L01_Read_Rx_Payload(nrf24_t nrf24, uint8_t *buf, uint8_t len);
 void nRF24L01_Flush_TX_FIFO(nrf24_t nrf24);
 void nRF24L01_Flush_RX_FIFO(nrf24_t nrf24);
 void NRF24L01_Set_TxAddr(nrf24_t nrf24, rt_uint8_t *addr_buf, rt_uint8_t length);
-int nRF24L01_Send_Packet(nrf24_t nrf24, uint8_t *data, uint8_t len, uint8_t pipe, nrf24_send_mode_et mode);
+int nRF24L01_Send_Packet(nrf24_t nrf24, uint8_t *data, uint8_t len, uint8_t pipe, ack_mode_et ack_mode);
 void nRF24L01_Set_Role_Mode(nrf24_t nrf24, nrf24_role_et mode);
 void nRF24L01_Ensure_RWW_Features_Activated(nrf24_t nrf24);
 int nRF24L01_Run(nrf24_t nrf24);

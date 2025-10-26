@@ -22,7 +22,7 @@ int nRF24L01_Param_Config(nrf24_param_t param)
     rt_memset(param, 0, sizeof(struct nRF24L01_PARAMETER_STRUCT));
 
     /* CONFIG */
-    param->config.prim_rx       = ROLE_PTX;
+    param->config.prim_rx       = ROLE_PRX;
     param->config.pwr_up        = 1;
     param->config.crco          = CRC_2_BYTE;
     param->config.en_crc        = 1;
@@ -33,7 +33,7 @@ int nRF24L01_Param_Config(nrf24_param_t param)
     /* EN_AA */
     param->en_aa.p0 = 1;
     param->en_aa.p1 = 1;
-    param->en_aa.p2 = 0;
+    param->en_aa.p2 = 1;
     param->en_aa.p3 = 0;
     param->en_aa.p4 = 0;
     param->en_aa.p5 = 0;
@@ -41,7 +41,7 @@ int nRF24L01_Param_Config(nrf24_param_t param)
     /* EN_RXADDR */
     param->en_rxaddr.p0 = RT_TRUE;
     param->en_rxaddr.p1 = RT_TRUE;
-    param->en_rxaddr.p2 = RT_FALSE;
+    param->en_rxaddr.p2 = RT_TRUE;
     param->en_rxaddr.p3 = RT_FALSE;
     param->en_rxaddr.p4 = RT_FALSE;
     param->en_rxaddr.p5 = RT_FALSE;
@@ -77,15 +77,19 @@ int nRF24L01_Param_Config(nrf24_param_t param)
     param->feature.en_dpl     = 1;
 
 
+    rt_uint8_t tx_addr[5] = { 0x55, 0x0A, 0x01, 0x89, 0x02 };
+    rt_uint8_t rx_addr_pipe0[5] = { 0x55, 0x0A, 0x01, 0x89, 0x99 };
+    rt_uint8_t rx_addr_pipe1[5] = { 0x55, 0x0A, 0x01, 0x89, 0x01 };
+
     for(int16_t i = 0; i < 5; i++){
-        param->txaddr[i] = i;
-        param->rx_addr_p0[i] = i;
-        param->rx_addr_p1[i] = i + 1;
+        param->txaddr[i] = tx_addr[i];
+        param->rx_addr_p0[i] = rx_addr_pipe0[i];
+        param->rx_addr_p1[i] = rx_addr_pipe1[i];
     }
-    param->rx_addr_p2 = 2;
-    param->rx_addr_p3 = 3;
-    param->rx_addr_p4 = 4;
-    param->rx_addr_p5 = 5;
+    param->rx_addr_p2 = 3;
+    param->rx_addr_p3 = 9;
+    param->rx_addr_p4 = 9;
+    param->rx_addr_p5 = 9;
 
     return RT_EOK;
 
@@ -429,6 +433,30 @@ void nRF24L01_Enter_Power_Up_Mode(nrf24_t nrf24)
 
 
 /***
+ * @brief 设置nRF24L01的待机模式
+ * @note
+ */
+void nRF24L01_Standby_Set(nrf24_t nrf24, nrf24_standby_et mode)
+{
+    if(mode == Standby_one)
+    {
+        nRF24L01_Enter_Power_Up_Mode(nrf24);
+        nrf24->nrf24_ops.nrf24_reset_ce();
+    }
+    else if(mode == Standby_two)
+    {
+        nRF24L01_Enter_Power_Up_Mode(nrf24);
+        nrf24->nrf24_ops.nrf24_set_ce();
+    }
+    else if(mode == PowerDown)
+    {
+        nRF24L01_Enter_Power_Down_Mode(nrf24);
+    }
+}
+
+
+
+/***
  * @brief 发送一包数据，若未收到 ACK，会重发（最多 RETR 次）
  */
 void nRF24L01_Write_Tx_Payload_Ack(nrf24_t nrf24, const uint8_t *buf, uint8_t len)
@@ -625,7 +653,7 @@ int nRF24L01_Run(nrf24_t nrf24)
 
     // 2. 读取status状态标志，并清除中断触发标志位
      nrf24->nrf24_flags.status = nRF24L01_Read_Status_Register(nrf24);
-     nRF24L01_Clear_Status_Register(nrf24, NRF24BITMASK_RX_DR | NRF24BITMASK_TX_DS);
+     nRF24L01_Clear_Status_Register(nrf24, NRF24BITMASK_RX_DR | NRF24BITMASK_TX_DS | NRF24BITMASK_MAX_RT);
 
      // 3. 分析哪条信道接收的数据
      uint8_t pipe = (nrf24->nrf24_flags.status & NRF24BITMASK_RX_P_NO) >> 1;
@@ -676,13 +704,6 @@ int nRF24L01_Run(nrf24_t nrf24)
                  nrf24->nrf24_cb.nrf24l01_rx_ind(nrf24, data_buf, length, pipe);
              }
              ret_flag |= 2;
-
-             if(rt_sem_trytake(nrf24_send_sem) ==  RT_EOK){
-                 if(nrf24->nrf24_cb.nrf24l01_tx_done){
-                     nrf24->nrf24_cb.nrf24l01_tx_done(nrf24,pipe);
-                 }
-                 ret_flag |= 1;
-             }
 
          }
      }
