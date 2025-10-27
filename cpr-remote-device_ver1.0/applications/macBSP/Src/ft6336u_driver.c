@@ -113,7 +113,7 @@ void FT6336U_Read_Info(struct rt_i2c_bus_device *bus,FT6336U_IC_INFO *info)
     iic_ft6336u_read_reg(bus, 1, &info_buf[2]);
 
     info->CPIPHER_INFO = (info_buf[0] << 16) + (info_buf[1] << 8) + info_buf[2];
-    rt_kprintf("PRINTF:%d. info->CPIPHER_INFO == %x \r\n",Record.kprintf_cnt++,info->CPIPHER_INFO);
+    rt_kprintf("PRINTF:%d. info->CPIPHER_INFO == 0x%x \r\n",Record.kprintf_cnt++,info->CPIPHER_INFO);
     if(info->CPIPHER_INFO == 0x642600){
         rt_kprintf("PRINTF:%d. This Touch Chip Type is FT6236G. \r\n",Record.kprintf_cnt++);
     }
@@ -129,7 +129,6 @@ void FT6336U_Read_Info(struct rt_i2c_bus_device *bus,FT6336U_IC_INFO *info)
     else{
         rt_kprintf("PRINTF:%d. This Touch Chip Type is not found. \r\n",Record.kprintf_cnt++);
     }
-    rt_kprintf("\r\n");
     //--------------------------------------------------------------
     /*! 读取ft6336u的库版本信息
      * */
@@ -141,7 +140,6 @@ void FT6336U_Read_Info(struct rt_i2c_bus_device *bus,FT6336U_IC_INFO *info)
 
     info->LIB_VERSION = (libv_buf[0] << 8) + libv_buf[1];
     rt_kprintf("PRINTF:%d. Touch Chip library file version is 0x%02x. \r\n",Record.kprintf_cnt++,info->LIB_VERSION);
-    rt_kprintf("\r\n");
     //--------------------------------------------------------------
     /*! 读取ft6336u的固件版本
      * */
@@ -149,7 +147,6 @@ void FT6336U_Read_Info(struct rt_i2c_bus_device *bus,FT6336U_IC_INFO *info)
     iic_ft6336u_read_reg(bus, 1, &frame_version);
     info->FIRMWARE_VERSION = frame_version;
     rt_kprintf("PRINTF:%d. Touch Chip frameware version is 0x%02x. \r\n",Record.kprintf_cnt++,info->FIRMWARE_VERSION);
-    rt_kprintf("\r\n");
     //--------------------------------------------------------------
     /*! 读取ft6336u的VENDOR ID
      * */
@@ -157,7 +154,6 @@ void FT6336U_Read_Info(struct rt_i2c_bus_device *bus,FT6336U_IC_INFO *info)
     iic_ft6336u_read_reg(bus, 1, &vendor_id);
     info->VENDOR_ID = vendor_id;
     rt_kprintf("PRINTF:%d. Touch Chip vendor_id is 0x%02x \r\n",Record.kprintf_cnt++,info->VENDOR_ID);
-    rt_kprintf("\r\n");
     //--------------------------------------------------------------
 
 

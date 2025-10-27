@@ -8,8 +8,8 @@
  * 2025-09-02     Administrator       the first version
  */
 #include "bsp_sys.h"
-#include <rtdbg.h>
 #include "bsp_nrf24l01_driver.h"
+
 
 /* 前向声明一下nrf24l01的事件回调句柄 */
 const static struct nrf24_callback g_cb;
@@ -27,7 +27,7 @@ void nRF24L01_Thread_entry(void* parameter)
 {
 
     /* 0. 给nrf24开创一个实际空间 */
-    nrf24_t _nrf24 = malloc(sizeof(nrf24_t));
+    _nrf24 = malloc(sizeof(nrf24_t));
     if (_nrf24 == NULL) {
         LOG_E("LOG:%d. nrf24 malloc error.",Record.ulog_cnt++);
     }
@@ -99,7 +99,6 @@ void nRF24L01_Thread_entry(void* parameter)
 
     /* 9. 解锁高级扩展功能 */
     nRF24L01_Ensure_RWW_Features_Activated(_nrf24);
-
     /* 10. 更新寄存器参数 */
     if (nRF24L01_Update_Parameter(_nrf24) != RT_EOK){
         LOG_E("LOG:%d. nRF24L01 update_onchip_config false.",Record.ulog_cnt++);
@@ -127,9 +126,9 @@ void nRF24L01_Thread_entry(void* parameter)
     nRF24L01_Enter_Power_Up_Mode(_nrf24);
     _nrf24->nrf24_ops.nrf24_set_ce();
     LOG_I("LOG:%d. Successfully initialized",Record.ulog_cnt++);
-    rt_kprintf("\r\n\r\n");
     rt_kprintf("----------------------------------\r\n");
-    rt_kprintf("[nrf24/demo] running receiver.\r\n");
+    rt_kprintf("running receiver.\r\n");
+
 
     for(;;)
     {
@@ -151,11 +150,11 @@ int nRF24L01_Thread_Init(void)
     /* 检查是否创建成功,成功就启动线程 */
     if(nRF24L01_Task_Handle != RT_NULL)
     {
-        LOG_I("[nRF24L01]nRF24L01_Thread_entry is Succeed!! \r\n");
+        LOG_I("nRF24L01_Thread_entry is Succeed!! \r\n");
         rt_thread_startup(nRF24L01_Task_Handle);
     }
     else {
-        LOG_E("[nRF24L01]nRF24L01_Thread_entry is Failed \r\n");
+        LOG_E("nRF24L01_Thread_entry is Failed \r\n");
     }
 
     return RT_EOK;
@@ -177,9 +176,6 @@ static void nrf24l01_tx_done(nrf24_t nrf24, rt_uint8_t pipe)
         the pipe have no special meaning except indicating (send) FAILED or OK
         However, it will matter when the role is ROLE_PRX*/
 
-    static int cnt = 0;
-    cnt++;
-
     if(nrf24->nrf24_cfg.config.prim_rx == ROLE_PTX)
     {
         if(pipe == NRF24_PIPE_NONE){
@@ -196,9 +192,11 @@ static void nrf24l01_tx_done(nrf24_t nrf24, rt_uint8_t pipe)
 
 static void nrf24l01_rx_ind(nrf24_t nrf24, uint8_t *data, uint8_t len, int pipe)
 {
-    /*! Don't need to care the pipe if the role is ROLE_PTX */
     rt_kprintf("(p%d): ", pipe);
-    rt_kprintf((char *)data);
+    for (uint8_t i = 0; i < len; i++) {
+        rt_kprintf("%02X ", data[i]);
+    }
+    rt_kprintf("\n");
 }
 
 

@@ -43,8 +43,8 @@ typedef enum
 typedef enum
 {
     ROLE_PTX = 0,
-    ROLE_PRX = 1,
-    ROLE_NONE = 2,
+    ROLE_PRX,
+    ROLE_NONE,
 } nrf24_role_et;
 
 /***

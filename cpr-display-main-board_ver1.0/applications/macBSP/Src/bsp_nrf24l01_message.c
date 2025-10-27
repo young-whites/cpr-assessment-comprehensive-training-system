@@ -233,8 +233,14 @@ void nrf24l01_protocol_operation(uint8_t* CmdBuf)
                 case FRAME_NRF24_CONNECT_CTRL_PANEL_CMD:
                 {
                     LOG_I("Receive: Connect cmd.");
-
-
+                    _nrf24->nrf24_ops.nrf24_reset_ce();
+                    nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
+                    nrf24l01_order_to_pipe(Order_nRF24L01_ACK_Connect_Control_Panel, NRF24_PIPE_2);
+                    _nrf24->nrf24_ops.nrf24_set_ce();
+                    rt_thread_mdelay(5);
+                    _nrf24->nrf24_ops.nrf24_reset_ce();
+                    nRF24L01_Set_Role_Mode(_nrf24, ROLE_PRX);
+                    _nrf24->nrf24_ops.nrf24_set_ce();
                 }break;
                 //----------------------------------------------------------------------------------------------------
 

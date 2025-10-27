@@ -6,7 +6,35 @@
  */
 
 
-#include "bsp_key.h"
+#include "bsp_sys.h"
+
+
+void MatrixKey_Scan(void);
+int keyTimer_Init(void);
+int hwtimer6_init(void);
+
+typedef enum
+{
+    Matrix_Column_1 = (0x01),
+    Matrix_Column_2,
+    Matrix_Column_3,
+}MatrixKey_ColumnName_TypeDef;
+
+
+
+typedef enum
+{
+    Matrix_Row_1 = (0x01),
+    Matrix_Row_2,
+    Matrix_Row_3,
+}MatrixKey_RowName_TypeDef;
+
+
+typedef enum
+{
+    Matrix_RESET = 0,
+    Matrix_SET
+}MatrixKey_Status_TypeDef;
 
 
 
@@ -372,15 +400,15 @@ void Matrixkey_Thread_entry(void* parameter)
 rt_thread_t Matrixkey_Task_Handle = RT_NULL;
 int Matrixkey_Thread_Init(void)
 {
-    Matrixkey_Task_Handle = rt_thread_create("Matrixkey_Thread_entry", Matrixkey_Thread_entry, RT_NULL, 4096, 9, 50);
+    Matrixkey_Task_Handle = rt_thread_create("Matrixkey_Thread_entry", Matrixkey_Thread_entry, RT_NULL, 4096, 10, 50);
     /* 检查是否创建成功,成功就启动线程 */
     if(Matrixkey_Task_Handle != RT_NULL)
     {
-        rt_kprintf("PRINTF:%d. Matrixkey_Thread_entry is Succeed!! \r\n",Record.kprintf_cnt++);
+        LOG_I("LOG:%d. Matrixkey_Thread_entry is Succeed.",Record.ulog_cnt++);
         rt_thread_startup(Matrixkey_Task_Handle);
     }
     else {
-        rt_kprintf("PRINTF:%d. Matrixkey_Thread_entry is Failed \r\n",Record.kprintf_cnt++);
+        LOG_I("LOG:%d. Matrixkey_Thread_entry is Failed.",Record.ulog_cnt++);
     }
 
     return RT_EOK;

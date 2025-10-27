@@ -15,7 +15,10 @@
 
 
 
-
+void system_param_init(void)
+{
+    Record.nrf_if_connected = 0;
+}
 
 
 

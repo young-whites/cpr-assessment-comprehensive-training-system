@@ -62,7 +62,7 @@
 #define RT_USING_COMPONENTS_INIT
 #define RT_USING_USER_MAIN
 #define RT_MAIN_THREAD_STACK_SIZE 2048
-#define RT_MAIN_THREAD_PRIORITY 10
+#define RT_MAIN_THREAD_PRIORITY 5
 #define RT_USING_MSH
 #define RT_USING_FINSH
 #define FINSH_USING_MSH
@@ -85,6 +85,8 @@
 #define RT_SERIAL_RB_BUFSZ 1024
 #define RT_USING_PIN
 #define RT_USING_SPI
+#define RT_USING_SPI_BITOPS
+#define RT_SPI_BITOPS_DEBUG
 
 /* Using USB */
 
@@ -105,6 +107,7 @@
 
 /* end of Interprocess Communication (IPC) */
 /* end of POSIX (Portable Operating System Interface) layer */
+#define RT_USING_CPLUSPLUS
 /* end of C/C++ and POSIX layer */
 
 /* Network */

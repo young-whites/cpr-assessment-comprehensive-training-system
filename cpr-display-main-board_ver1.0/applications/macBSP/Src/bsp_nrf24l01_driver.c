@@ -29,7 +29,6 @@ int nRF24L01_Param_Config(nrf24_param_t param)
     param->config.mask_max_rt   = 0;
     param->config.mask_tx_ds    = 0;
     param->config.mask_rx_dr    = 0;
-
     /* EN_AA */
     param->en_aa.p0 = 1;
     param->en_aa.p1 = 1;
@@ -67,9 +66,9 @@ int nRF24L01_Param_Config(nrf24_param_t param)
     param->dynpd.p0 = 1;
     param->dynpd.p1 = 1;
     param->dynpd.p2 = 1;
-    param->dynpd.p3 = 1;
-    param->dynpd.p4 = 1;
-    param->dynpd.p5 = 1;
+    param->dynpd.p3 = 0;
+    param->dynpd.p4 = 0;
+    param->dynpd.p5 = 0;
 
     /* FEATURE */
     param->feature.en_dyn_ack = 1;
@@ -87,6 +86,7 @@ int nRF24L01_Param_Config(nrf24_param_t param)
         param->rx_addr_p1[i] = rx_addr_pipe1[i];
     }
     param->rx_addr_p2 = 3;
+
     param->rx_addr_p3 = 9;
     param->rx_addr_p4 = 9;
     param->rx_addr_p5 = 9;
@@ -657,6 +657,16 @@ int nRF24L01_Run(nrf24_t nrf24)
 
      // 3. 分析哪条信道接收的数据
      uint8_t pipe = (nrf24->nrf24_flags.status & NRF24BITMASK_RX_P_NO) >> 1;
+     if(pipe == 0x07){
+         LOG_I("RX FIFO Empty.\n");
+     }
+     else if(pipe == 0x06){
+         LOG_I("Not used.\n");
+     }
+     else{
+         LOG_I("Data pipe number(p%d).\n",pipe);
+     }
+
 
      // 4. 角色 = 发送端（PTX）
      if(nrf24->nrf24_cfg.config.prim_rx == ROLE_PTX)
@@ -699,7 +709,17 @@ int nRF24L01_Run(nrf24_t nrf24)
          if(pipe < 5){
              uint8_t data_buf[32];
              uint8_t length = nRF24L01_Read_Top_RXFIFO_Width(nrf24);
+             LOG_I("Receive length = %d. \n",length);
              nRF24L01_Read_Rx_Payload(nrf24, data_buf, length);
+
+             if(nrf24l01_portocol_get_command(data_buf,length) == CMD_TRUE){
+                 LOG_I("Protocol parse succeed.\n");
+             }
+             else{
+                 LOG_W("Protocol parse failed.\n");
+             }
+
+
              if(nrf24->nrf24_cb.nrf24l01_rx_ind){
                  nrf24->nrf24_cb.nrf24l01_rx_ind(nrf24, data_buf, length, pipe);
              }

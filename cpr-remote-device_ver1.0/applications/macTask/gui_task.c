@@ -66,15 +66,15 @@ void GUI_Thread_entry(void* parameter)
 rt_thread_t GUI_Task_Handle = RT_NULL;
 int GUI_Thread_Init(void)
 {
-    GUI_Task_Handle = rt_thread_create("GUI_Thread_entry", GUI_Thread_entry, RT_NULL, 4096, 5, 300);
+    GUI_Task_Handle = rt_thread_create("GUI_Thread_entry", GUI_Thread_entry, RT_NULL, 4096, 6, 1000);
     /* 检查是否创建成功,成功就启动线程 */
     if(GUI_Task_Handle != RT_NULL)
     {
-        rt_kprintf("PRINTF:%d. GUI_Thread_entry is Succeed!! \r\n",Record.kprintf_cnt++);
+        LOG_I("LOG:%d. GUI_Thread_entry is Succeed.",Record.ulog_cnt++);
         rt_thread_startup(GUI_Task_Handle);
     }
     else {
-        rt_kprintf("PRINTF:%d. GUI_Thread_entry is Failed \r\n",Record.kprintf_cnt++);
+        LOG_I("LOG:%d. GUI_Thread_entry is Failed.",Record.ulog_cnt++);
     }
 
     return RT_EOK;

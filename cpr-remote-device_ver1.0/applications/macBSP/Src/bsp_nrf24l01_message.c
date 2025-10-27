@@ -233,7 +233,7 @@ void nrf24l01_protocol_operation(uint8_t* CmdBuf)
                 case FRAME_NRF24_CONNECT_CTRL_PANEL_CMD:
                 {
                     LOG_I("Receive: Connect succeed.");
-
+                    Record.nrf_if_connected = 1;
                 }break;
                 //----------------------------------------------------------------------------------------------------
 
@@ -259,7 +259,7 @@ void nrf24l01_protocol_operation(uint8_t* CmdBuf)
  */
 extern rt_uint8_t largeid_buf[8];
 extern rt_uint8_t smallid_buf[8];
-void nrf24l01_order_to_pipe(uint8_t order, uint8_t pipe_num)
+void nrf24l01_order_to_pipe(nrf24_t nrf24, uint8_t order, uint8_t pipe_num)
 {
     uint8_t emptyBuf[20] = {0};
     uint8_t frame_package[30] = { 0 };
@@ -273,7 +273,7 @@ void nrf24l01_order_to_pipe(uint8_t order, uint8_t pipe_num)
             rt_memset(emptyBuf, 0, sizeof(emptyBuf));
             emptyBuf[0] = FRAME_NRF24_CONNECT_CTRL_PANEL_CMD;
             package_len = nrf24l01_build_frame(FRAME_TYPE_ACT,FRAME_STATE_ASK,emptyBuf,1,frame_package);
-            nRF24L01_Send_Packet(_nrf24, frame_package, package_len, 0, nRF24_SEND_NO_ACK);
+            nRF24L01_Send_Packet(nrf24, frame_package, package_len, pipe_num, nRF24_SEND_NO_ACK);
         }break;
 
 

@@ -35,10 +35,10 @@ void tft_spi_init(void)
     /* 查找SPI设备 */
     spi_dev_tft = (struct rt_spi_device *)rt_device_find(TFT_SPI_NAME);
     if(spi_dev_tft == NULL){
-        rt_kprintf("PRINTF:%d. lcd spi device is not created!\r\n",Record.kprintf_cnt++);
+        LOG_I("LOG:%d. lcd spi device is not created!",Record.ulog_cnt++);
     }
     else{
-        rt_kprintf("PRINTF:%d. lcd spi device is successfully!\r\n",Record.kprintf_cnt++);
+        LOG_I("LOG:%d. lcd spi device is successfully!",Record.ulog_cnt++);
     }
     /***
      *! 配置SPI结构体参数
@@ -70,7 +70,7 @@ rt_err_t st7789_send_cmd(const rt_uint8_t cmd)
     len = rt_spi_send(spi_dev_tft, &cmd, 1);
 
     if (len != 1){
-        LOG_I("lcd_write_cmd error. %d", len);
+        LOG_E("LOG:%d. lcd_write_cmd error. %d",Record.ulog_cnt++, len);
         return -RT_ERROR;
     }
     else{
@@ -91,7 +91,7 @@ rt_err_t st7789_send_data(const rt_uint8_t data)
     len = rt_spi_send(spi_dev_tft, &data, 1);
 
     if (len != 1){
-        LOG_I("lcd_write_data error. %d", len);
+        LOG_E("LOG:%d. lcd_write_data error. %d",Record.ulog_cnt++, len);
         return -RT_ERROR;
     }
     else{
@@ -117,7 +117,7 @@ rt_err_t st7789_send_half_word(const rt_uint16_t data)
     len = rt_spi_send(spi_dev_tft, &sendbuf, 2);
 
     if (len != 2){
-        LOG_I("lcd_write_half_word error. %d", len);
+        LOG_E("LOG:%d. lcd_write_half_word error. %d",Record.ulog_cnt++, len);
         return -RT_ERROR;
     }
     else{

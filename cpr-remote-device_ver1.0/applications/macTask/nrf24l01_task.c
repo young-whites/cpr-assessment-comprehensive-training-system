@@ -8,8 +8,12 @@
  * 2025-09-02     Administrator       the first version
  */
 #include "bsp_sys.h"
-#include <rtdbg.h>
 #include "bsp_nrf24l01_driver.h"
+
+#define DBG_TAG "nRF24"
+#define DBG_LVL DBG_LOG
+#include <rtdbg.h>
+
 
 /* 前向声明一下nrf24l01的事件回调句柄 */
 const static struct nrf24_callback g_cb;
@@ -39,18 +43,18 @@ void nRF24L01_Thread_entry(void* parameter)
     /* 1. 创建二值信号量 */
     nrf24_send_sem = rt_sem_create("nrf24_send", 0, RT_IPC_FLAG_FIFO);
     if(nrf24_send_sem == RT_NULL){
-        LOG_E("Failed to create nrf24l01 send semaphore.");
+        LOG_E("LOG:%d. Failed to create nrf24l01 send semaphore.",Record.ulog_cnt++);
     }
     else{
-        LOG_I("Succeed to create nrf24l01 send semaphore.");
+        LOG_I("LOG:%d. Succeed to create nrf24l01 send semaphore.",Record.ulog_cnt++);
     }
 
     nrf24_irq_sem = rt_sem_create("nrf24_irq", 0, RT_IPC_FLAG_FIFO);
     if(nrf24_irq_sem == RT_NULL){
-        LOG_E("Failed to create nrf24l01 irq semaphore.");
+        LOG_E("LOG:%d. Failed to create nrf24l01 irq semaphore.",Record.ulog_cnt++);
     }
     else{
-        LOG_I("Succeed to create nrf24l01 irq semaphore.");
+        LOG_I("LOG:%d. Succeed to create nrf24l01 irq semaphore.",Record.ulog_cnt++);
         _nrf24->nrf24_flags.using_irq = RT_TRUE;
     }
 
@@ -74,7 +78,6 @@ void nRF24L01_Thread_entry(void* parameter)
     else{
         LOG_I("LOG:%d. nrf24 parameter config successfully.",Record.ulog_cnt++);
     }
-
     /* 6. 配置启用中断引脚和中断回调函数 */
     if(nRF24L01_IQR_GPIO_Config(&_nrf24->port_api) != RT_EOK){
         LOG_E("LOG:%d. nrf24 irq config error.",Record.ulog_cnt++);
@@ -125,20 +128,21 @@ void nRF24L01_Thread_entry(void* parameter)
     nRF24L01_Clear_Observe_TX(_nrf24);
     /* 15. 配置完成，进入上电模式 */
     nRF24L01_Enter_Power_Up_Mode(_nrf24);
-    _nrf24->nrf24_ops.nrf24_reset_ce();
+    _nrf24->nrf24_ops.nrf24_set_ce();
     LOG_I("LOG:%d. Successfully initialized",Record.ulog_cnt++);
-    rt_kprintf("\r\n\r\n");
-    rt_kprintf("----------------------------------\r\n");
-    rt_kprintf("[nrf24/demo] running transmitter.\r\n");
+    rt_kprintf("running transmitter.\r\n");
 
 
     for(;;)
     {
         if(Record.nrf_if_connected == 0){
-            LOG_I("Wait for connecting.");
-            nrf24l01_order_to_pipe(Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
+            rt_kprintf("----------------------------------\r\n");
+            rt_kprintf("Wait for connecting.\n");
+            _nrf24->nrf24_ops.nrf24_reset_ce();
+            nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
+            nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
+            _nrf24->nrf24_ops.nrf24_set_ce();
         }
-
         nRF24L01_Run(_nrf24);
 
         rt_thread_mdelay(500);
@@ -154,15 +158,15 @@ void nRF24L01_Thread_entry(void* parameter)
 rt_thread_t nRF24L01_Task_Handle = RT_NULL;
 int nRF24L01_Thread_Init(void)
 {
-    nRF24L01_Task_Handle = rt_thread_create("nRF24L01_Thread_entry", nRF24L01_Thread_entry, RT_NULL, 4096, 9, 50);
+    nRF24L01_Task_Handle = rt_thread_create("nRF24L01_Thread_entry", nRF24L01_Thread_entry, RT_NULL, 4096, 9, 100);
     /* 检查是否创建成功,成功就启动线程 */
     if(nRF24L01_Task_Handle != RT_NULL)
     {
-        LOG_I("[nRF24L01]nRF24L01_Thread_entry is Succeed!! \r\n");
+        LOG_I("LOG:%d. nRF24L01_Thread_entry is Succeed.",Record.ulog_cnt++);
         rt_thread_startup(nRF24L01_Task_Handle);
     }
     else {
-        LOG_E("[nRF24L01]nRF24L01_Thread_entry is Failed \r\n");
+        LOG_E("LOG:%d. nRF24L01_Thread_entry is Failed",Record.ulog_cnt++);
     }
 
     return RT_EOK;
@@ -180,10 +184,10 @@ static void nrf24l01_tx_done(nrf24_t nrf24, rt_uint8_t pipe)
     if(nrf24->nrf24_cfg.config.prim_rx == ROLE_PTX)
     {
         if(pipe == NRF24_PIPE_NONE){
-            rt_kprintf("tx_done failed");
+            rt_kprintf("tx_done failed\n");
         }
         else{
-            rt_kprintf("tx_done ok");
+            rt_kprintf("tx_done ok\n");
         }
     }
 
@@ -194,9 +198,11 @@ static void nrf24l01_tx_done(nrf24_t nrf24, rt_uint8_t pipe)
 
 static void nrf24l01_rx_ind(nrf24_t nrf24, uint8_t *data, uint8_t len, int pipe)
 {
-    /*! Don't need to care the pipe if the role is ROLE_PTX */
     rt_kprintf("(p%d): ", pipe);
-    rt_kprintf((char *)data);
+    for (uint8_t i = 0; i < len; i++) {
+        rt_kprintf("%02X ", data[i]);
+    }
+    rt_kprintf("\n");
 }
 
 

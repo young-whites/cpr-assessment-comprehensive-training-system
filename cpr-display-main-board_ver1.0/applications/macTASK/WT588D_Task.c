@@ -30,13 +30,14 @@ void WT588D_Thread_entry(void* parameter)
         WT588D_Set_Cmd(WT588D_ADDR_VOICE_1);
         rt_thread_mdelay(90);
         WT588D_Set_Volume(WT588D_CMD_VOLUME_LEVEL7);
+#if 0
         if(WT588D_Busy_Check() == 1){
             rt_kprintf("PRINTF:%d. The voice is pausing now\r\n", Record.kprintf_cnt++);
         }
         else{
             rt_kprintf("PRINTF:%d. The voice is playing now\r\n", Record.kprintf_cnt++);
         }
-
+#endif
         rt_thread_mdelay(8000);
     }
 
@@ -52,7 +53,7 @@ int WT588D_Thread_Init(void)
 {
     rt_thread_t WT588D_Task_Handle = RT_NULL;
     /* 创建检查一些系统状态标志的线程  -- 优先级：25 */
-    WT588D_Task_Handle = rt_thread_create("WT588D_Thread_entry", WT588D_Thread_entry, RT_NULL, 1024, 25, 1000);
+    WT588D_Task_Handle = rt_thread_create("WT588D_Thread_entry", WT588D_Thread_entry, RT_NULL, 1024, 11, 100);
     /* 检查是否创建成功,成功就启动线程 */
     if(WT588D_Task_Handle != RT_NULL)
     {

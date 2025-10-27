@@ -29,10 +29,10 @@ void ft6336u_device_init(void)
 {
     ft6336u_iic.i2c_bus = (struct rt_i2c_bus_device *)(rt_device_find(ft6336u_iic.i2c_name));
     if(ft6336u_iic.i2c_bus != RT_NULL){
-        rt_kprintf("PRINTF:%d. ft6336u_iic bus is found!\r\n",Record.kprintf_cnt++);
+        LOG_I("LOG:%d. ft6336u_iic bus is found!",Record.ulog_cnt++);
     }
     else {
-        rt_kprintf("ft6336u_iic bus can't find!\r\n");
+        LOG_E("LOG:%d. ft6336u_iic bus can't find!",Record.ulog_cnt++);
     }
 }
 

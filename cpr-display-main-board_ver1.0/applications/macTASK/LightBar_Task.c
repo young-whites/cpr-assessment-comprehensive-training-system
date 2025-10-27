@@ -318,7 +318,7 @@ int LightBar_Thread_Init(void)
 {
     rt_thread_t LightBar_Task_Handle = RT_NULL;
     /* 创建检查一些系统状态标志的线程  -- 优先级：11 */
-    LightBar_Task_Handle = rt_thread_create("LightBar_Thread_entry", LightBar_Thread_entry, RT_NULL, 1024, 11, 500);
+    LightBar_Task_Handle = rt_thread_create("LightBar_Thread_entry", LightBar_Thread_entry, RT_NULL, 1024, 10, 60);
     /* 检查是否创建成功,成功就启动线程 */
     if(LightBar_Task_Handle != RT_NULL)
     {
@@ -331,7 +331,7 @@ int LightBar_Thread_Init(void)
 
     return RT_EOK;
 }
-INIT_APP_EXPORT(LightBar_Thread_Init);
+//INIT_APP_EXPORT(LightBar_Thread_Init);
 
 
 

@@ -31,7 +31,6 @@ extern "C" {
 #include "rtt_system_work.h"
 /* macBSP 头文件 */
 #include "bsp_battery.h"
-#include "bsp_key.h"
 #include "bsp_led.h"
 #include <bsp_nrf24l01_driver.h>
 #include <bsp_nrf24l01_spi.h>
@@ -65,6 +64,9 @@ extern "C" {
 #include "macLOG.h"
 // 这个宏用于使能lv_printf.c文件中的lv_snprintf()函数
 #define USE_LV_SNPRINTF     0
+
+void system_param_init(void);
+
 
 #ifdef __cplusplus
 }

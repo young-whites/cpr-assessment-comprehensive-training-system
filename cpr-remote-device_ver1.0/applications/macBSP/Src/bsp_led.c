@@ -346,15 +346,15 @@ void LED_Thread_entry(void* parameter)
 rt_thread_t LED_Task_Handle = RT_NULL;
 int LED_Thread_Init(void)
 {
-    LED_Task_Handle = rt_thread_create("LED_Thread_entry", LED_Thread_entry, RT_NULL, 4096, 9, 20);
+    LED_Task_Handle = rt_thread_create("LED_Thread_entry", LED_Thread_entry, RT_NULL, 4096, 10, 30);
     /* 检查是否创建成功,成功就启动线程 */
     if(LED_Task_Handle != RT_NULL)
     {
-        rt_kprintf("PRINTF:%d. LED_Thread_entry is Succeed!! \r\n",Record.kprintf_cnt++);
+        LOG_I("LOG:%d. LED_Thread_entry is Succeed.",Record.ulog_cnt++);
         rt_thread_startup(LED_Task_Handle);
     }
     else {
-        rt_kprintf("PRINTF:%d. LED_Thread_entry is Failed \r\n",Record.kprintf_cnt++);
+        LOG_I("LOG:%d. LED_Thread_entry is Failed.",Record.ulog_cnt++);
     }
 
     return RT_EOK;

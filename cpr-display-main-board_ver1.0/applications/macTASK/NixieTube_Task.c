@@ -495,7 +495,7 @@ int NixieTube_Thread_Init(void)
 {
     rt_thread_t NixieTube_Task_Handle = RT_NULL;
     /* 创建检查一些系统状态标志的线程  -- 优先级：11 */
-    NixieTube_Task_Handle = rt_thread_create("NixieTube_Thread_entry", NixieTube_Thread_entry, RT_NULL, 2048, 11, 30);
+    NixieTube_Task_Handle = rt_thread_create("NixieTube_Thread_entry", NixieTube_Thread_entry, RT_NULL, 2048, 10, 30);
     /* 检查是否创建成功,成功就启动线程 */
     if(NixieTube_Task_Handle != RT_NULL)
     {
@@ -508,7 +508,7 @@ int NixieTube_Thread_Init(void)
 
     return RT_EOK;
 }
-INIT_APP_EXPORT(NixieTube_Thread_Init);
+//INIT_APP_EXPORT(NixieTube_Thread_Init);
 
 
 

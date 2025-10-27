@@ -575,7 +575,6 @@ int nRF24L01_Send_Packet(nrf24_t nrf24, uint8_t *data, uint8_t len, uint8_t pipe
     // 如果是接收端（PRX）
     else if(nrf24->nrf24_cfg.config.prim_rx == ROLE_PRX && ack_mode == nRF24_RECE_IN_ACK){
         nRF24L01_Write_Tx_Payload_InAck(nrf24, pipe, data, len);
-        rt_sem_release(nrf24_send_sem);
     }
 
     return RT_EOK;
@@ -650,24 +649,35 @@ int nRF24L01_Run(nrf24_t nrf24)
     if(nrf24->nrf24_flags.using_irq == RT_TRUE){
         rt_err_t result = rt_sem_take(nrf24_irq_sem, RT_WAITING_FOREVER);
         if(result != RT_EOK){
-            LOG_E("nrf24_irq_sem take a dynamic semaphore, failed.\n");
+            LOG_E("LOG:%d. nrf24_irq_sem take a dynamic semaphore, failed.",Record.ulog_cnt++);
         }
         else{
-            LOG_I("nrf24_irq_sem take a dynamic semaphore, succeed.\n");
+            LOG_I("LOG:%d. nrf24_irq_sem take a dynamic semaphore, succeed.",Record.ulog_cnt++);
         }
     }
+
 
     // 2. 读取status状态标志，并清除中断触发标志位
      nrf24->nrf24_flags.status = nRF24L01_Read_Status_Register(nrf24);
      nRF24L01_Clear_Status_Register(nrf24, NRF24BITMASK_RX_DR | NRF24BITMASK_TX_DS | NRF24BITMASK_MAX_RT);
 
-     // 3. 分析哪条信道接收的数据
-     uint8_t pipe = (nrf24->nrf24_flags.status & NRF24BITMASK_RX_P_NO) >> 1;
 
-     // 4. 角色 = 发送端（PTX）
+     // 3. 角色 = 发送端（PTX）
      if(nrf24->nrf24_cfg.config.prim_rx == ROLE_PTX)
      {
-         // 4.1 读取status寄存器的 NRF24BITMASK_MAX_RT位，如果为1，说明达到最大重发次数，发送失败
+
+         uint8_t pipe = (nrf24->nrf24_flags.status & NRF24BITMASK_RX_P_NO) >> 1;
+         if(pipe == 0x07){
+             LOG_I("LOG:%d. nRF24L01 ACK RX FIFO Empty.",Record.ulog_cnt++);
+         }
+         else if(pipe == 0x06){
+             LOG_I("LOG:%d. nRF24L01 ACK RX not used.",Record.ulog_cnt++);
+         }
+         else{
+             LOG_I("LOG:%d. nRF24L01 ACK RX data pipe number(p%d).",Record.ulog_cnt++,pipe);
+         }
+
+         // 3.1 读取status寄存器的 NRF24BITMASK_MAX_RT位，如果为1，说明达到最大重发次数，发送失败
          if(nrf24->nrf24_flags.status & NRF24BITMASK_MAX_RT){
              nRF24L01_Flush_TX_FIFO(nrf24);
              nRF24L01_Clear_Status_Register(nrf24, NRF24BITMASK_MAX_RT);
@@ -677,11 +687,19 @@ int nRF24L01_Run(nrf24_t nrf24)
              return -1;
          }
 
-         /* 4.2 收到 ACK 带载荷（PTX 也能收）*/
+         /* 3.2 收到 ACK 带载荷（PTX 也能收）*/
          if(nrf24->nrf24_flags.status & NRF24BITMASK_RX_DR){
              uint8_t rec_data[32];
              uint8_t len = nRF24L01_Read_Top_RXFIFO_Width(nrf24);
              nRF24L01_Read_Rx_Payload(nrf24, rec_data, len);
+
+             if(nrf24l01_portocol_get_command(rec_data,len) == CMD_TRUE){
+                 LOG_I("LOG:%d. nRF24L01 ACK Protocol parse succeed.",Record.ulog_cnt++);
+             }
+             else{
+                 LOG_W("LOG:%d. nRF24L01 ACK Protocol parse failed.",Record.ulog_cnt++);
+             }
+
              if(nrf24->nrf24_cb.nrf24l01_rx_ind){
                  nrf24->nrf24_cb.nrf24l01_rx_ind(nrf24, rec_data, len, pipe);
              }
@@ -689,7 +707,7 @@ int nRF24L01_Run(nrf24_t nrf24)
          }
 
 
-         /* 4.3 NRF24BITMASK_TX_DST --> 在PTX模式下，发送需要ACK数据包并接收到回应后，置位 */
+         /* 3.3 NRF24BITMASK_TX_DST --> 在PTX模式下，发送需要ACK数据包并接收到回应后，置位 */
          if(nrf24->nrf24_flags.status & NRF24BITMASK_TX_DS){
              if(nrf24->nrf24_cb.nrf24l01_tx_done){
                  nrf24->nrf24_cb.nrf24l01_tx_done(nrf24, pipe);
@@ -699,13 +717,42 @@ int nRF24L01_Run(nrf24_t nrf24)
      }
 
 
-     // 5. 角色 = 接收端（PRX）
+     nrf24->nrf24_ops.nrf24_reset_ce();
+     nRF24L01_Set_Role_Mode(nrf24, ROLE_PRX);
+     nrf24->nrf24_ops.nrf24_set_ce();
+
+     rt_thread_mdelay(1);
+
+     // 4. 角色 = 接收端（PRX）
      if(nrf24->nrf24_cfg.config.prim_rx == ROLE_PRX)
      {
+
+         // 4.1 分析哪条信道接收的数据
+         uint8_t pipe = (nrf24->nrf24_flags.status & NRF24BITMASK_RX_P_NO) >> 1;
+         if(pipe == 0x07){
+             LOG_I("LOG:%d. nRF24L01 RX FIFO Empty.",Record.ulog_cnt++);
+         }
+         else if(pipe == 0x06){
+             LOG_I("LOG:%d. nRF24L01 Not used.",Record.ulog_cnt++);
+         }
+         else{
+             LOG_I("LOG:%d. nRF24L01 Data pipe number(p%d).",Record.ulog_cnt++ ,pipe);
+         }
+
+         // 4.2 读取数据
          if(pipe < 5){
              uint8_t data_buf[32];
              uint8_t length = nRF24L01_Read_Top_RXFIFO_Width(nrf24);
+             LOG_I("LOG:%d. Receive length = %d.",Record.ulog_cnt++,length);
              nRF24L01_Read_Rx_Payload(nrf24, data_buf, length);
+
+             if(nrf24l01_portocol_get_command(data_buf,length) == CMD_TRUE){
+                 LOG_I("LOG:%d. Protocol parse succeed.",Record.ulog_cnt++);
+             }
+             else{
+                 LOG_W("LOG:%d. Protocol parse failed.",Record.ulog_cnt++);
+             }
+
              if(nrf24->nrf24_cb.nrf24l01_rx_ind){
                  nrf24->nrf24_cb.nrf24l01_rx_ind(nrf24, data_buf, length, pipe);
              }

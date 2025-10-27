@@ -11,6 +11,11 @@
 #include <rtthread.h>
 #include "bsp_sys.h"
 
+
+#define DBG_TAG "main"
+#define DBG_LVL DBG_LOG
+#include <rtdbg.h>
+
 /**
   * @brief  The application entry point.
   * @retval int
@@ -46,6 +51,7 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   ulog_init();
+  system_param_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
