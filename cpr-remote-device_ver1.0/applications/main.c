@@ -37,7 +37,7 @@ int main(void)
   /* USER CODE END Init */
 
   /* Configure the system clock */
-  SystemClock_Config();
+//  SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
@@ -51,6 +51,7 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   ulog_init();
+  sysTimer_Init();
   system_param_init();
   /* USER CODE END 2 */
 
@@ -59,7 +60,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+      LED_Blink(LED_Name_Green, 1, 0, 0);
       rt_thread_mdelay(1000);
     /* USER CODE BEGIN 3 */
   }

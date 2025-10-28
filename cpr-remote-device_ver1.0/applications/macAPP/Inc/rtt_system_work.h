@@ -13,7 +13,7 @@
 #include "bsp_sys.h"
 
 
-#define USE_SOFT_STATE_MACHINE 0
+#define USE_SOFT_STATE_MACHINE 1
 #if USE_SOFT_STATE_MACHINE
 int sysTimer_Init(void);
 #endif

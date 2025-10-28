@@ -24,7 +24,6 @@ static void Timing_1ms(void)
 static void Timing_10ms(void)
 {
 
-
 }
 
 
@@ -60,21 +59,17 @@ static void Timing_1s(void)
 static rt_uint32_t sysTimeTick = 0;
 static void sysTimer_callback(void* parameter)
 {
+    sysTimeTick++;
 
-    if(Record.OldMode == 0)
-    {
-        sysTimeTick++;
-
-        if(sysTimeTick > 60000){
-            sysTimeTick = 0;
-        }
-
-        if((sysTimeTick % 1)    == 0)   Timing_1ms();
-        if((sysTimeTick % 10)   == 0)   Timing_10ms();
-        if((sysTimeTick % 50)   == 0)   Timing_50ms();
-        if((sysTimeTick % 500)  == 0)   Timing_500ms();
-        if((sysTimeTick % 1000) == 0)   Timing_1s();
+    if(sysTimeTick > 60000){
+        sysTimeTick = 0;
     }
+
+    if((sysTimeTick % 1)    == 0)   Timing_1ms();
+    if((sysTimeTick % 10)   == 0)   Timing_10ms();
+    if((sysTimeTick % 50)   == 0)   Timing_50ms();
+    if((sysTimeTick % 500)  == 0)   Timing_500ms();
+    if((sysTimeTick % 1000) == 0)   Timing_1s();
 }
 
 

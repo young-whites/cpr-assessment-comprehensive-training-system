@@ -334,7 +334,6 @@ void NRF24L01_Set_TxAddr(nrf24_t nrf24, rt_uint8_t *addr_buf, rt_uint8_t length)
 int nRF24L01_Send_Packet(nrf24_t nrf24, uint8_t *data, uint8_t len, uint8_t pipe, ack_mode_et ack_mode);
 void nRF24L01_Set_Role_Mode(nrf24_t nrf24, nrf24_role_et mode);
 void nRF24L01_Ensure_RWW_Features_Activated(nrf24_t nrf24);
-int nRF24L01_Run(nrf24_t nrf24);
 
 // bsp_nrf24l01_spi 文件中函数声明
 int nRF24L01_SPI_Init(nrf24_port_api_t port_api);

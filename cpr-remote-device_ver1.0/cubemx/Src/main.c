@@ -347,10 +347,8 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LCD_CS_Pin|nRF24_CE_Pin|LCD_BLK_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_GREEN_Pin BAT_EN_Pin Matrixkey_Column1_Pin Matrixkey_Column2_Pin
-                           Matrixkey_Column3_Pin */
-  GPIO_InitStruct.Pin = LED_GREEN_Pin|BAT_EN_Pin|Matrixkey_Column1_Pin|Matrixkey_Column2_Pin
-                          |Matrixkey_Column3_Pin;
+  /*Configure GPIO pins : LED_GREEN_Pin BAT_EN_Pin */
+  GPIO_InitStruct.Pin = LED_GREEN_Pin|BAT_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -381,8 +379,10 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(TOUCH_INT_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LCD_DC_Pin LCD_RST_Pin */
-  GPIO_InitStruct.Pin = LCD_DC_Pin|LCD_RST_Pin;
+  /*Configure GPIO pins : LCD_DC_Pin LCD_RST_Pin Matrixkey_Column1_Pin Matrixkey_Column2_Pin
+                           Matrixkey_Column3_Pin */
+  GPIO_InitStruct.Pin = LCD_DC_Pin|LCD_RST_Pin|Matrixkey_Column1_Pin|Matrixkey_Column2_Pin
+                          |Matrixkey_Column3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -411,7 +411,7 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pins : Matrixkey_Row1_Pin Matrixkey_Row2_Pin Matrixkey_Row3_Pin */
   GPIO_InitStruct.Pin = Matrixkey_Row1_Pin|Matrixkey_Row2_Pin|Matrixkey_Row3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : nRF24_CSN_Pin */
@@ -432,6 +432,7 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
 
 #ifdef  USE_FULL_ASSERT
 /**

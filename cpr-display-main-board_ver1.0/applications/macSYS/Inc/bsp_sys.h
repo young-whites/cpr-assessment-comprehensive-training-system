@@ -32,7 +32,7 @@
 #include "bsp_wt588d.h"
 #include "bsp_led.h"
 #include "rtt_system_work.h"
-
+#include "macLOG.h"
 
 
 

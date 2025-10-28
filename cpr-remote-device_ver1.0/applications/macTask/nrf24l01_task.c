@@ -15,6 +15,7 @@
 #include <rtdbg.h>
 
 
+
 /* 前向声明一下nrf24l01的事件回调句柄 */
 const static struct nrf24_callback g_cb;
 /* 创建nRF24L01发送数据的二值信号量 */
@@ -132,20 +133,98 @@ void nRF24L01_Thread_entry(void* parameter)
     LOG_I("LOG:%d. Successfully initialized",Record.ulog_cnt++);
     rt_kprintf("running transmitter.\r\n");
 
-
+    rt_uint8_t lll = 0;
     for(;;)
     {
+        /* 尚未连接则持续广播 */
         if(Record.nrf_if_connected == 0){
-            rt_kprintf("----------------------------------\r\n");
-            rt_kprintf("Wait for connecting.\n");
+            /* ----------  1. PTX 发送  ---------- */
+            if(lll == 0){
+                _nrf24->nrf24_ops.nrf24_reset_ce();
+                nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
+                nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
+                _nrf24->nrf24_ops.nrf24_set_ce();
+                rt_thread_mdelay(1);
+                _nrf24->nrf24_ops.nrf24_reset_ce();
+                lll = 1;
+            }
+
+            /* ----------  2. 立即进入 PRX 接收窗口  ---------- */
+            nRF24L01_Set_Role_Mode(_nrf24, ROLE_PRX);          /* 切 PRX */
+            _nrf24->nrf24_ops.nrf24_set_ce();                  /* 开始监听 */
+
+            /* ----------  3. 限时等待 IRQ（ACK 或独立回包）  ---------- */
+            rt_err_t  rx_ok = rt_sem_take(nrf24_irq_sem, 100);
+
+            /* ----------  4. 处理本次 IRQ  ---------- */
+            if(rx_ok == RT_EOK)
+            {
+                /* 读 STATUS 并清中断 */
+                _nrf24->nrf24_flags.status = nRF24L01_Read_Status_Register(_nrf24);
+                nRF24L01_Clear_IRQ_Flags(_nrf24);
+                /* 4.1 收到数据（ACK-Payload 或独立包） */
+                if(_nrf24->nrf24_flags.status & NRF24BITMASK_RX_DR)
+                {
+                    uint8_t len, rec_data[32];
+                    len = nRF24L01_Read_Top_RXFIFO_Width(_nrf24);
+                    nRF24L01_Read_Rx_Payload(_nrf24, rec_data, len);
+
+                    if(nrf24l01_portocol_get_command(rec_data, len) == CMD_TRUE)
+                    {
+                        LOG_I("Protocol parse succeed.");
+                    }
+                    else
+                    {
+                        LOG_W("Protocol parse failed.");
+                    }
+
+                    uint8_t pipe = (_nrf24->nrf24_flags.status & NRF24BITMASK_RX_P_NO) >> 1;
+                    if(_nrf24->nrf24_cb.nrf24l01_rx_ind){
+                        _nrf24->nrf24_cb.nrf24l01_rx_ind(_nrf24, rec_data, len, pipe);
+                    }
+                }
+
+                /* 4.2 发送成功 */
+                if(_nrf24->nrf24_flags.status & NRF24BITMASK_TX_DS)
+                {
+                    rt_thread_mdelay(100);
+                    LOG_I("TX done.");
+                }
+
+                /* 4.3 重发超限 */
+                 if(_nrf24->nrf24_flags.status & NRF24BITMASK_MAX_RT)
+                 {
+                     nRF24L01_Flush_TX_FIFO(_nrf24);
+                     LOG_W("TX timeout.");
+                 }
+            }
+            else
+            {
+                // 超时重新请求
+                LOG_W("RX window timeout.");
+                lll = 0;
+                if(lll == 0){
+                    _nrf24->nrf24_ops.nrf24_reset_ce();
+                    nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
+                    nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
+                    _nrf24->nrf24_ops.nrf24_set_ce();
+                    rt_thread_mdelay(1);
+                    _nrf24->nrf24_ops.nrf24_reset_ce();
+                    lll = 1;
+                }
+
+            }
+            /* ----------  5. 窗口结束，切回 PTX  ---------- */
             _nrf24->nrf24_ops.nrf24_reset_ce();
             nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
-            nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
-            _nrf24->nrf24_ops.nrf24_set_ce();
         }
-        nRF24L01_Run(_nrf24);
+        /* 已连接后的业务循环（示例：每 400 ms 心跳） */
+        else
+        {
+            /* 这里放正常双向通信代码 */
+            rt_thread_mdelay(400);
+        }
 
-        rt_thread_mdelay(500);
     }
 }
 

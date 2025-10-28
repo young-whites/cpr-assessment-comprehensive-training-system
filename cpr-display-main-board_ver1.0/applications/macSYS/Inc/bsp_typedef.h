@@ -28,6 +28,7 @@ typedef struct {
     rt_uint16_t Number_Blow_Time;                // 按压-时间
     rt_uint16_t Number_Blow_Correct;             // 按压-正确计数
     rt_uint16_t Number_Blow_Error;               // 按压-错误计数
+    rt_uint8_t  nRF24_tx_pending;                // 接收到信号后，发送回调
 
 }RecordStruct;
 extern RecordStruct Record;

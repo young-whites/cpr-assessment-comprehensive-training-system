@@ -48,8 +48,8 @@ typedef enum {
 	STM32_LOG_VERBOSE     /*!< Bigger chunks of debugging information, or frequent messages which can potentially flood the output. */
 } stm32_log_level_t;
 
-
 void STM32_LOG_COLOR(stm32_log_level_t level,const char *tag,const char *format, ...);
+
 
 #endif
 

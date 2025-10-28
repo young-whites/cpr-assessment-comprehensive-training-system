@@ -62,6 +62,7 @@ void MX_ADC1_Init(void);
 
 /* Exported functions prototypes ---------------------------------------------*/
 
+
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */

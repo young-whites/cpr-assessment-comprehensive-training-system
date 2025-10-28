@@ -329,11 +329,11 @@ int ledTimer_Init(void)
   */
 void LED_Thread_entry(void* parameter)
 {
-
+    LED_Init();
     for(;;)
     {
         LED_DrvScan();
-        rt_thread_mdelay(10);
+        rt_thread_mdelay(1);
     }
 }
 
@@ -346,7 +346,7 @@ void LED_Thread_entry(void* parameter)
 rt_thread_t LED_Task_Handle = RT_NULL;
 int LED_Thread_Init(void)
 {
-    LED_Task_Handle = rt_thread_create("LED_Thread_entry", LED_Thread_entry, RT_NULL, 4096, 10, 30);
+    LED_Task_Handle = rt_thread_create("LED_Thread_entry", LED_Thread_entry, RT_NULL, 4096, 10, 100);
     /* 检查是否创建成功,成功就启动线程 */
     if(LED_Task_Handle != RT_NULL)
     {
