@@ -13,7 +13,7 @@
 static key_event_t key_last = {0};
 static key_event_t key_cur  = {0};
 static uint8_t     debounce_cnt = 0;   /* 连续相同次数 */
-#define DEBOUNCE_TH   2               /* 20 ms 稳定即生效 */
+#define DEBOUNCE_TH   1               /* 20 ms 稳定即生效 */
 
 
 
@@ -22,115 +22,6 @@ char keys[3][3] = { {'1', '2', '3'},
                     {'7', '8', '9'}};
 
 
-/**
- * @brief  第一行第一列的按键执行函数--1
- * @param  None
- * @retval None
- */
-static void MatrixKey_Row1_Column1_Press(void)
-{
-//    LED_Blink(LED_Name_Green, 1, 0, 0);
-    rt_kprintf("OK");
-}
-
-
-/**
- * @brief  第二行第一列的按键执行函数--4
- * @param  None
- * @retval None
- */
-static void MatrixKey_Row2_Column1_Press(void)
-{
-//    LED_Blink(LED_Name_Green, 1, 0, 0);
-    rt_kprintf("OK");
-}
-
-
-/**
- * @brief  第三行第一列的按键执行函数--7
- * @param  None
- * @retval None
- */
-static void MatrixKey_Row3_Column1_Press(void)
-{
-//    LED_Blink(LED_Name_Green, 1, 0, 0);
-    rt_kprintf("OK");
-}
-
-
-
-
-/**
- * @brief  第一行第二列的按键执行函数--2
- * @param  None
- * @retval None
- */
-static void MatrixKey_Row1_Column2_Press(void)
-{
-//    LED_Blink(LED_Name_Green, 1, 0, 0);
-    rt_kprintf("OK");
-}
-
-
-/**
- * @brief  第二行第二列的按键执行函数--5
- * @param  None
- * @retval None
- */
-static void MatrixKey_Row2_Column2_Press(void)
-{
-//    LED_Blink(LED_Name_Green, 1, 0, 0);
-    rt_kprintf("OK");
-}
-
-
-/**
- * @brief  第三行第二列的按键执行函数--8
- * @param  None
- * @retval None
- */
-static void MatrixKey_Row3_Column2_Press(void)
-{
-//    LED_Blink(LED_Name_Green, 1, 0, 0);
-    rt_kprintf("OK");
-}
-
-
-
-
-/**
- * @brief  第一行第三列的按键执行函数--3
- * @param  None
- * @retval None
- */
-static void MatrixKey_Row1_Column3_Press(void)
-{
-//    LED_Blink(LED_Name_Green, 1, 0, 0);
-    rt_kprintf("OK");
-}
-
-
-/**
- * @brief  第二行第三列的按键执行函数--6
- * @param  None
- * @retval None
- */
-static void MatrixKey_Row2_Column3_Press(void)
-{
-//    LED_Blink(LED_Name_Green, 1, 0, 0);
-    rt_kprintf("OK");
-}
-
-
-/**
- * @brief  第三行第三列的按键执行函数--9
- * @param  None
- * @retval None
- */
-static void MatrixKey_Row3_Column3_Press(void)
-{
-    rt_kprintf("OK");
-}
 
 
 
@@ -175,47 +66,37 @@ void MatrixKey_Scan(void)
             row == 1 ? Matrixkey_Row2_Pin :
                        Matrixkey_Row3_Pin);
 
-        if (pin == GPIO_PIN_RESET) {           /* 低电平 = 按下 */
-            sample.row  = row + 1;
-            sample.col  = scan_col + 1;
+        /* 2. 采样部分：没按键 -> KEY_NONE */
+        if (pin == GPIO_PIN_RESET) {
+            sample.row   = row + 1;
+            sample.col   = scan_col + 1;
             sample.state = KEY_PRESS;
-            break;                              /* 一列里只取第一个按下的键 */
+            break;
+        } else {
+            sample.state = KEY_NONE;   /* 明确：没按键 */
         }
     }
-
-    /* 没有按键 -> 状态清零 */
-        if (sample.state == KEY_RELEASE)
-            sample.row = sample.col = 0;
-
         /* ---- 3. 消抖状态机 ---- */
-        if (sample.row == key_cur.row &&
-            sample.col == key_cur.col &&
-            sample.state == key_cur.state) {
-            /* 连续相同 -> 计数++ */
-            if (debounce_cnt < DEBOUNCE_TH)
-                debounce_cnt++;
-        } else {
-            /* 状态变化 -> 重新开始计数 */
-            key_cur = sample;
-            debounce_cnt = 0;
-        }
+    if (sample.row == key_cur.row &&
+        sample.col == key_cur.col &&
+        sample.state == key_cur.state) {
+        debounce_cnt++;
+    } else {
+        key_cur = sample;
+        debounce_cnt = 0;
+    }
 
-        /* ---- 4. 达到稳定阈值 -> 生成一次事件 ---- */
-        if (debounce_cnt == DEBOUNCE_TH) {
-            if (key_cur.state == KEY_PRESS &&
-                (key_cur.row != key_last.row ||
-                 key_cur.col != key_last.col)) {
-                /* 新按键按下 */
-                MatrixKey_Event(key_cur.row, key_cur.col, KEY_PRESS);
-            } else if (key_cur.state == KEY_RELEASE &&
-                       key_last.state == KEY_PRESS) {
-                /* 原按键松开（可选） */
-                MatrixKey_Event(key_last.row, key_last.col, KEY_RELEASE);
-            }
-            key_last = key_cur;              /* 保存稳定状态 */
-            debounce_cnt++;                    /* 避免重复触发 */
+    /* 4. 触发条件：PRESS 或 真正的 RELEASE */
+    if (debounce_cnt == DEBOUNCE_TH) {
+        if (key_cur.state == KEY_PRESS &&
+            (key_cur.row != key_last.row || key_cur.col != key_last.col)) {
+            MatrixKey_Event(key_cur.row, key_cur.col, KEY_PRESS);
+        } else if (key_last.state == KEY_PRESS && key_cur.state == KEY_NONE) {
+            MatrixKey_Event(key_last.row, key_last.col, KEY_RELEASE);
         }
-
+        key_last = key_cur;
+        debounce_cnt++;
+    }
         /* ---- 5. 列号++，下次进函数扫下一列 ---- */
         scan_col++;
         if (scan_col >= 3) scan_col = 0;
@@ -357,7 +238,7 @@ void Matrixkey_Thread_entry(void* parameter)
     for(;;)
     {
         MatrixKey_Scan();
-        rt_thread_mdelay(10);
+        rt_thread_mdelay(20);
     }
 }
 

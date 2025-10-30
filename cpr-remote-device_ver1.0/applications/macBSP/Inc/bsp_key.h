@@ -42,8 +42,9 @@ typedef enum
 
 /* ---------------  非阻塞扫描专用  --------------- */
 typedef enum {
-    KEY_RELEASE = 0,
-    KEY_PRESS   = 1
+    KEY_NONE = 0,
+    KEY_RELEASE,
+    KEY_PRESS,
 } key_state_t;
 
 
