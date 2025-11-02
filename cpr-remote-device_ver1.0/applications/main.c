@@ -46,7 +46,7 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   sysTimer_Init();
-
+  system_param_init();
 
   /* USER CODE END 2 */
 

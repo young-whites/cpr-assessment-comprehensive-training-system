@@ -12,7 +12,27 @@
 
 
 
+// 全局变量
 RecordStruct Record;
+
+// 与nRF24L01通讯相关的全局事件集
+rt_event_t nrf24l01_events;
+
+
+
+
+void system_param_init(void)
+{
+    Record.nrf_if_connected = 0;
+}
+
+
+
+void all_project_event_init(void)
+{
+    rt_event_init(&nrf24l01_events, "nrf_lvgl", RT_IPC_FLAG_FIFO);
+}
+
 
 
 

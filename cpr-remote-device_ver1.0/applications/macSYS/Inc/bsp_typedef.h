@@ -29,8 +29,9 @@ extern RecordStruct Record;
 
 
 
+void system_param_init(void);
 
-
+extern rt_event_t nrf24l01_events;
 
 
 
