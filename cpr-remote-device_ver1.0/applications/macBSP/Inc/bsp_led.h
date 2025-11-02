@@ -35,7 +35,7 @@ void LED_BlinkSetCycleDuty(int8_t ledName, int8_t Cycle, int8_t Duty);
 void LED_Blink(int8_t ledName, int8_t cry, int8_t mute, int8_t repeat);
 void LED_Fancy(int8_t mode);
 void LED_DrvScan(void);
-int ledTimer_Init(void);
+
 
 
 

@@ -390,16 +390,6 @@ void TIM5_IRQHandler(void)
     rt_interrupt_leave();
 }
 #endif
-#ifdef BSP_USING_TIM6
-void TIM6_IRQHandler(void)
-{
-    /* enter interrupt */
-    rt_interrupt_enter();
-    HAL_TIM_IRQHandler(&stm32_hwtimer_obj[TIM6_INDEX].tim_handle);
-    /* leave interrupt */
-    rt_interrupt_leave();
-}
-#endif
 #ifdef BSP_USING_TIM11
 void TIM1_TRG_COM_TIM11_IRQHandler(void)
 {
@@ -497,12 +487,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if (htim->Instance == TIM5)
     {
         rt_device_hwtimer_isr(&stm32_hwtimer_obj[TIM5_INDEX].time_device);
-    }
-#endif
-#ifdef BSP_USING_TIM6
-    if (htim->Instance == TIM6)
-    {
-        rt_device_hwtimer_isr(&stm32_hwtimer_obj[TIM6_INDEX].time_device);
     }
 #endif
 #ifdef BSP_USING_TIM11

@@ -5,7 +5,7 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2025-06-29     RealThread   first version
+ * 2025-08-27     RealThread   first version
  */
 
 #ifndef __BOARD_H__
@@ -23,18 +23,18 @@ extern "C"
 
 #define CHIP_FAMILY_STM32
 #define CHIP_SERIES_STM32F1
-#define CHIP_NAME_STM32F103RE
+#define CHIP_NAME_STM32F103RF
 
 /*-------------------------- CHIP CONFIG END --------------------------*/
 
 /*-------------------------- ROM/RAM CONFIG BEGIN --------------------------*/
 
 #define ROM_START              ((uint32_t)0x08000000)
-#define ROM_SIZE               (512 * 1024)
+#define ROM_SIZE               (768 * 1024)
 #define ROM_END                ((uint32_t)(ROM_START + ROM_SIZE))
 
 #define RAM_START              (0x20000000)
-#define RAM_SIZE               (64 * 1024)
+#define RAM_SIZE               (96 * 1024)
 #define RAM_END                (RAM_START + RAM_SIZE)
 
 /*-------------------------- ROM/RAM CONFIG END --------------------------*/
@@ -86,11 +86,13 @@ extern "C"
  *                             #define BSP_I2C1_SDA_PIN    GET_PIN(port, pin)   ->   GET_PIN(C, 12)
  */
 
+/*#define BSP_USING_I2C1*/
 #define BSP_USING_I2C1
 #ifdef BSP_USING_I2C1
 #define BSP_I2C1_SCL_PIN    GET_PIN(B, 6)
 #define BSP_I2C1_SDA_PIN    GET_PIN(B, 7)
 #endif
+
 
 /*#define BSP_USING_I2C2*/
 #ifdef BSP_USING_I2C2
@@ -184,7 +186,7 @@ extern "C"
  *
  */
 
-#define BSP_USING_ADC1
+/*#define BSP_USING_ADC1*/
 /*#define BSP_USING_ADC2*/
 /*#define BSP_USING_ADC3*/
 
@@ -223,7 +225,6 @@ extern "C"
 
 /*#define BSP_USING_TIM*/
 #ifdef BSP_USING_TIM
-#define BSP_USING_TIM6
 /*#define BSP_USING_TIM15*/
 /*#define BSP_USING_TIM16*/
 /*#define BSP_USING_TIM17*/
@@ -245,6 +246,7 @@ extern "C"
  *
  */
 /*#define BSP_USING_ONCHIP_RTC*/
+
 
 /*-------------------------- RTC CONFIG END --------------------------*/
 

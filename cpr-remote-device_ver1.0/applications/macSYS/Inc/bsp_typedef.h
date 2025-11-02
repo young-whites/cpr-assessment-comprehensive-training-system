@@ -35,6 +35,4 @@ extern RecordStruct Record;
 
 
 
-
-
 #endif /* APPLICATIONS_MACSYS_INC_BSP_TYPEDEF_H_ */

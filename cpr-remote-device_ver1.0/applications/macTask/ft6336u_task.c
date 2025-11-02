@@ -9,10 +9,6 @@
  */
 #include "bsp_sys.h"
 
-#define DBG_TAG "FT6636U"
-#define DBG_LVL DBG_LOG
-#include <rtdbg.h>
-
 
 #define USE_EXTI_FUNC 1
 
@@ -29,12 +25,12 @@ static void FT6336U_INT_Callback(void *args)
     if (rt_pin_read(GET_PIN(A,6)) == PIN_LOW){
         /* 下降沿：手指按下 */
         Record.touch_down_flag = 1;
-//        rt_kprintf("PRINTF:%d. down\r\n", Record.kprintf_cnt++);
+//        rt_kprintf("down\r\n");
     }
     else{
         /* 上升沿：手指离开 */
         Record.touch_down_flag = 0;
-//        rt_kprintf("PRINTF:%d. up\r\n", Record.kprintf_cnt++);
+//        rt_kprintf("up\r\n");
     }
 
     rt_interrupt_leave();
@@ -57,7 +53,7 @@ static int FT6336U_INT_GPIO_Config(void)
     rt_pin_irq_enable(GET_PIN(A, 6), PIN_IRQ_ENABLE);
     return 0;
 }
-INIT_ENV_EXPORT(FT6336U_INT_GPIO_Config);
+INIT_APP_EXPORT(FT6336U_INT_GPIO_Config);
 
 #endif /* USE_EXTI_FUNC */
 
@@ -90,8 +86,6 @@ void FT6336U_Thread_entry(void* parameter)
 
         rt_thread_mdelay(10);
     }
-
-
 }
 
 
@@ -103,20 +97,20 @@ void FT6336U_Thread_entry(void* parameter)
 int FT6336U_Thread_Init(void)
 {
     rt_thread_t FT6336U_Task_Handle = RT_NULL;
-    FT6336U_Task_Handle = rt_thread_create("FT6336U_Thread_entry", FT6336U_Thread_entry, RT_NULL, 1024, 10, 50);
+    FT6336U_Task_Handle = rt_thread_create("FT6336U_Thread_entry", FT6336U_Thread_entry, RT_NULL, 1024, 25, 300);
     /* 检查是否创建成功,成功就启动线程 */
     if(FT6336U_Task_Handle != RT_NULL)
     {
-        LOG_I("LOG:%d. FT6336U_Thread_entry is Succeed",Record.ulog_cnt++);
+        rt_kprintf("PRINTF:%d. FT6336U_Thread_entry is Succeed!! \r\n",Record.kprintf_cnt++);
         rt_thread_startup(FT6336U_Task_Handle);
     }
     else {
-        rt_kprintf("LOG:%d. FT6336U_Thread_entry is Failed",Record.ulog_cnt++);
+        rt_kprintf("PRINTF:%d. FT6336U_Thread_entry is Failed \r\n",Record.kprintf_cnt++);
     }
 
     return RT_EOK;
 }
-INIT_ENV_EXPORT(FT6336U_Thread_Init);
+INIT_APP_EXPORT(FT6336U_Thread_Init);
 
 
 

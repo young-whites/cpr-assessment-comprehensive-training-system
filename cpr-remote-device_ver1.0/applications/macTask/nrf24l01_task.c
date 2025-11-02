@@ -5,7 +5,7 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2025-09-02     Administrator       the first version
+ * 2025-11-02     Administrator       the first version
  */
 #include "bsp_sys.h"
 #include "bsp_nrf24l01_driver.h"
@@ -290,11 +290,3 @@ const static struct nrf24_callback g_cb = {
     .nrf24l01_rx_ind = nrf24l01_rx_ind,
     .nrf24l01_tx_done = nrf24l01_tx_done,
 };
-
-
-
-
-
-
-
-

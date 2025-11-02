@@ -29,10 +29,10 @@ void ft6336u_device_init(void)
 {
     ft6336u_iic.i2c_bus = (struct rt_i2c_bus_device *)(rt_device_find(ft6336u_iic.i2c_name));
     if(ft6336u_iic.i2c_bus != RT_NULL){
-        LOG_I("LOG:%d. ft6336u_iic bus is found!",Record.ulog_cnt++);
+        rt_kprintf("PRINTF:%d. ft6336u_iic bus is found!\r\n",Record.kprintf_cnt++);
     }
     else {
-        LOG_E("LOG:%d. ft6336u_iic bus can't find!",Record.ulog_cnt++);
+        rt_kprintf("ft6336u_iic bus can't find!\r\n");
     }
 }
 
@@ -98,8 +98,6 @@ rt_err_t iic_ft6336u_write_reg_nbytes(struct rt_i2c_bus_device *bus,
 
 
 
-
-
 /**
  * @brief   ft6336u向寄存器中写入多个字节的数据(reg+data)
  * @param  *bus     : 设备结点
@@ -128,9 +126,6 @@ rt_err_t iic_ft6336u_write_reg_datas(struct rt_i2c_bus_device *bus,rt_uint8_t* d
         return RT_ERROR;
     }
 }
-
-
-
 
 
 

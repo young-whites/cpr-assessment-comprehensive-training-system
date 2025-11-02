@@ -558,7 +558,7 @@
     #ifdef CONFIG_LV_USE_LOG
         #define LV_USE_LOG CONFIG_LV_USE_LOG
     #else
-        #define LV_USE_LOG 0
+        #define LV_USE_LOG 1
     #endif
 #endif
 #if LV_USE_LOG

@@ -11,7 +11,7 @@
 
 
 
-#if USE_SOFT_STATE_MACHINE
+
 
 static void Timing_1ms(void)
 {
@@ -23,6 +23,7 @@ static void Timing_1ms(void)
 
 static void Timing_10ms(void)
 {
+
 
 }
 
@@ -92,9 +93,9 @@ int sysTimer_Init(void)
 
     return RT_EOK;
 }
+INIT_APP_EXPORT(sysTimer_Init);
 
 
-#endif
 
 
 

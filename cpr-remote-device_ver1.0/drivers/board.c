@@ -5,15 +5,16 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2025-06-29     RealThread   first version
+ * 2025-08-27     RealThread   first version
  */
 
 #include <rtthread.h>
 #include <board.h>
 #include <drv_common.h>
-#include "main.h"
+#include "bsp_sys.h"
 
-__WEAK void rt_hw_board_init()
+
+void rt_hw_board_init()
 {
     extern void hw_board_init(char *clock_src, int32_t clock_src_freq, int32_t clock_target_freq);
 
@@ -35,6 +36,10 @@ __WEAK void rt_hw_board_init()
 #endif
 
 }
+
+
+
+
 
 
 
@@ -302,3 +307,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
   }
 
 }
+
+
+
+
+
+

@@ -285,44 +285,6 @@ int8_t LED_GetNumber(void)
 /*---------------------------------------------------------------------------------------------------------------*/
 /* 以下是按键扫描线程的创建以及回调函数                                                                          */
 /*---------------------------------------------------------------------------------------------------------------*/
-#define LED_USE_SOFT_TIMER  0   // 使用软件定时器
-#define LED_USE_THREAD_TASK 1   // 使用RT-Thread线程
-
-
-
-#if LED_USE_SOFT_TIMER
-/**
-  * @brief  ledTimer Callback Function
-  * @retval void
-  */
-static void ledTimer_callback(void* parameter)
-{
-    LED_DrvScan();
-}
-
-
-
-/**
-  * @brief  ledTimer initialize
-  * @retval int
-  */
-int ledTimer_Init(void)
-{
-    static rt_timer_t ledTimer;
-    /* 创建led软件定时器线程 */
-    ledTimer = rt_timer_create("ledTimer_callback", ledTimer_callback, RT_NULL, 1, RT_TIMER_FLAG_PERIODIC | RT_TIMER_FLAG_SOFT_TIMER);
-    /* 如果句柄创建成功，就开启ledTimer软件定时器 */
-    if(ledTimer != RT_NULL)
-    {
-        rt_kprintf("PRINTF:%d. LEDTimer initialize succeed!\r\n",Record.kprintf_cnt++);
-        LED_Init();
-        rt_timer_start(ledTimer);
-    }
-
-    return RT_EOK;
-}
-#elif LED_USE_THREAD_TASK
-
 /**
   * @brief  This thread entry is used for key scan
   * @retval void
@@ -333,7 +295,7 @@ void LED_Thread_entry(void* parameter)
     for(;;)
     {
         LED_DrvScan();
-        rt_thread_mdelay(1);
+        rt_thread_mdelay(10);
     }
 }
 
@@ -346,19 +308,18 @@ void LED_Thread_entry(void* parameter)
 rt_thread_t LED_Task_Handle = RT_NULL;
 int LED_Thread_Init(void)
 {
-    LED_Task_Handle = rt_thread_create("LED_Thread_entry", LED_Thread_entry, RT_NULL, 4096, 10, 100);
+    LED_Task_Handle = rt_thread_create("LED_Thread_entry", LED_Thread_entry, RT_NULL, 4096, 9, 20);
     /* 检查是否创建成功,成功就启动线程 */
     if(LED_Task_Handle != RT_NULL)
     {
-        LOG_I("LOG:%d. LED_Thread_entry is Succeed.",Record.ulog_cnt++);
+        rt_kprintf("PRINTF:%d. LED_Thread_entry is Succeed!! \r\n",Record.kprintf_cnt++);
         rt_thread_startup(LED_Task_Handle);
     }
     else {
-        LOG_I("LOG:%d. LED_Thread_entry is Failed.",Record.ulog_cnt++);
+        rt_kprintf("PRINTF:%d. LED_Thread_entry is Failed \r\n",Record.kprintf_cnt++);
     }
 
     return RT_EOK;
 }
 INIT_APP_EXPORT(LED_Thread_Init);
 
-#endif
