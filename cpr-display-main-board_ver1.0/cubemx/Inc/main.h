@@ -41,12 +41,15 @@ extern SPI_HandleTypeDef hspi2;
 extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
+extern DMA_HandleTypeDef hdma_usart3_rx;
+extern DMA_HandleTypeDef hdma_usart3_tx;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
 void SystemClock_Config(void);
 void MX_GPIO_Init(void);
+void MX_DMA_Init(void);
 void MX_USART1_UART_Init(void);
 void MX_UART4_Init(void);
 void MX_USART3_UART_Init(void);

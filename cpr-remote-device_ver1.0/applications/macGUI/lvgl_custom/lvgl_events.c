@@ -28,9 +28,6 @@ static void screen_main_btn_1_start_event_handler (lv_event_t *e)
 
 
 
-
-
-
 void events_init_screen_main (lvgl_ui_t *ui)
 {
     lv_obj_add_event_cb(ui->screen_main_btn_1_start, screen_main_btn_1_start_event_handler, LV_EVENT_CLICKED, ui);
