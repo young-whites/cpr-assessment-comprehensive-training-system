@@ -21,44 +21,46 @@ typedef struct
 {
     lv_obj_t *screen_main;
     bool screen_main_del;
-    lv_obj_t *screen_main_cont_1;
+    lv_obj_t *screen_main_cont_main;
     lv_obj_t *screen_main_btn_1_start;
     lv_obj_t *screen_main_btn_1_start_label;
     lv_obj_t *screen_main_label_1_title;
     lv_obj_t *screen_main_label_2_connect;
     lv_obj_t *screen_menu;
     bool screen_menu_del;
-    lv_obj_t *screen_menu_cont_1;
-    lv_obj_t *screen_menu_label_8_pprinter;
+    lv_obj_t *screen_menu_cont_menu;
+    lv_obj_t *screen_menu_label_8_printer;
     lv_obj_t *screen_menu_label_1_assess;
-    lv_obj_t *screen_menu_imgbtn_2_competation;
-    lv_obj_t *screen_menu_imgbtn_2_competation_label;
-    lv_obj_t *screen_menu_imgbtn_3_train;
-    lv_obj_t *screen_menu_imgbtn_3_train_label;
     lv_obj_t *screen_menu_label_2_competation;
     lv_obj_t *screen_menu_label_3_train;
     lv_obj_t *screen_menu_label_4_score;
     lv_obj_t *screen_menu_label_7_settings;
     lv_obj_t *screen_menu_label_5_operation;
     lv_obj_t *screen_menu_label_9_switch;
-    lv_obj_t *screen_menu_imgbtn_9_switch;
-    lv_obj_t *screen_menu_imgbtn_9_switch_label;
-    lv_obj_t *screen_menu_imgbtn_5_opreation;
-    lv_obj_t *screen_menu_imgbtn_5_opreation_label;
+    lv_obj_t *screen_menu_img_2_competation;
+    lv_obj_t *screen_menu_img_3_train;
+    lv_obj_t *screen_menu_img_4_score;
+    lv_obj_t *screen_menu_img_7_setting;
+    lv_obj_t *screen_menu_img_6_instruction;
+    lv_obj_t *screen_menu_img_1_assess;
+    lv_obj_t *screen_menu_img_8_printer;
+    lv_obj_t *screen_menu_img_9_switch;
+    lv_obj_t *screen_menu_img_5_operation;
     lv_obj_t *screen_menu_label_6_instructions;
-    lv_obj_t *screen_menu_imgbtn_6_instruction;
-    lv_obj_t *screen_menu_imgbtn_6_instruction_label;
-    lv_obj_t *screen_menu_imgbtn_7_setting;
-    lv_obj_t *screen_menu_imgbtn_7_setting_label;
-    lv_obj_t *screen_menu_imgbtn_8_printer;
-    lv_obj_t *screen_menu_imgbtn_8_printer_label;
-    lv_obj_t *screen_menu_imgbtn_4_score;
-    lv_obj_t *screen_menu_imgbtn_4_score_label;
-    lv_obj_t *screen_menu_imgbtn_1_assess;
-    lv_obj_t *screen_menu_imgbtn_1_assess_label;
     lv_obj_t *screen_data;
     bool screen_data_del;
-    lv_obj_t *screen_data_cont_1;
+    lv_obj_t *screen_data_cont_data;
+    lv_obj_t *screen_data_label_1_model;
+    lv_obj_t *screen_setting;
+    bool screen_setting_del;
+    lv_obj_t *screen_setting_cont_setting;
+    lv_obj_t *screen_setting_btn_1_time_set;
+    lv_obj_t *screen_setting_btn_1_time_set_label;
+    lv_obj_t *screen_setting_label_1_set;
+    lv_obj_t *screen_setting_btn_2_press_rate;
+    lv_obj_t *screen_setting_btn_2_press_rate_label;
+    lv_obj_t *screen_setting_btn_3_air_rate;
+    lv_obj_t *screen_setting_btn_3_air_rate_label;
 }lvgl_ui_t;
 extern lvgl_ui_t guider_lvgl;
 
@@ -80,28 +82,20 @@ void lv_user_gui_init(void);
 void setup_scr_screen_main(lvgl_ui_t *ui);
 void setup_scr_screen_menu(lvgl_ui_t *ui);
 void setup_scr_screen_data(lvgl_ui_t *ui);
+void setup_scr_screen_setting(lvgl_ui_t *ui);
 /* lvgl_events.c文件 */
 void events_init_screen_main (lvgl_ui_t *ui);
 
 
-LV_IMG_DECLARE(_competation_alpha_70x70);
-LV_IMG_DECLARE(_competation_pressed_alpha_70x70);
-LV_IMG_DECLARE(_train_alpha_70x67);
-LV_IMG_DECLARE(_train_pressed_alpha_70x67);
-LV_IMG_DECLARE(_switch_alpha_75x75);
-LV_IMG_DECLARE(_switch_pressed_alpha_75x75);
-LV_IMG_DECLARE(_operation_alpha_70x70);
-LV_IMG_DECLARE(_operation_presssed_alpha_70x70);
-LV_IMG_DECLARE(_specification_alpha_70x70);
-LV_IMG_DECLARE(_specification_pressed_alpha_70x70);
-LV_IMG_DECLARE(_setting_alpha_70x70);
-LV_IMG_DECLARE(_setting_pressed_alpha_70x70);
-LV_IMG_DECLARE(_printer_alpha_70x70);
-LV_IMG_DECLARE(_printer_pressed_alpha_70x70);
-LV_IMG_DECLARE(_score_alpha_70x70);
-LV_IMG_DECLARE(_score_pressed_alpha_70x70);
-LV_IMG_DECLARE(_assess_alpha_80x70);
-LV_IMG_DECLARE(_assess_pressed_alpha_80x70);
+LV_IMG_DECLARE(_competation_alpha_50x50);
+LV_IMG_DECLARE(_train_alpha_50x50);
+LV_IMG_DECLARE(_score_alpha_50x50);
+LV_IMG_DECLARE(_setting_alpha_50x50);
+LV_IMG_DECLARE(_specification_alpha_50x50);
+LV_IMG_DECLARE(_assess_alpha_50x50);
+LV_IMG_DECLARE(_printer_alpha_50x50);
+LV_IMG_DECLARE(_switch_alpha_50x50);
+LV_IMG_DECLARE(_operation_alpha_50x50);
 
 LV_FONT_DECLARE(lv_font_AlimamaDongFangDaKai_18)
 LV_FONT_DECLARE(lv_font_montserratMedium_16)
@@ -109,7 +103,8 @@ LV_FONT_DECLARE(lv_font_montserratMedium_12)
 LV_FONT_DECLARE(lv_font_AlimamaDongFangDaKai_24)
 LV_FONT_DECLARE(lv_font_SourceHanSerifSC_Regular_16)
 LV_FONT_DECLARE(lv_font_AlimamaDongFangDaKai_15)
-LV_FONT_DECLARE(lv_font_SourceHanSerifSC_Regular_12)
+LV_FONT_DECLARE(lv_font_SourceHanSerifSC_Regular_20)
+LV_FONT_DECLARE(lv_font_AlimamaDongFangDaKai_21)
 
 
 

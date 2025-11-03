@@ -30,40 +30,48 @@ static void screen_main_btn_1_start_event_handler (lv_event_t *e)
 
 void events_init_screen_main (lvgl_ui_t *ui)
 {
-    lv_obj_add_event_cb(ui->screen_main_btn_1_start, screen_main_btn_1_start_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_main_btn_1_start, screen_main_btn_1_start_event_handler, LV_EVENT_PRESSED, ui);
 }
 
 
 //-----------------------------------------------------------------------------------------------------------------------
 
 
-static void screen_menu_imgbtn_2_competation_event_handler (lv_event_t *e)
+static void screen_menu_img_2_competation_event_handler (lv_event_t *e)
 {
-    LV_LOG_USER("Released");
+    LV_LOG_USER("Clicked");
+//    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, &guider_lvgl.screen_main_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
+    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_data, guider_lvgl.screen_data_del, &guider_lvgl.screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+}
 
+static void screen_menu_img_3_train_event_handler (lv_event_t *e)
+{
+    LV_LOG_USER("Clicked");
+//    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, &guider_lvgl.screen_main_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
     ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_data, guider_lvgl.screen_data_del, &guider_lvgl.screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
 }
 
-static void screen_menu_imgbtn_3_train_event_handler (lv_event_t *e)
+static void screen_menu_img_1_assess_event_handler (lv_event_t *e)
 {
-    LV_LOG_USER("Released");
-
+    LV_LOG_USER("Clicked");
+//    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, &guider_lvgl.screen_main_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
     ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_data, guider_lvgl.screen_data_del, &guider_lvgl.screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
 }
 
-static void screen_menu_imgbtn_1_assess_event_handler (lv_event_t *e)
-{
-    LV_LOG_USER("Released");
 
-    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_data, guider_lvgl.screen_data_del, &guider_lvgl.screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
+static void screen_menu_img_7_setting_event_handler (lv_event_t *e)
+{
+    LV_LOG_USER("Clicked");
+    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_setting, guider_lvgl.screen_setting_del, &guider_lvgl.screen_menu_del, setup_scr_screen_setting, LV_SCR_LOAD_ANIM_NONE, 0, 200, true, true);
 }
 
 
 void events_init_screen_menu (lvgl_ui_t *ui)
 {
-    lv_obj_add_event_cb(ui->screen_menu_imgbtn_2_competation, screen_menu_imgbtn_2_competation_event_handler, LV_EVENT_RELEASED, ui);
-    lv_obj_add_event_cb(ui->screen_menu_imgbtn_3_train, screen_menu_imgbtn_3_train_event_handler, LV_EVENT_RELEASED, ui);
-    lv_obj_add_event_cb(ui->screen_menu_imgbtn_1_assess, screen_menu_imgbtn_1_assess_event_handler, LV_EVENT_RELEASED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_2_competation, screen_menu_img_2_competation_event_handler, LV_EVENT_PRESSED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_3_train, screen_menu_img_3_train_event_handler, LV_EVENT_PRESSED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_7_setting, screen_menu_img_7_setting_event_handler, LV_EVENT_PRESSED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_1_assess, screen_menu_img_1_assess_event_handler, LV_EVENT_PRESSED, ui);
 }
 
 

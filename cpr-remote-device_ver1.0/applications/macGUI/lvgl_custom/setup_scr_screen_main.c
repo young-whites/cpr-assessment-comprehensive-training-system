@@ -21,29 +21,26 @@ void setup_scr_screen_main(lvgl_ui_t *ui)
     //Write style for screen_main, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_bg_opa(ui->screen_main, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
-    //Write codes screen_main_cont_1
-    ui->screen_main_cont_1 = lv_obj_create(ui->screen_main);
-    lv_obj_set_pos(ui->screen_main_cont_1, 0, 0);
-    lv_obj_set_size(ui->screen_main_cont_1, 240, 320);
-    lv_obj_set_scrollbar_mode(ui->screen_main_cont_1, LV_SCROLLBAR_MODE_OFF);
+    //Write codes screen_main_cont_main
+    ui->screen_main_cont_main = lv_obj_create(ui->screen_main);
+    lv_obj_set_pos(ui->screen_main_cont_main, 0, 0);
+    lv_obj_set_size(ui->screen_main_cont_main, 240, 320);
+    lv_obj_set_scrollbar_mode(ui->screen_main_cont_main, LV_SCROLLBAR_MODE_OFF);
 
-    //Write style for screen_main_cont_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_border_width(ui->screen_main_cont_1, 2, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_border_opa(ui->screen_main_cont_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui->screen_main_cont_1, lv_color_hex(0x2195f6), LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_border_side(ui->screen_main_cont_1, LV_BORDER_SIDE_FULL, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_radius(ui->screen_main_cont_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui->screen_main_cont_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui->screen_main_cont_1, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_grad_dir(ui->screen_main_cont_1, LV_GRAD_DIR_NONE, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_top(ui->screen_main_cont_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_bottom(ui->screen_main_cont_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_left(ui->screen_main_cont_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_right(ui->screen_main_cont_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_width(ui->screen_main_cont_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    //Write style for screen_main_cont_main, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
+    lv_obj_set_style_border_width(ui->screen_main_cont_main, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui->screen_main_cont_main, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui->screen_main_cont_main, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui->screen_main_cont_main, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_dir(ui->screen_main_cont_main, LV_GRAD_DIR_NONE, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui->screen_main_cont_main, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui->screen_main_cont_main, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui->screen_main_cont_main, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui->screen_main_cont_main, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui->screen_main_cont_main, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_main_btn_1_start
-    ui->screen_main_btn_1_start = lv_btn_create(ui->screen_main_cont_1);
+    ui->screen_main_btn_1_start = lv_btn_create(ui->screen_main_cont_main);
     ui->screen_main_btn_1_start_label = lv_label_create(ui->screen_main_btn_1_start);
     lv_label_set_text(ui->screen_main_btn_1_start_label, "开始");
     lv_label_set_long_mode(ui->screen_main_btn_1_start_label, LV_LABEL_LONG_WRAP);
@@ -71,7 +68,7 @@ void setup_scr_screen_main(lvgl_ui_t *ui)
     lv_obj_set_style_text_align(ui->screen_main_btn_1_start, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_main_label_1_title
-    ui->screen_main_label_1_title = lv_label_create(ui->screen_main_cont_1);
+    ui->screen_main_label_1_title = lv_label_create(ui->screen_main_cont_main);
     lv_label_set_text(ui->screen_main_label_1_title, "心肺复苏模型遥控器");
     lv_label_set_long_mode(ui->screen_main_label_1_title, LV_LABEL_LONG_WRAP);
     lv_obj_set_pos(ui->screen_main_label_1_title, 45, 50);
@@ -94,7 +91,7 @@ void setup_scr_screen_main(lvgl_ui_t *ui)
     lv_obj_set_style_shadow_width(ui->screen_main_label_1_title, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_main_label_2_connect
-    ui->screen_main_label_2_connect = lv_label_create(ui->screen_main_cont_1);
+    ui->screen_main_label_2_connect = lv_label_create(ui->screen_main_cont_main);
     lv_label_set_text(ui->screen_main_label_2_connect, "连接中...");
     lv_label_set_long_mode(ui->screen_main_label_2_connect, LV_LABEL_LONG_WRAP);
     lv_obj_set_pos(ui->screen_main_label_2_connect, 45, 125);

@@ -38,6 +38,8 @@ void init_scr_del_flag(lvgl_ui_t *ui)
 
     ui->screen_main_del = true;
     ui->screen_menu_del = true;
+    ui->screen_data_del = true;
+    ui->screen_setting_del = true;
 }
 
 
