@@ -7,8 +7,8 @@
  * Date           Author       Notes
  * 2025-11-03     Administrator       the first version
  */
-#ifndef APPLICATIONS_MACBSP_INC_BSP_RS485_H_
-#define APPLICATIONS_MACBSP_INC_BSP_RS485_H_
+#ifndef APPLICATIONS_MACBSP_INC_BSP_RS485_DRV_H_
+#define APPLICATIONS_MACBSP_INC_BSP_RS485_DRV_H_
 #include "bsp_sys.h"
 
 
@@ -18,13 +18,12 @@ extern "C"
 #endif
 
 
-//#define RS485_USING_DEV             //使用RS485设备化
-//#define RS485_USING_TEST            //使用测试功能
+#define RS485_USING_TEST            //使用测试功能
 //#define RS485_USING_SAMPLE_SLAVE    //使用从机示例
 //#define RS485_USING_SAMPLE_MASTER   //使用主机示例
-//#define RS485_USING_DMA_RX          //使用DMA接收
+#define RS485_USING_DMA_RX          //使用DMA接收
 //#define RS485_USING_INT_TX          //使用中断发送
-//#define RS485_USING_DMA_TX          //使用DMA发送
+#define RS485_USING_DMA_TX          //使用DMA发送
 
 
 #ifndef RS485_SW_DLY_US
@@ -36,7 +35,7 @@ extern "C"
 #define RS485_BYTE_TMO_MAX          200   //最大字节超时
 
 // 创建RS458实例(instance)
-typedef struct rs485_instance rs485_inst_t;
+typedef struct rs485_inst rs485_inst_t;
 
 #ifdef RS485_USING_DEV
 #include <rs485_dev.h>
@@ -144,4 +143,4 @@ int rs485_send_then_recv(rs485_inst_t * hinst, void *send_buf, int send_len, voi
 
 #endif
 
-#endif /* APPLICATIONS_MACBSP_INC_BSP_RS485_H_ */
+#endif /* APPLICATIONS_MACBSP_INC_BSP_RS485_DRV_H_ */

@@ -21,19 +21,29 @@
 #include <rtdbg.h>
 #include <stdio.h>
 #include <drv_spi.h>
+#include <rtconfig.h>
+#include <string.h>
 
 /* 该头文件包含了所有CubeMX自动生成的初始化引脚 */
 #include "main.h"
 
+/* macBSP文件 */
+#include "bsp_led.h"
+#include "bsp_rs485_drv.h"
+#include "bsp_rs485_dev.h"
+#include "bsp_rs485_message.h"
+#include "bsp_wt588d.h"
+
+/* macNRF文件 */
+#include "bsp_nrf24l01_debug.h"
 #include "bsp_nrf24l01_driver.h"
 #include "bsp_nrf24l01_message.h"
 #include "bsp_nrf24l01_spi.h"
-#include "bsp_typedef.h"
-#include "bsp_wt588d.h"
-#include "bsp_led.h"
-#include "rtt_system_work.h"
-#include "macLOG.h"
 
+/* macSYS文件 */
+#include "bsp_typedef.h"
+#include "macLOG.h"
+#include "rtt_system_work.h"
 
 
 
