@@ -23,6 +23,10 @@ typedef struct {
     rt_uint8_t  touch_fingers;                   // 触摸报点数
     rt_uint8_t  nrf_if_connected;                // 是否建立连接
     rt_uint8_t  nrf_sending;                     // 正在发送标志(0：发送完    1：已发送)
+    //------------------------------------------------------------
+    rt_uint16_t work_time;                       // 需要设置的工作时间(在设置页面设置)
+
+
 }RecordStruct;
 extern RecordStruct Record;
 

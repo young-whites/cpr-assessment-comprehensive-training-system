@@ -17,17 +17,19 @@
 
 
 
-/* 定时器  超时函数 */
+/* 接收超时定时器回调函数，当字节间隔超时时释放信号量，通知接收完成 */
 static void rs232_recv_timeout(void *parameter)
 {
     rs232_inst_t *hinst = (rs232_inst_t *)(parameter);
 
-    if (hinst !=RT_NULL)
-    {
+    if (hinst !=RT_NULL){
         rt_sem_release(&hinst->rx_sem);
     }
 }
 
+
+/* 串口接收指示回调函数，当有数据到达时读取并启动超时定时器 */
+// 调用时机：当串口硬件 FIFO 收到新数据并触发 RX 中断 → RT-Thread 底层驱动调用 dev->rx_indicate(dev, size) → 注册的回调函数 rs232_recv_ind_hook 被执行
 static rt_err_t rs232_recv_ind_hook(rt_device_t dev, rt_size_t size)
 {
     /*当前每次接收1byte*/
@@ -35,21 +37,18 @@ static rt_err_t rs232_recv_ind_hook(rt_device_t dev, rt_size_t size)
 
     if (size > 0)
     {
-        // if (rt_mutex_take(hinst->lock, RT_WAITING_FOREVER) != RT_EOK)
-        // {
-        //  LOG_E("rs232 send fail. it is destoried.");
-        //  return(-RT_ERROR);
-        // }
+        /* 每次接收到新数据，就从这个地址中去拿这个数据： hinst->received_buf 是数据接收区的首地址 + 已经接收的数据长度 = 当前数据地址*/
         int len = rt_device_read(hinst->serial, 0, hinst->received_buf + hinst->received_len, size);
+
         if (len)
         {
+            /* 如果累计接收的数据长度 < 数据接收缓冲区的最大值就可以继续接收 */
             if (hinst->received_len < hinst->received_max_len-1)
             {
                 hinst->received_len++;
             }
         }
         rt_timer_start(hinst->received_over_timer);
-        //rt_mutex_release(hinst->lock);
     }
     return(RT_EOK);
 }
