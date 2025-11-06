@@ -45,7 +45,6 @@
 
 /* macGUI 路径下头文件 */
 // --lvgl_custom
-#include "lvgl_events.h"
 #include "setup_scr_screen.h"
 // --lvgl_examples
 #include "lvgl_tests.h"

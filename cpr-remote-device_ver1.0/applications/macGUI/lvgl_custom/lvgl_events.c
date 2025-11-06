@@ -7,73 +7,143 @@
  * Date           Author       Notes
  * 2025-08-30     18452       the first version
  */
-#include "lvgl_events.h"
+#include "bsp_sys.h"
 
 
-
-
-static void screen_main_btn_1_start_event_handler (lv_event_t *e)
-{
-    LV_LOG_USER("Clicked");
-    if (Record.nrf_if_connected) {
-            // 已连接，直接切换到控制菜单页面
-        ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, &guider_lvgl.screen_main_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
-        } else {
-            // 未连接，隐藏按钮，显示“连接中...”
-            lv_obj_add_flag(guider_lvgl.screen_main_btn_1_start, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_flag(guider_lvgl.screen_main_label_2_connect, LV_OBJ_FLAG_HIDDEN);
-        }
-
-}
-
-
-
-void events_init_screen_main (lvgl_ui_t *ui)
-{
-    lv_obj_add_event_cb(ui->screen_main_btn_1_start, screen_main_btn_1_start_event_handler, LV_EVENT_PRESSED, ui);
-}
 
 
 //-----------------------------------------------------------------------------------------------------------------------
 
 
+
+
+
+static void screen_menu_img_1_assess_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_data, ui->screen_data_del, &ui->screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 static void screen_menu_img_2_competation_event_handler (lv_event_t *e)
 {
-    LV_LOG_USER("Clicked");
-//    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, &guider_lvgl.screen_main_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
-    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_data, guider_lvgl.screen_data_del, &guider_lvgl.screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_data, ui->screen_data_del, &ui->screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 static void screen_menu_img_3_train_event_handler (lv_event_t *e)
 {
-    LV_LOG_USER("Clicked");
-//    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, &guider_lvgl.screen_main_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
-    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_data, guider_lvgl.screen_data_del, &guider_lvgl.screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_data, ui->screen_data_del, &ui->screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
-static void screen_menu_img_1_assess_event_handler (lv_event_t *e)
+
+static void screen_menu_img_5_operation_event_handler (lv_event_t *e)
 {
-    LV_LOG_USER("Clicked");
-//    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, &guider_lvgl.screen_main_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
-    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_data, guider_lvgl.screen_data_del, &guider_lvgl.screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_operation, ui->screen_operation_del, &ui->screen_menu_del, setup_scr_screen_operation, LV_SCR_LOAD_ANIM_NONE, 0, 200, true, true);
+        break;
+    }
+    default:
+        break;
+    }
 }
-
 
 static void screen_menu_img_7_setting_event_handler (lv_event_t *e)
 {
-    LV_LOG_USER("Clicked");
-    ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_setting, guider_lvgl.screen_setting_del, &guider_lvgl.screen_menu_del, setup_scr_screen_setting, LV_SCR_LOAD_ANIM_NONE, 0, 200, true, true);
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_setting, ui->screen_setting_del, &ui->screen_menu_del, setup_scr_screen_setting, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+static void screen_menu_img_8_printer_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+static void screen_menu_img_9_switch_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 
 void events_init_screen_menu (lvgl_ui_t *ui)
 {
-    lv_obj_add_event_cb(ui->screen_menu_img_2_competation, screen_menu_img_2_competation_event_handler, LV_EVENT_PRESSED, ui);
-    lv_obj_add_event_cb(ui->screen_menu_img_3_train, screen_menu_img_3_train_event_handler, LV_EVENT_PRESSED, ui);
-    lv_obj_add_event_cb(ui->screen_menu_img_7_setting, screen_menu_img_7_setting_event_handler, LV_EVENT_PRESSED, ui);
-    lv_obj_add_event_cb(ui->screen_menu_img_1_assess, screen_menu_img_1_assess_event_handler, LV_EVENT_PRESSED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_1_assess, screen_menu_img_1_assess_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_2_competation, screen_menu_img_2_competation_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_3_train, screen_menu_img_3_train_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_5_operation, screen_menu_img_5_operation_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_7_setting, screen_menu_img_7_setting_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_8_printer, screen_menu_img_8_printer_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_9_switch, screen_menu_img_9_switch_event_handler, LV_EVENT_CLICKED, ui);
+
 }
 
+
+
+
+
+
+//-----------------------------------------------------------------------------------------------------------------------
 
 
 

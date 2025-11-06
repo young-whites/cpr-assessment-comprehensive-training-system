@@ -25,7 +25,8 @@ typedef struct {
     rt_uint8_t  nrf_sending;                     // 正在发送标志(0：发送完    1：已发送)
     //------------------------------------------------------------
     rt_uint16_t work_time;                       // 需要设置的工作时间(在设置页面设置)
-
+    rt_uint16_t air_rate;                        // 需要设置的潮气达标率
+    rt_uint16_t press_rate;                      // 需要设置的按压达标率
 
 }RecordStruct;
 extern RecordStruct Record;

@@ -54,13 +54,45 @@ typedef struct
     lv_obj_t *screen_setting;
     bool screen_setting_del;
     lv_obj_t *screen_setting_cont_setting;
-    lv_obj_t *screen_setting_btn_1_time_set;
-    lv_obj_t *screen_setting_btn_1_time_set_label;
-    lv_obj_t *screen_setting_label_1_set;
-    lv_obj_t *screen_setting_btn_2_press_rate;
-    lv_obj_t *screen_setting_btn_2_press_rate_label;
+    lv_obj_t *screen_setting_btn_plus;
+    lv_obj_t *screen_setting_btn_plus_label;
+    lv_obj_t *screen_setting_btn_minus;
+    lv_obj_t *screen_setting_btn_minus_label;
     lv_obj_t *screen_setting_btn_3_air_rate;
     lv_obj_t *screen_setting_btn_3_air_rate_label;
+    lv_obj_t *screen_setting_btn_2_press_rate;
+    lv_obj_t *screen_setting_btn_2_press_rate_label;
+    lv_obj_t *screen_setting_btn_1_time_set;
+    lv_obj_t *screen_setting_btn_1_time_set_label;
+    lv_obj_t *screen_setting_label_air_rate;
+    lv_obj_t *screen_setting_label_press_rate;
+    lv_obj_t *screen_setting_label_time_value;
+    lv_obj_t *screen_setting_label_set_title;
+    lv_obj_t *screen_operation;
+    bool screen_operation_del;
+    lv_obj_t *screen_operation_cont_operation;
+    lv_obj_t *screen_operation_btn_opera_11;
+    lv_obj_t *screen_operation_btn_opera_11_label;
+    lv_obj_t *screen_operation_btn_opera_10;
+    lv_obj_t *screen_operation_btn_opera_10_label;
+    lv_obj_t *screen_operation_btn_opera_9;
+    lv_obj_t *screen_operation_btn_opera_9_label;
+    lv_obj_t *screen_operation_btn_opera_8;
+    lv_obj_t *screen_operation_btn_opera_8_label;
+    lv_obj_t *screen_operation_btn_opera_7;
+    lv_obj_t *screen_operation_btn_opera_7_label;
+    lv_obj_t *screen_operation_btn_opera_6;
+    lv_obj_t *screen_operation_btn_opera_6_label;
+    lv_obj_t *screen_operation_btn_opera_5;
+    lv_obj_t *screen_operation_btn_opera_5_label;
+    lv_obj_t *screen_operation_btn_opera_4;
+    lv_obj_t *screen_operation_btn_opera_4_label;
+    lv_obj_t *screen_operation_btn_opera_3;
+    lv_obj_t *screen_operation_btn_opera_3_label;
+    lv_obj_t *screen_operation_btn_opera_2;
+    lv_obj_t *screen_operation_btn_opera_2_label;
+    lv_obj_t *screen_operation_btn_opera_1;
+    lv_obj_t *screen_operation_btn_opera_1_label;
 }lvgl_ui_t;
 extern lvgl_ui_t guider_lvgl;
 
@@ -83,9 +115,13 @@ void setup_scr_screen_main(lvgl_ui_t *ui);
 void setup_scr_screen_menu(lvgl_ui_t *ui);
 void setup_scr_screen_data(lvgl_ui_t *ui);
 void setup_scr_screen_setting(lvgl_ui_t *ui);
+void setup_scr_screen_operation(lvgl_ui_t *ui);
+
 /* lvgl_events.c文件 */
 void events_init_screen_main (lvgl_ui_t *ui);
-
+void events_init_screen_menu (lvgl_ui_t *ui);
+void events_init_screen_setting (lvgl_ui_t *ui);
+void events_init_screen_operation(lvgl_ui_t *ui);
 
 LV_IMG_DECLARE(_competation_alpha_50x50);
 LV_IMG_DECLARE(_train_alpha_50x50);
@@ -104,7 +140,12 @@ LV_FONT_DECLARE(lv_font_AlimamaDongFangDaKai_24)
 LV_FONT_DECLARE(lv_font_SourceHanSerifSC_Regular_16)
 LV_FONT_DECLARE(lv_font_AlimamaDongFangDaKai_15)
 LV_FONT_DECLARE(lv_font_SourceHanSerifSC_Regular_20)
+LV_FONT_DECLARE(lv_font_montserratMedium_40)
+LV_FONT_DECLARE(lv_font_SourceHanSerifSC_Regular_26)
 LV_FONT_DECLARE(lv_font_AlimamaDongFangDaKai_21)
+LV_FONT_DECLARE(lv_font_AlimamaDongFangDaKai_16)
+LV_FONT_DECLARE(lv_font_SourceHanSerifSC_Regular_12)
+
 
 
 
