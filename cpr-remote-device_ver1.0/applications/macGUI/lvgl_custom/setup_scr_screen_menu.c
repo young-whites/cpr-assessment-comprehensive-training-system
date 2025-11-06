@@ -382,6 +382,33 @@ void setup_scr_screen_menu(lvgl_ui_t *ui)
     lv_obj_set_style_pad_left(ui->screen_menu_label_6_instructions, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui->screen_menu_label_6_instructions, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
+    //Write codes screen_menu_label_printing
+    ui->screen_menu_label_printing = lv_label_create(ui->screen_menu);
+    lv_label_set_text(ui->screen_menu_label_printing, "打印中...");
+    lv_label_set_long_mode(ui->screen_menu_label_printing, LV_LABEL_LONG_WRAP);
+    lv_obj_set_pos(ui->screen_menu_label_printing, 54, 125);
+    lv_obj_set_size(ui->screen_menu_label_printing, 130, 70);
+    lv_obj_add_flag(ui->screen_menu_label_printing, LV_OBJ_FLAG_HIDDEN);
+
+    //Write style for screen_menu_label_printing, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
+    lv_obj_set_style_border_width(ui->screen_menu_label_printing, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui->screen_menu_label_printing, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui->screen_menu_label_printing, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui->screen_menu_label_printing, &lv_font_AlimamaDongFangDaKai_16, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui->screen_menu_label_printing, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_letter_space(ui->screen_menu_label_printing, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui->screen_menu_label_printing, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_align(ui->screen_menu_label_printing, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui->screen_menu_label_printing, 206, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui->screen_menu_label_printing, lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_dir(ui->screen_menu_label_printing, LV_GRAD_DIR_NONE, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui->screen_menu_label_printing, 23, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui->screen_menu_label_printing, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui->screen_menu_label_printing, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui->screen_menu_label_printing, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui->screen_menu_label_printing, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+
+
     //The custom code of screen_menu.
 
 
@@ -395,5 +422,135 @@ void setup_scr_screen_menu(lvgl_ui_t *ui)
 
 
 
+
+
+
+//-----------------------------------------------------------------------------------------------------------------------
+//考核模式
+static void screen_menu_img_1_assess_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_data, ui->screen_data_del, &ui->screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+// 竞赛模式
+static void screen_menu_img_2_competation_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_data, ui->screen_data_del, &ui->screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+// 训练模式
+static void screen_menu_img_3_train_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_data, ui->screen_data_del, &ui->screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+// 操作功能
+static void screen_menu_img_5_operation_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_operation, ui->screen_operation_del, &ui->screen_menu_del, setup_scr_screen_operation, LV_SCR_LOAD_ANIM_NONE, 0, 200, true, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+// 设置
+static void screen_menu_img_7_setting_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(ui, &ui->screen_setting, ui->screen_setting_del, &ui->screen_menu_del, setup_scr_screen_setting, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+// 打印
+static void screen_menu_img_8_printer_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        /* 1. 显示“打印中...” */
+        lv_obj_clear_flag(ui->screen_menu_label_printing, LV_OBJ_FLAG_HIDDEN);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+// 开关
+static void screen_menu_img_9_switch_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lvgl_ui_t *ui = lv_event_get_user_data(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+
+void events_init_screen_menu (lvgl_ui_t *ui)
+{
+    lv_obj_add_event_cb(ui->screen_menu_img_1_assess, screen_menu_img_1_assess_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_2_competation, screen_menu_img_2_competation_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_3_train, screen_menu_img_3_train_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_5_operation, screen_menu_img_5_operation_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_7_setting, screen_menu_img_7_setting_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_8_printer, screen_menu_img_8_printer_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->screen_menu_img_9_switch, screen_menu_img_9_switch_event_handler, LV_EVENT_CLICKED, ui);
+
+}
 
 

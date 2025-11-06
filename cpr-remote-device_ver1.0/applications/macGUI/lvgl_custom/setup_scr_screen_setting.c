@@ -21,7 +21,7 @@
  * Date           Author       Notes
  * 2025-11-03     Administrator       the first version
  */
-#include "bsp_sys.h"
+#include "setup_scr_screen.h"
 
 
 

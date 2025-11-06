@@ -8,13 +8,12 @@
  * 2025-08-29     18452       the first version
  */
 #ifndef APPLICATIONS_MACGUI_LVGL_CUSTOM_SETUP_SCR_SCREEN_H_
-#define APPLICATIONS_MACGUI_CUSTOM_SETUP_SCR_SCREEN_H_
+#define APPLICATIONS_MACGUI_LVGL_CUSTOM_SETUP_SCR_SCREEN_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "bsp_sys.h"
 #include "lvgl.h"
 
 typedef struct
@@ -29,24 +28,25 @@ typedef struct
     lv_obj_t *screen_menu;
     bool screen_menu_del;
     lv_obj_t *screen_menu_cont_menu;
-    lv_obj_t *screen_menu_label_8_printer;
-    lv_obj_t *screen_menu_label_1_assess;
-    lv_obj_t *screen_menu_label_2_competation;
-    lv_obj_t *screen_menu_label_3_train;
-    lv_obj_t *screen_menu_label_4_score;
-    lv_obj_t *screen_menu_label_7_settings;
-    lv_obj_t *screen_menu_label_5_operation;
-    lv_obj_t *screen_menu_label_9_switch;
-    lv_obj_t *screen_menu_img_2_competation;
-    lv_obj_t *screen_menu_img_3_train;
-    lv_obj_t *screen_menu_img_4_score;
+    lv_obj_t *screen_menu_img_9_switch;
+    lv_obj_t *screen_menu_img_8_printer;
     lv_obj_t *screen_menu_img_7_setting;
     lv_obj_t *screen_menu_img_6_instruction;
-    lv_obj_t *screen_menu_img_1_assess;
-    lv_obj_t *screen_menu_img_8_printer;
-    lv_obj_t *screen_menu_img_9_switch;
     lv_obj_t *screen_menu_img_5_operation;
+    lv_obj_t *screen_menu_img_4_score;
+    lv_obj_t *screen_menu_img_3_train;
+    lv_obj_t *screen_menu_img_2_competation;
+    lv_obj_t *screen_menu_img_1_assess;
+    lv_obj_t *screen_menu_label_9_switch;
+    lv_obj_t *screen_menu_label_8_printer;
+    lv_obj_t *screen_menu_label_7_settings;
     lv_obj_t *screen_menu_label_6_instructions;
+    lv_obj_t *screen_menu_label_5_operation;
+    lv_obj_t *screen_menu_label_4_score;
+    lv_obj_t *screen_menu_label_3_train;
+    lv_obj_t *screen_menu_label_2_competation;
+    lv_obj_t *screen_menu_label_1_assess;
+    lv_obj_t *screen_menu_label_printing;
     lv_obj_t *screen_data;
     bool screen_data_del;
     lv_obj_t *screen_data_cont_data;
@@ -122,6 +122,9 @@ void events_init_screen_main (lvgl_ui_t *ui);
 void events_init_screen_menu (lvgl_ui_t *ui);
 void events_init_screen_setting (lvgl_ui_t *ui);
 void events_init_screen_operation(lvgl_ui_t *ui);
+
+/* gui_custom.c文件 */
+void lock_screen_input(void);
 
 LV_IMG_DECLARE(_competation_alpha_50x50);
 LV_IMG_DECLARE(_train_alpha_50x50);

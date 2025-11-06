@@ -325,7 +325,6 @@ void setup_scr_screen_operation(lvgl_ui_t *ui)
     lv_obj_set_style_bg_color(ui->screen_operation_btn_opera_3, lv_color_hex(0xFF5722), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_bg_opa(ui->screen_operation_btn_opera_3, 255, LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_text_color(ui->screen_operation_btn_opera_3, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_CHECKED);
-    /* 按下时加个轻微阴影，让视觉更突出 */
     lv_obj_set_style_shadow_color(ui->screen_operation_btn_opera_3, lv_color_hex(0xFF5722), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_shadow_width(ui->screen_operation_btn_opera_3, 8, LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_shadow_spread(ui->screen_operation_btn_opera_3, 2, LV_PART_MAIN | LV_STATE_CHECKED);
@@ -357,7 +356,6 @@ void setup_scr_screen_operation(lvgl_ui_t *ui)
     lv_obj_set_style_bg_color(ui->screen_operation_btn_opera_2, lv_color_hex(0xFF5722), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_bg_opa(ui->screen_operation_btn_opera_2, 255, LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_text_color(ui->screen_operation_btn_opera_2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_CHECKED);
-    /* 按下时加个轻微阴影，让视觉更突出 */
     lv_obj_set_style_shadow_color(ui->screen_operation_btn_opera_2, lv_color_hex(0xFF5722), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_shadow_width(ui->screen_operation_btn_opera_2, 8, LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_shadow_spread(ui->screen_operation_btn_opera_2, 2, LV_PART_MAIN | LV_STATE_CHECKED);
@@ -502,6 +500,7 @@ static void screen_operation_btn_opera_6_event_handler (lv_event_t *e)
     }
 }
 
+// "脉搏无"按钮
 static void screen_operation_btn_opera_5_event_handler (lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -510,6 +509,9 @@ static void screen_operation_btn_opera_5_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_VALUE_CHANGED:
     {
+        if(lv_obj_has_state(btn, LV_STATE_CHECKED)) {
+            lv_obj_clear_state(ui->screen_operation_btn_opera_4, LV_STATE_CHECKED);
+        }
         break;
     }
     default:
@@ -517,6 +519,7 @@ static void screen_operation_btn_opera_5_event_handler (lv_event_t *e)
     }
 }
 
+// "脉搏有"按钮
 static void screen_operation_btn_opera_4_event_handler (lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -525,6 +528,9 @@ static void screen_operation_btn_opera_4_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_VALUE_CHANGED:
     {
+        if(lv_obj_has_state(btn, LV_STATE_CHECKED)) {
+            lv_obj_clear_state(ui->screen_operation_btn_opera_5, LV_STATE_CHECKED);
+        }
         break;
     }
     default:
@@ -532,6 +538,7 @@ static void screen_operation_btn_opera_4_event_handler (lv_event_t *e)
     }
 }
 
+// "瞳孔缩小"按钮
 static void screen_operation_btn_opera_3_event_handler (lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -540,6 +547,12 @@ static void screen_operation_btn_opera_3_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_VALUE_CHANGED:
     {
+        if(lv_obj_has_state(btn, LV_STATE_CHECKED))
+        {
+            // 互斥：清除其他两个按钮的选中状态
+            lv_obj_clear_state(ui->screen_operation_btn_opera_1, LV_STATE_CHECKED);
+            lv_obj_clear_state(ui->screen_operation_btn_opera_2, LV_STATE_CHECKED);
+        }
         break;
     }
     default:
@@ -547,6 +560,7 @@ static void screen_operation_btn_opera_3_event_handler (lv_event_t *e)
     }
 }
 
+// "瞳孔放大"按钮
 static void screen_operation_btn_opera_2_event_handler (lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
