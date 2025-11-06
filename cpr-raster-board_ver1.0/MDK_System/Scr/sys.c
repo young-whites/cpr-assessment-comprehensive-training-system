@@ -1,0 +1,55 @@
+#include "sys.h"
+
+
+
+
+
+
+
+
+
+
+/**
+ * @brief  配置 STM8S003F6P6 的系统时钟
+ * @param  无
+ * @retval 使用内部高速时钟源（HSI） Max：16Mhz
+ * @retval 时钟分频数：CLK_PRESCALER_HSIDIV1（1分频）
+ */
+void System_Clock_Config(void)
+{
+	/*所有时钟源寄存器配置为缺省值*/
+	CLK_DeInit();
+
+	/*使用内部高速时钟源（HSI）*/
+    /* Clock divider to HSI/1  */
+	CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
+
+}
+
+
+
+
+
+/**
+ * @brief  系统关机时需要进行的操作
+ * @param  无
+ * @retval TIM2_CH2的占空比输出设置为0
+ * @retval 短按按键的计数值清零
+ */
+void System_ShutDown(void)
+{
+
+}
+
+
+
+/**
+ * @brief  系统开机时需要进行的操作
+ * @param  无
+ * @retval 使能TIM2时钟
+ * @retval 
+ */
+void System_BootUp(void)
+{
+
+}
