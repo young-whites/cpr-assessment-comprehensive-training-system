@@ -1,3 +1,4 @@
+#include <bsp_rs232_drv.h>
 /*
  * Copyright (c) 2006-2021, RT-Thread Development Team
  *
@@ -7,7 +8,6 @@
  * Date           Author       Notes
  * 2025-11-04     Administrator       the first version
  */
-#include "bsp_rs232.h"
 
 
 #define DBG_TAG "rs232"
@@ -53,26 +53,25 @@ static rt_err_t rs232_recv_ind_hook(rt_device_t dev, rt_size_t size)
     return(RT_EOK);
 }
 
-// static rt_err_t rs232_sendover_hook(rt_device_t dev, void *buffer)
-// {
-//     /*DMA发送完毕后执行，可以添加RS485控制脚*/
-//     return(RT_EOK);
-// }
 
-
+/* rs232_cal_byte_tmo() 就是“波特率→毫秒”的换算表，把 3.5 字符时间换算出来并锁在 [1,20] ms 安全区，给接收状态机当“帧间隔”用 */
 static int rs232_cal_byte_tmo(int baudrate)
 {
+    /* 发送 40 bit 需要的时间折成毫秒 */
     int tmo = (40 * 1000) / baudrate;
-    if (tmo < RS232_BYTE_TMO_MIN)
-    {
+
+    /* 算得太小（高速波特率）时，给个下限，防止系统定时器精度不够导致超时 */
+    if (tmo < RS232_BYTE_TMO_MIN){
         tmo = RS232_BYTE_TMO_MIN;
     }
-    else if (tmo > RS232_BYTE_TMO_MAX)
-    {
+    /* 算得太大（低速波特率）时，给上限，避免一帧要等几百毫秒，系统响应太慢 */
+    else if (tmo > RS232_BYTE_TMO_MAX){
         tmo = RS232_BYTE_TMO_MAX;
     }
     return (tmo);
 }
+
+
 
 /*
  * @brief   create rs232 instance dynamically
@@ -83,43 +82,47 @@ static int rs232_cal_byte_tmo(int baudrate)
  */
 rs232_inst_t * rs232_create(const char *name, int baudrate, int parity)
 {
-    rs232_inst_t *hinst;
-    rt_device_t dev;
+    rs232_inst_t *hinst;    // 实例指针（返回值）
+    rt_device_t dev;        // 底层串口设备句柄
 
+    // 查找串口设备
     dev = rt_device_find(name);
-    if (dev == RT_NULL)
-    {
+    if (dev == RT_NULL){
         LOG_E("rs232 instance initiliaze error, the serial device(%s) no found.", name);
         return(RT_NULL);
     }
 
-    if (dev->type != RT_Device_Class_Char)
-    {
+    // 校验字符型设备
+    if (dev->type != RT_Device_Class_Char){
         LOG_E("rs232 instance initiliaze error, the serial device(%s) type is not char.", name);
         return(RT_NULL);
     }
 
+    // 给RS232实例创建一个可用的内存空间
     hinst = rt_malloc(sizeof(struct rs232_inst));
-    if (hinst == RT_NULL)
-    {
+    if (hinst == RT_NULL){
         LOG_E("rs232 create fail. no memory for rs232 create instance.");
         return(RT_NULL);
     }
 
+    // 创建一个互斥锁
     hinst->lock = rt_mutex_create(name, RT_IPC_FLAG_FIFO);
-    if (hinst->lock == RT_NULL)
-    {
+    if (hinst->lock == RT_NULL){
         rt_free(hinst);
         LOG_E("rs232 create fail. no memory for rs232 create mutex.");
         return(RT_NULL);
     }
 
-    /* 初始化信号量 */
+    // 创建一个 信号量，用于 通知“一次完整数据包已接收完毕”
+    // 初始值为 0：表示当前没有数据可读
+    // 接收线程会阻塞在 rt_sem_take() 上，等定时器释放信号量才醒来
     rt_sem_init(&hinst->rx_sem, name, 0, RT_IPC_FLAG_FIFO);
-    hinst->received_len = 0;
-    hinst->serial = dev;
-    hinst->status = 0;
-    hinst->byte_tmo = rs232_cal_byte_tmo(baudrate);
+    hinst->received_len = 0;    // 已接收字节数清零
+    hinst->serial = dev;        // 保存底层串口句柄
+    hinst->status = 0;          // 连接状态：0=未打开
+    hinst->byte_tmo = rs232_cal_byte_tmo(baudrate);     // 根据波特率计算字节间隔超时
+
+    // 创建“接收超时”定时器
     hinst->received_over_timer = rt_timer_create(name, rs232_recv_timeout,
                                  hinst,  hinst->byte_tmo,
                                  RT_TIMER_FLAG_ONE_SHOT);
@@ -130,6 +133,8 @@ rs232_inst_t * rs232_create(const char *name, int baudrate, int parity)
         LOG_E("rs232 create fail. no memory for rs232 create timer.");
         return(RT_NULL);
     }
+
+    // 配置RS232的串口参数（只配置参数，不开启串口设备）
     rs232_config(hinst, baudrate, (parity?9:8), parity, 0);
 
     LOG_D("rs232 create success.");
@@ -144,16 +149,14 @@ rs232_inst_t * rs232_create(const char *name, int baudrate, int parity)
  */
 int rs232_destory(rs232_inst_t * hinst)
 {
-    if (hinst == RT_NULL)
-    {
+    if (hinst == RT_NULL){
         LOG_E("rs232 destory fail. hinst is NULL.");
         return(-RT_ERROR);
     }
 
     rs232_disconn(hinst);
 
-    if (hinst->lock)
-    {
+    if (hinst->lock){
         rt_mutex_delete(hinst->lock);
         hinst->lock = RT_NULL;
     }
@@ -178,8 +181,7 @@ int rs232_config(rs232_inst_t * hinst, int baudrate, int databits, int parity, i
 {
     struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT;
 
-    if (hinst == RT_NULL)
-    {
+    if (hinst == RT_NULL){
         LOG_E("rs232 config fail. hinst is NULL.");
         return(-RT_ERROR);
     }
@@ -392,89 +394,8 @@ int rs232_send(rs232_inst_t * hinst, void *buf, int size)
 
 
 
-#ifdef RS232_USING_SAMPLE
 
-#ifndef RS232_SAMPLE_SERIAL
-#define RS232_SAMPLE_SERIAL       "uart2"
-#endif
 
-#ifndef RS232_SAMPLE_BAUDRATE
-#define RS232_SAMPLE_BAUDRATE     9600
-#endif
-
-#ifndef RS232_SAMPLE_MASTER_PARITY
-#define RS232_SAMPLE_MASTER_PARITY      0 //0 -- none parity
-#endif
-
-#define RS232_SEND_MAX_SIZE 100 //发送数据缓存大小
-#define RS232_RECEIVED_MAX_SIZE 256 //接收数据缓存大小
-
-rs232_inst_t *sample_hinst;
-uint8_t mRs232ReceivedMessage[RS232_RECEIVED_MAX_SIZE]; //接收到的数据
-uint8_t mRs232SendBuf[RS232_SEND_MAX_SIZE]; //接收中的数据，缓存在这里
-uint8_t mRs232ReceivedBuf[RS232_RECEIVED_MAX_SIZE]; //发送中的数据，保存在这里
-
-//接收数据线程函数
-void rs232_receivedFrame(void *parameter)
-{
-    int len;
-
-    while(1)
-    {
-        len = rs232_recv(sample_hinst, mRs232ReceivedMessage, RS232_RECEIVED_MAX_SIZE);
-        if (len > 0)
-        {
-            //mRs232ReceivedMessage为接收到的数据
-            LOG_I("received data, data[0] is %d\n",mRs232ReceivedMessage[0]);
-        }
-    }
-}
-
-static void rs232_sample_loopback_test(void *args)
-{
-    static rt_uint8_t buf[256];
-    int len;
-
-    sample_hinst = rs232_create(RS232_SAMPLE_SERIAL, RS232_SAMPLE_BAUDRATE, RS232_SAMPLE_MASTER_PARITY);
-    sample_hinst->received_buf = mRs232ReceivedBuf;
-    sample_hinst->received_max_len = RS232_RECEIVED_MAX_SIZE;
-
-    if (sample_hinst == RT_NULL)
-    {
-        LOG_E("create rs232 instance fail.");
-        return;
-    }
-
-    rt_thread_t tid = rt_thread_create("rs232_rec", rs232_receivedFrame, RT_NULL, 1024, 16, 20);
-    RT_ASSERT(tid != RT_NULL);
-    rt_thread_startup(tid);
-
-    if (rs232_connect(sample_hinst) != RT_EOK)
-    {
-        rs232_destory(sample_hinst);
-        LOG_E("rs232 connect fail.");
-        return;
-    }
-
-    while(1)
-    {
-        len = 16;
-        rs232_send(sample_hinst, buf, len);
-        rt_thread_mdelay(1000);
-    }
-}
-
-static int rs232_sample_init(void)
-{
-    rt_thread_t tid = rt_thread_create("rs232", rs232_sample_loopback_test, RT_NULL, 1024, 16, 20);
-    RT_ASSERT(tid != RT_NULL);
-    rt_thread_startup(tid);
-    LOG_I("rs232 sample thread startup...");
-    return(RT_EOK);
-}
-INIT_APP_EXPORT(rs232_sample_init);
-
-#endif
 
 
 

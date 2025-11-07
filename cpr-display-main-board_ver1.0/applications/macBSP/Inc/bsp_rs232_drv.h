@@ -7,8 +7,8 @@
  * Date           Author       Notes
  * 2025-11-04     Administrator       the first version
  */
-#ifndef APPLICATIONS_MACBSP_INC_BSP_RS232_H_
-#define APPLICATIONS_MACBSP_INC_BSP_RS232_H_
+#ifndef APPLICATIONS_MACBSP_INC_BSP_RS232_DRV_H_
+#define APPLICATIONS_MACBSP_INC_BSP_RS232_DRV_H_
 #include "bsp_sys.h"
 
 
@@ -98,4 +98,4 @@ int rs232_send(rs232_inst_t * hinst, void *buf, int size);
 
 
 
-#endif /* APPLICATIONS_MACBSP_INC_BSP_RS232_H_ */
+#endif /* APPLICATIONS_MACBSP_INC_BSP_RS232_DRV_H_ */

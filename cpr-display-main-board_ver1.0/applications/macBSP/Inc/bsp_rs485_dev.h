@@ -18,7 +18,7 @@ extern "C"
 #endif
 
 //rs485-device-name, serial-device-name, baudrate, parity(0~2), control-pin, send-level(0~1)
-#define RS485_DEV_CFG_TABLE {                               \
+#define RS485_DEV_CFG_TABLE {                     \
     {"rs485-1", "uart3",    115200, 0,  -1,  -1}, \
 }
 

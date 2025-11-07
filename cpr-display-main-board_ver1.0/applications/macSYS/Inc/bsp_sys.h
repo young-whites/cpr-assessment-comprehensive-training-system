@@ -29,6 +29,7 @@
 
 /* macBSP文件 */
 #include "bsp_led.h"
+#include "bsp_rs232_drv.h"
 #include "bsp_rs485_drv.h"
 #include "bsp_rs485_dev.h"
 #include "bsp_rs485_message.h"
