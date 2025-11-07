@@ -120,7 +120,7 @@ void rd_printer_move_to_horizontal_table_cmd(void);
  *        ·即使字符宽度变化，以前指定的水平定位位置也不变
  *        ·缺省定位位置为字体A (12 × 24)
  */
-void rd_printer_set_horizontal_table_cmd(void);
+rt_size_t rd_printer_set_horizontal_tab_cmd(const rt_uint8_t *positions, rt_uint8_t count);
 
 
 
@@ -282,7 +282,7 @@ void rd_printer_set_vertical_amplification_char_cmd(rt_uint8_t n);
  *        ·如果n 在定义范围之外，忽略该命令
  *        ·垂直方向是指进纸方向，水平方向与进纸方向垂直。然而，当字符方向顺时针旋转90°后，垂直方向与水平方向之间的关系颠倒，也就是说本命令优先级低于于FS 2 ，当两个命令同时有效时，字符显示是先旋转，再放大
  */
-void rd_printer_set_enlarged_characters_cmd(rt_uint8_t n);
+void rd_printer_set_enlarged_characters_cmd(rt_uint8_t n1, rt_uint8_t n2);
 
 
 /**
@@ -291,7 +291,7 @@ void rd_printer_set_enlarged_characters_cmd(rt_uint8_t n);
  * @param HEX   -> 1C  26
  * @note  上电后打印机默认为汉字打印模式
  */
-
+void rd_printer_enter_chinese_mode_cmd(void);
 
 
 
@@ -301,7 +301,7 @@ void rd_printer_set_enlarged_characters_cmd(rt_uint8_t n);
  * @param HEX   -> 1C  2E
  * @note  取消汉字字符模式，当取消汉字字符模式后，超过0x80的编码仍然当作ASCII字符处理，将不再打印汉字，除非再用FS &命令选择汉字模式。 打印机进入汉字打印模式
  */
-
+void rd_printer_quit_chinese_mode_cmd(void);
 
 
 
@@ -311,7 +311,7 @@ void rd_printer_set_enlarged_characters_cmd(rt_uint8_t n);
  * @param HEX   -> 1B   36
  * @note  在该命令输入之后的所有字符均使用字符集1中的字符打印(见附录D)字符集1中有6× 8点阵字符224个，包括ASCII字符及各种图形符号等。代码范围20H~FFH(32~255)
  */
-
+void rd_printer_select_6X8_character_1(void);
 
 
 
@@ -321,6 +321,8 @@ void rd_printer_set_enlarged_characters_cmd(rt_uint8_t n);
  * @param HEX   -> 1B   37
  * @note  在该命令输入之后的所有字符均使用字符集1中的字符打印(见附录D)字符集1中有6× 8点阵字符224个，包括ASCII字符及各种图形符号等。代码范围20H~FFH(32~255)
  */
+void rd_printer_select_6X8_character_2(void);
+
 
 
 
