@@ -27,6 +27,8 @@ void system_param_init(void)
     Record.work_time = 200;
     Record.press_rate = 70;
     Record.air_rate = 50;
+
+    Record.menu_index = 0;
 }
 
 

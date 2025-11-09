@@ -1,3 +1,4 @@
+
 /*
  * bsp_key.c
  *
@@ -96,10 +97,33 @@ void MyCustomKeyHandler(key_event_t event) {
 
     if (event.state == KEY_PRESS) {
         rt_kprintf("Custom Handler: Key '%c' pressed at Row %d, Col %d\n", key_value, event.row, event.col);
-        // 这里添加你的自定义逻辑，例如：更新 LCD 显示、发送到队列、或触发其他事件
-    } else if (event.state == KEY_RELEASE) {
+
+        // 新增逻辑：当键值为 '3' 时，切换回 menu 页面
+        if (key_value == '3' && Record.menu_index == 2) {
+            // 获取当前活动屏幕
+            lv_obj_t *current_scr = lv_scr_act();
+            // 确定当前屏幕的 del 标志（根据 guider_lvgl 结构匹配）
+            bool *current_del = NULL;
+            if (current_scr == guider_lvgl.screen_data) {
+                current_del = &guider_lvgl.screen_data_del;
+            } else if (current_scr == guider_lvgl.screen_setting) {
+                current_del = &guider_lvgl.screen_setting_del;
+            } else if (current_scr == guider_lvgl.screen_operation) {
+                current_del = &guider_lvgl.screen_operation_del;
+            }
+            // 执行页面切换到 menu（使用提供的 ui_load_scr_animation 函数）
+            ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, current_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
+            Record.menu_index = 1;
+        }
+        else {
+            // 如果当前已在 menu 或未知屏幕，不执行切换
+            rt_kprintf("Already on menu or unknown screen, skipping switch.\n");
+            return;
+
+        }
+    }
+    else if (event.state == KEY_RELEASE) {
         rt_kprintf("Custom Handler: Key '%c' released at Row %d, Col %d\n", key_value, event.row, event.col);
-        // 自定义释放逻辑
     }
 }
 

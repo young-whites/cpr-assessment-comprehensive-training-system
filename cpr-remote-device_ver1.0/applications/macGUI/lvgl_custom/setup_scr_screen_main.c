@@ -152,6 +152,7 @@ static void screen_main_btn_1_start_event_handler (lv_event_t *e)
 //            lv_obj_clear_flag(guider_lvgl.screen_main_label_2_connect, LV_OBJ_FLAG_HIDDEN);
 //        }
     ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, &guider_lvgl.screen_main_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
+    Record.menu_index = 1;
 }
 
 

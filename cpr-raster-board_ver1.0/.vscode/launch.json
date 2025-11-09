@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "i:/GitHub-young-nights/cpr-assessment-training-machine/cpr-raster-board_ver1.0/MDK_System/Scr",
-      "program": "i:/GitHub-young-nights/cpr-assessment-training-machine/cpr-raster-board_ver1.0/MDK_System/Scr/build/Debug/outDebug",
+      "cwd": "c:/Users/18452/Documents/Github-young-nights/cpr-assessment-training-machine/cpr-raster-board_ver1.0",
+      "program": "c:/Users/18452/Documents/Github-young-nights/cpr-assessment-training-machine/cpr-raster-board_ver1.0/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

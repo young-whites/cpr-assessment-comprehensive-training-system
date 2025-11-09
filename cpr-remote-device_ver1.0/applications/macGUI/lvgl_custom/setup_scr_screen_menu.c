@@ -436,6 +436,7 @@ static void screen_menu_img_1_assess_event_handler (lv_event_t *e)
     case LV_EVENT_CLICKED:
     {
         ui_load_scr_animation(ui, &ui->screen_data, ui->screen_data_del, &ui->screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        Record.menu_index = 2;
         break;
     }
     default:
@@ -452,6 +453,7 @@ static void screen_menu_img_2_competation_event_handler (lv_event_t *e)
     case LV_EVENT_CLICKED:
     {
         ui_load_scr_animation(ui, &ui->screen_data, ui->screen_data_del, &ui->screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        Record.menu_index = 2;
         break;
     }
     default:
@@ -468,6 +470,7 @@ static void screen_menu_img_3_train_event_handler (lv_event_t *e)
     case LV_EVENT_CLICKED:
     {
         ui_load_scr_animation(ui, &ui->screen_data, ui->screen_data_del, &ui->screen_menu_del, setup_scr_screen_data, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        Record.menu_index = 2;
         break;
     }
     default:
@@ -484,6 +487,7 @@ static void screen_menu_img_5_operation_event_handler (lv_event_t *e)
     case LV_EVENT_CLICKED:
     {
         ui_load_scr_animation(ui, &ui->screen_operation, ui->screen_operation_del, &ui->screen_menu_del, setup_scr_screen_operation, LV_SCR_LOAD_ANIM_NONE, 0, 200, true, true);
+        Record.menu_index = 2;
         break;
     }
     default:
@@ -500,6 +504,7 @@ static void screen_menu_img_7_setting_event_handler (lv_event_t *e)
     case LV_EVENT_CLICKED:
     {
         ui_load_scr_animation(ui, &ui->screen_setting, ui->screen_setting_del, &ui->screen_menu_del, setup_scr_screen_setting, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
+        Record.menu_index = 2;
         break;
     }
     default:
@@ -532,7 +537,7 @@ static void screen_menu_img_9_switch_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_CLICKED:
     {
-
+        battery_recharge_disable();
         break;
     }
     default:

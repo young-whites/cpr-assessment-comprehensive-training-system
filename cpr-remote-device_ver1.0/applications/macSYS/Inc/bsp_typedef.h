@@ -27,7 +27,7 @@ typedef struct {
     rt_uint16_t work_time;                       // 需要设置的工作时间(在设置页面设置)
     rt_uint16_t air_rate;                        // 需要设置的潮气达标率
     rt_uint16_t press_rate;                      // 需要设置的按压达标率
-
+    rt_uint8_t  menu_index;                      // 菜单页面索引(0：主页面  1：菜单页面  2：其他子页面)
 }RecordStruct;
 extern RecordStruct Record;
 
