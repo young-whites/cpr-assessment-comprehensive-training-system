@@ -1609,6 +1609,12 @@
     <group>
         <name>MDK_APP</name>
         <file>
+            <name>$PROJ_DIR$\..\MDK_APP\app_bsp.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\MDK_APP\app_bsp.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\MDK_APP\app_timming.c</name>
         </file>
         <file>
