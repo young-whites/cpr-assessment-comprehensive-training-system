@@ -72,8 +72,8 @@ void adc_thread_entry(void* parameter)
 {
     while(1)
     {
-        adc_val += rt_adc_read((rt_adc_device_t)adc_dev1.adc_dev, adc_dev1.adc_channel_1);
-
+        adc_val = rt_adc_read((rt_adc_device_t)adc_dev1.adc_dev, adc_dev1.adc_channel_1);
+        rt_kprintf("<any>:%d\n",adc_val);
         rt_thread_mdelay(10);
     }
 }
