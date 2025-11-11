@@ -74,6 +74,9 @@ static void printer_rs232_thread_entry(void *args)
         return;
     }
 
+
+
+
     while(1)
     {
 

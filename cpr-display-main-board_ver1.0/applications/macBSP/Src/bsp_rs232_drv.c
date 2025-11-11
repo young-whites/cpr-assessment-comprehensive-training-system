@@ -284,8 +284,7 @@ int rs232_connect(rs232_inst_t * hinst)
  */
 int rs232_disconn(rs232_inst_t * hinst)
 {
-    if (hinst == RT_NULL)
-    {
+    if (hinst == RT_NULL){
         LOG_E("rs232 disconnect fail. hinst is NULL.");
         return(-RT_ERROR);
     }
@@ -298,13 +297,11 @@ int rs232_disconn(rs232_inst_t * hinst)
 
     rt_mutex_take(hinst->lock, RT_WAITING_FOREVER);
 
-    if (hinst->received_over_timer)
-    {
+    if (hinst->received_over_timer){
         rt_timer_delete(hinst->received_over_timer);
     }
 
-    if (hinst->serial)
-    {
+    if (hinst->serial){
         hinst->serial->rx_indicate = RT_NULL;
         rt_device_close(hinst->serial);
     }

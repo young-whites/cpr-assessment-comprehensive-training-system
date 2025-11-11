@@ -1,5 +1,5 @@
 #include "stm8s_it.h"
-#include "sys.h"
+#include "app_sys.h"
 
 extern void TimingDelay_Decrement(void);
 

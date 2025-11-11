@@ -13,8 +13,10 @@
 
 
 /*Custom header file*****************/
-#include "General_TIM.h"
-#include "usart.h"
+#include "app_general_tim.h"
+#include "app_usart.h"
+#include "app_bsp.h"
+#include "app_timming.h"
 /*GPIO Port marco definition********/
 #include "stm8s.h"
 #include "stm8s_uart1.h"

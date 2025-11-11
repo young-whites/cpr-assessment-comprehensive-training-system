@@ -1,6 +1,6 @@
 #ifndef __GENERAL_TIM_H
 #define	__GENERAL_TIM_H
-#include "sys.h"
+#include "app_sys.h"
 
 
 

@@ -1,4 +1,4 @@
-#include "sys.h"
+#include "app_sys.h"
 
 
 
@@ -21,7 +21,7 @@ void System_Clock_Config(void)
 	CLK_DeInit();
 
 	/*使用内部高速时钟源（HSI）*/
-    /* Clock divider to HSI/1  */
+    /* Clock divider to HSI/1 - 16Mhz */
 	CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
 
 }

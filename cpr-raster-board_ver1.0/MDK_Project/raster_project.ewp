@@ -1764,25 +1764,25 @@
         <group>
             <name>Inc</name>
             <file>
-                <name>$PROJ_DIR$\..\MDK_System\Inc\general_tim.h</name>
+                <name>$PROJ_DIR$\..\MDK_System\Inc\app_general_tim.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\MDK_System\Inc\sys.h</name>
+                <name>$PROJ_DIR$\..\MDK_System\Inc\app_sys.h</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\MDK_System\Inc\usart.h</name>
+                <name>$PROJ_DIR$\..\MDK_System\Inc\app_usart.h</name>
             </file>
         </group>
         <group>
             <name>Scr</name>
             <file>
-                <name>$PROJ_DIR$\..\MDK_System\Scr\general_tim.c</name>
+                <name>$PROJ_DIR$\..\MDK_System\Scr\app_general_tim.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\MDK_System\Scr\sys.c</name>
+                <name>$PROJ_DIR$\..\MDK_System\Scr\app_sys.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\MDK_System\Scr\usart.c</name>
+                <name>$PROJ_DIR$\..\MDK_System\Scr\app_usart.c</name>
             </file>
         </group>
     </group>

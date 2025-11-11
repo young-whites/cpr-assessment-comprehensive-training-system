@@ -506,3 +506,6 @@ void rd_printer_select_6X8_character_2(void)
     static rt_uint8_t cmd_buf[2] = {0x1B, 0x37};
     rs232_send(printer_hinst, cmd_buf, sizeof(cmd_buf));
 }
+
+
+
