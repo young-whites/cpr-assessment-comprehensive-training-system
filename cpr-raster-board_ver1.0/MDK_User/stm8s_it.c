@@ -1,11 +1,45 @@
 #include "stm8s_it.h"
 #include "app_sys.h"
 
+
+
+
+
+
+/**
+  * @brief  UART1 TX Interrupt routine
+  * @param None
+  * @retval
+  * None
+  */
+INTERRUPT_HANDLER(EXTI_PORTD_IRQHandler, 6)
+{
+    
+    uint8_t curr_A = GPIO_ReadInputPin(GPIOD, GPIO_PIN_3);
+    uint8_t curr_B = GPIO_ReadInputPin(GPIOD, GPIO_PIN_4);
+    uint8_t curr_state = (curr_A << 1) | curr_B;  // 00,01,10,11
+
+    /* 格雷码 4× 倍频状态表 */
+    static const int8_t quad_table[16] = {
+        0, -1, +1,  0,   // 00 → xx
+       +1,  0,  0, -1,   // 01 → xx
+       -1,  0,  0, +1,   // 10 → xx
+        0, +1, -1,  0    // 11 → xx
+    };
+
+    uint8_t transition = (last_state << 2) | curr_state;
+    depth_count += quad_table[transition];
+
+    last_state = curr_state;
+
+    /* 清除中断标志 */
+    EXTI_ClearITPendingBit(EXTI_IT_PORTD);
+}
+
+
+
+
 extern void TimingDelay_Decrement(void);
-
-
-
-
 #pragma vector = 0x0D
 /* 每1ms 进入一次中断 */
 __interrupt void TIM1_IRQHandler(void)

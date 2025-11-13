@@ -17,7 +17,8 @@ void APP_BSP_GPIO_Init(void)
 
 void GPIO_EXTIConfig(void)
 {
-    // 配置外部中断
+    // 设置 GPIOC 端口 的所有引脚为 双边沿触发（即上升沿和下降沿都会触发中断）
     EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOC, EXTI_SENSITIVITY_RISE_FALL);
+    // 设置 GPIOD 端口 的所有引脚为 双边沿触发（即上升沿和下降沿都会触发中断）
     EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_RISE_FALL);
 }

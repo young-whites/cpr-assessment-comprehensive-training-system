@@ -21,7 +21,8 @@ void main(void)
 	UART1_Config();
 	/* BSP GPIO INIT */
 	APP_BSP_GPIO_Init();
-
+	/* EXTI Config */
+	GPIO_EXTIConfig();
 	
 	/* Open all interrupts -----------------------------------------------------*/
 	enableInterrupts();
