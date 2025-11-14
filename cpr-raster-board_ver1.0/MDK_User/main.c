@@ -1,7 +1,8 @@
 #include "stm8s.h"
 #include "app_sys.h"
 
-
+#define PITCH_MM    2.00f          		// 实测齿距2.0mm
+#define MM_PER_PULSE (PITCH_MM / 4.0f)  // 0.5 mm/脉冲
 
 
 void main(void)

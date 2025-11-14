@@ -4,7 +4,8 @@
 
 
 
-
+volatile int32_t depth_count = 0;   // 脉冲计数（4×）
+float depth_mm = 0.0f;              // 实时深度（mm）
 
 /**
   * @brief  UART1 TX Interrupt routine
@@ -14,7 +15,7 @@
   */
 INTERRUPT_HANDLER(EXTI_PORTD_IRQHandler, 6)
 {
-    
+    static uint8_t last_state = 0;
     uint8_t curr_A = GPIO_ReadInputPin(GPIOD, GPIO_PIN_3);
     uint8_t curr_B = GPIO_ReadInputPin(GPIOD, GPIO_PIN_4);
     uint8_t curr_state = (curr_A << 1) | curr_B;  // 00,01,10,11
@@ -32,8 +33,7 @@ INTERRUPT_HANDLER(EXTI_PORTD_IRQHandler, 6)
 
     last_state = curr_state;
 
-    /* 清除中断标志 */
-    EXTI_ClearITPendingBit(EXTI_IT_PORTD);
+    EXTI->CR1 |= 0xC0;
 }
 
 

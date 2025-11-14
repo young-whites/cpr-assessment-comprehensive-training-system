@@ -28,7 +28,7 @@ void UART1_Config(void)
           - Tx and Rx enabled
           - UART1 Clock disabled
   */
-    UART1_Init(56000, UART1_WORDLENGTH_8D, UART1_STOPBITS_1, UART1_PARITY_NO, UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TXRX_ENABLE); 
+    UART1_Init(9600, UART1_WORDLENGTH_8D, UART1_STOPBITS_1, UART1_PARITY_NO, UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TXRX_ENABLE); 
 
     /* 使能UART1接收中断，中断向量号为18 */
     UART1_ITConfig(UART1_IT_RXNE_OR, ENABLE);
@@ -101,7 +101,7 @@ void    UART1_ReceiveValueInit(USART_ReceiveDataTypedef* Uart_Device_Rx, uint16_
   *         Data              数据内容
   * @retval None
   */
-void    UART1_Receive(USART_ReceiveDataTypedef* Uart_Device_Rx, uint8_t Data)
+void UART1_Receive(USART_ReceiveDataTypedef* Uart_Device_Rx, uint8_t Data)
 {
     if (!Uart_Device_Rx->receive_full_flag)
     {

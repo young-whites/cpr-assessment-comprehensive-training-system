@@ -26,9 +26,7 @@
 
 
 
-
 void System_Clock_Config(void);
-void System_ShutDown(void);
-void System_BootUp(void);
+
 
 #endif /*__SYS_H*/

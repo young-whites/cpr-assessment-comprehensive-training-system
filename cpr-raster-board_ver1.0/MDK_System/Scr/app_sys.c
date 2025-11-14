@@ -27,29 +27,3 @@ void System_Clock_Config(void)
 }
 
 
-
-
-
-/**
- * @brief  系统关机时需要进行的操作
- * @param  无
- * @retval TIM2_CH2的占空比输出设置为0
- * @retval 短按按键的计数值清零
- */
-void System_ShutDown(void)
-{
-
-}
-
-
-
-/**
- * @brief  系统开机时需要进行的操作
- * @param  无
- * @retval 使能TIM2时钟
- * @retval 
- */
-void System_BootUp(void)
-{
-
-}

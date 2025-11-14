@@ -27,8 +27,6 @@ void    USART1_SendData(u8* buffer, u16 size);
 void    UART1_ReceiveValueInit(USART_ReceiveDataTypedef* Uart_Device_Rx, uint16_t Length);
 void    UART1_Receive(USART_ReceiveDataTypedef* Uart_Device_Rx, uint8_t Data);
 uint8_t UART1_GetByte(USART_ReceiveDataTypedef* Uart_Device_Rx);
-int     putchar(int ch);
-void    USER_UART1_Printf(char* fmt, ...);
 
 
 
