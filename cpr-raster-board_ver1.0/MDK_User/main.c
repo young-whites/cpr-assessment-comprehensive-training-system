@@ -20,8 +20,6 @@ void main(void)
 	UART1_ReceiveValueInit(&USART1_QueueBuf, UART_DATALENGTH);
 	/* UART1 Config*/
 	UART1_Config();
-	/* BSP GPIO INIT */
-	APP_BSP_GPIO_Init();
 	/* EXTI Config */
 	GPIO_EXTIConfig();
 	

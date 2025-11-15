@@ -1767,6 +1767,9 @@
                 <name>$PROJ_DIR$\..\MDK_System\Inc\app_general_tim.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\MDK_System\Inc\app_message.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\MDK_System\Inc\app_sys.h</name>
             </file>
             <file>
@@ -1777,6 +1780,9 @@
             <name>Scr</name>
             <file>
                 <name>$PROJ_DIR$\..\MDK_System\Scr\app_general_tim.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\MDK_System\Scr\app_message.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\MDK_System\Scr\app_sys.c</name>

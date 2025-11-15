@@ -7,6 +7,8 @@
 volatile int32_t depth_count = 0;   // 脉冲计数（4×）
 float depth_mm = 0.0f;              // 实时深度（mm）
 
+
+
 /**
   * @brief  UART1 TX Interrupt routine
   * @param None
@@ -32,8 +34,6 @@ INTERRUPT_HANDLER(EXTI_PORTD_IRQHandler, 6)
     depth_count += quad_table[transition];
 
     last_state = curr_state;
-
-    EXTI->CR1 |= 0xC0;
 }
 
 
@@ -53,8 +53,7 @@ __interrupt void TIM1_IRQHandler(void)
     }
 
     /*1s扫秒时间，取余为整数说明时间到进入执行函数*/
-    if ((msCnt % 3000) == 0)	Timing_3s();
-    if ((msCnt % 10) == 0)      Timing_10ms();
+    if ((msCnt % 1000) == 0)	Timing_1s();
 
 
 

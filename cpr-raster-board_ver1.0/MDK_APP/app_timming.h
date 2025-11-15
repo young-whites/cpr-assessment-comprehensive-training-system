@@ -6,8 +6,7 @@
 
 
 
-void Timing_3s(void);
-void Timing_10ms(void);
+void Timing_1s(void);
 
 
 

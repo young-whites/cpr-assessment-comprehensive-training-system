@@ -5,7 +5,6 @@
 
 
 
-void APP_BSP_GPIO_Init(void);
 void GPIO_EXTIConfig(void);
 
 #endif /* _APP_BSP_H_ */
