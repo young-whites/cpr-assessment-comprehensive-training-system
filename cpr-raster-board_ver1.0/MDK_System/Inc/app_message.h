@@ -13,7 +13,7 @@
 
 
 
-void USART1_SendDepth(float depth_mm);
+void USART1_SendDepthDir(float depth_mm, int8_t dir);
 
 
 

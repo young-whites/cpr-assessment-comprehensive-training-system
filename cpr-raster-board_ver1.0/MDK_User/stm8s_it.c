@@ -3,9 +3,10 @@
 
 
 
+volatile int32_t depth_count = 0;     // 脉冲计数（4×）
+float depth_mm = 0.0f;                // 当前深度（mm）
+int8_t direction = 0;                 // 方向：1=向下，-1=向上，0=静止
 
-volatile int32_t depth_count = 0;   // 脉冲计数（4×）
-float depth_mm = 0.0f;              // 实时深度（mm）
 
 
 
@@ -23,17 +24,31 @@ INTERRUPT_HANDLER(EXTI_PORTD_IRQHandler, 6)
     uint8_t curr_state = (curr_A << 1) | curr_B;  // 00,01,10,11
 
     /* 格雷码 4× 倍频状态表 */
-    static const int8_t quad_table[16] = {
-        0, -1, +1,  0,   // 00 → xx
-       +1,  0,  0, -1,   // 01 → xx
-       -1,  0,  0, +1,   // 10 → xx
-        0, +1, -1,  0    // 11 → xx
+static const int8_t quad_table[16] = {
+         0,  +1,  -1,  0,   // 00 → 00,01,10,11
+        -1,   0,   0, +1,   // 01 → ...
+        +1,   0,   0, -1,   // 10 → ...
+         0,  -1,  +1,  0    // 11 → ...
     };
 
-    uint8_t transition = (last_state << 2) | curr_state;
-    depth_count += quad_table[transition];
+    uint8_t trans = (last_state << 2) | curr_state;
+    int8_t delta = quad_table[trans];  // 本次变化量
 
+    // 判断方向
+    if (delta > 0) {
+        direction = 1;   // 向下压
+    } else if (delta < 0) {
+        direction = -1;  // 向上弹
+    } else {
+        direction = 0;   // 非法或静止
+    }
+
+    depth_count += delta;
     last_state = curr_state;
+
+    /* 正确清除 PORTD 中断标志 */
+    EXTI->CR1 |= 0xC0;  // 写1到 bit7 和 bit6
+
 }
 
 
