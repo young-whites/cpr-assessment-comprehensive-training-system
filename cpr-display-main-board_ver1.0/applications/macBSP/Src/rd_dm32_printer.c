@@ -85,6 +85,7 @@ void rd_printer_print_and_formfeed_1_cmd(rt_uint8_t n)
 }
 
 
+
 /**
  * @brief 打印输出打印缓冲区中的数据，并进纸n行
  * @param ASCII -> ESC d   n （0 ≤ n ≤ 255）

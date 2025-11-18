@@ -44,6 +44,7 @@ void GPIO_SetColumn(MatrixKey_ColumnName_TypeDef col, MatrixKey_Status_TypeDef s
             port = Matrixkey_Column3_GPIO_Port;
             pin = Matrixkey_Column3_Pin;
             break;
+
         default:
             return;
     }
@@ -97,9 +98,21 @@ void MyCustomKeyHandler(key_event_t event) {
 
     if (event.state == KEY_PRESS) {
         rt_kprintf("Custom Handler: Key '%c' pressed at Row %d, Col %d\n", key_value, event.row, event.col);
+        //-------------------------------------------------------------------------------------------------------------------------
+        // 新增逻辑：当键值为'1'时，进入设置页面
+        if(key_value == '1' && Record.nrf_if_connected == 1)
+        {
 
+        }
+        //-------------------------------------------------------------------------------------------------------------------------
+        // 新增逻辑：当键值为'2'时，进入操作页面
+        if(key_value == '2' && Record.nrf_if_connected == 1 )
+        {
+
+        }
+        //-------------------------------------------------------------------------------------------------------------------------
         // 新增逻辑：当键值为 '3' 时，切换回 menu 页面
-        if (key_value == '3' && Record.menu_index == 2) {
+        if (key_value == '3' && Record.menu_index == 2 && Record.nrf_if_connected == 1) {
             // 获取当前活动屏幕
             lv_obj_t *current_scr = lv_scr_act();
             // 确定当前屏幕的 del 标志（根据 guider_lvgl 结构匹配）
@@ -115,12 +128,70 @@ void MyCustomKeyHandler(key_event_t event) {
             ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, current_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
             Record.menu_index = 1;
         }
-        else {
-            // 如果当前已在 menu 或未知屏幕，不执行切换
-            rt_kprintf("Already on menu or unknown screen, skipping switch.\n");
-            return;
+
+        //-------------------------------------------------------------------------------------------------------------------------
+        // 新增逻辑：在设置模式，且数值选中可调，按键键值为 '4' 时，对设置数值增加
+        if(key_value == '4' && Record.setting_mode == 1 && Record.nrf_if_connected == 1)
+        {
+            if(Flag.air_rate_set == 1){
+                Record.set_air_rate += 1;
+                if (Record.air_rate > 100) Record.air_rate = 100;
+                lv_label_set_text_fmt(ui->screen_setting_label_air_rate, "%d%%", Record.air_rate);
+
+            }
+            else if(Flag.press_rate_set == 1){
+                Record.set_press_rate += 1;
+                if (Record.press_rate >= 100) Record.press_rate = 100;
+                lv_label_set_text_fmt(ui->screen_setting_label_press_rate, "%d%%", Record.press_rate);
+            }
+            else if(Flag.work_time_set == 1){
+                Record.set_work_time +=10;
+                if (Record.work_time > 990) Record.work_time = 990;
+                lv_label_set_text_fmt(ui->screen_setting_label_time_value, "%ds", Record.work_time);
+
+            }
+        }
+        //-------------------------------------------------------------------------------------------------------------------------
+        // 新增逻辑：在竞赛/训练/考核模式页面，按键键值为 '5' 时，开始项目
+        if(key_value == '5' && Record.nrf_if_connected == 1)
+        {
 
         }
+        //-------------------------------------------------------------------------------------------------------------------------
+        // 新增逻辑：在竞赛/训练/考核模式页面，按键键值为 '6' 时，复位项目
+        if(key_value == '6' && Record.nrf_if_connected == 1 )
+        {
+
+        }
+        //-------------------------------------------------------------------------------------------------------------------------
+        // 新增逻辑：在设置模式，且数值选中可调，按键键值为 '7' 时，对设置数值减少
+        if(key_value == '7' && Record.setting_mode == 1 && Record.nrf_if_connected == 1)
+        {
+            if(Flag.air_rate_set == 1){
+                Record.set_air_rate -= 1;
+                if (Record.air_rate <= 1) Record.air_rate = 1;
+                lv_label_set_text_fmt(ui->screen_setting_label_air_rate, "%d%%", Record.air_rate);
+            }
+            else if(Flag.press_rate_set == 1){
+                Record.set_press_rate -= 1;
+                if (Record.press_rate <= 1) Record.press_rate = 1;
+                lv_label_set_text_fmt(ui->screen_setting_label_press_rate, "%d%%", Record.press_rate);
+            }
+            else if(Flag.work_time_set == 1){
+                Record.set_work_time -=10;
+                if (Record.work_time <= 10) Record.work_time = 10;
+                lv_label_set_text_fmt(ui->screen_setting_label_time_value, "%ds", Record.work_time);
+            }
+        }
+        //-------------------------------------------------------------------------------------------------------------------------
+        // 新增逻辑：当键值为'8'时，开始打印
+
+
+
+        //-------------------------------------------------------------------------------------------------------------------------
+        // 新增逻辑：当键值为'9'时，关闭设备
+
+
     }
     else if (event.state == KEY_RELEASE) {
         rt_kprintf("Custom Handler: Key '%c' released at Row %d, Col %d\n", key_value, event.row, event.col);

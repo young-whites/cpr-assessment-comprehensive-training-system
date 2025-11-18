@@ -444,6 +444,9 @@ static void screen_setting_btn_1_time_set_event_handler (lv_event_t *e)
             // 隐藏其他 label
             lv_obj_add_flag(ui->screen_setting_label_press_rate, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui->screen_setting_label_air_rate, LV_OBJ_FLAG_HIDDEN);
+
+            Record.setting_mode = 1;
+            Flag.work_time_set = 1;
         }
         else
         {
@@ -451,6 +454,9 @@ static void screen_setting_btn_1_time_set_event_handler (lv_event_t *e)
             lv_obj_add_flag(ui->screen_setting_btn_minus, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui->screen_setting_label_time_value, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui->screen_setting_btn_plus, LV_OBJ_FLAG_HIDDEN);
+
+            Record.setting_mode = 0;
+            Flag.work_time_set = 0;
         }
         break;
     }
@@ -480,6 +486,9 @@ static void screen_setting_btn_2_press_rate_event_handler (lv_event_t *e)
             // 隐藏其他 label
             lv_obj_add_flag(ui->screen_setting_label_time_value, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui->screen_setting_label_air_rate, LV_OBJ_FLAG_HIDDEN);
+
+            Record.setting_mode = 1;
+            Flag.press_rate_set = 1;
         }
         else
         {
@@ -487,6 +496,9 @@ static void screen_setting_btn_2_press_rate_event_handler (lv_event_t *e)
             lv_obj_add_flag(ui->screen_setting_btn_minus, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui->screen_setting_btn_plus, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui->screen_setting_label_press_rate, LV_OBJ_FLAG_HIDDEN);
+
+            Record.setting_mode = 0;
+            Flag.press_rate_set = 0;
         }
 
         break;
@@ -522,6 +534,8 @@ static void screen_setting_btn_3_air_rate_event_handler (lv_event_t *e)
             // 隐藏其他 label
             lv_obj_add_flag(ui->screen_setting_label_time_value, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui->screen_setting_label_press_rate, LV_OBJ_FLAG_HIDDEN);
+
+            Record.setting_mode = 1;
         }
         else
         {
@@ -529,6 +543,8 @@ static void screen_setting_btn_3_air_rate_event_handler (lv_event_t *e)
             lv_obj_add_flag(ui->screen_setting_label_air_rate, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui->screen_setting_btn_plus, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(ui->screen_setting_btn_minus, LV_OBJ_FLAG_HIDDEN);
+
+            Record.setting_mode = 0;
         }
 
         break;

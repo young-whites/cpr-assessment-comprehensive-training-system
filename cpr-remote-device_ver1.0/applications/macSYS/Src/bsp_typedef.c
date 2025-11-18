@@ -14,6 +14,8 @@
 
 // 全局变量
 RecordStruct Record;
+FlagStruct Flag;
+
 
 // 与nRF24L01通讯相关的全局事件集
 rt_event_t nrf24l01_events;
