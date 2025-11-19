@@ -51,6 +51,11 @@ int main(void)
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
+
+
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -386,4 +386,3 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 
 
 
-

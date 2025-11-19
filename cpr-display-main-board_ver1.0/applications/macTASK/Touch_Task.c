@@ -10,10 +10,165 @@
 #include "bsp_sys.h"
 
 
+#define TOUCH_KEY_TOTAL  14
+#define DEBOUNCE_TIME_MS    30      // 消抖时间 30ms
+#define LONG_PRESS_TIME_MS 1000     // 长按判定时间 1000ms
+
+typedef enum {
+    KEY_STATE_IDLE = 0,    // 未按下
+    KEY_STATE_DEBOUNCE,    // 消抖中
+    KEY_STATE_PRESSED,     // 已按下
+    KEY_STATE_LONG_PRESS   // 长按触发后
+} key_state_t;
+
+typedef struct {
+    key_state_t state;
+    rt_tick_t   last_change_time;
+    rt_tick_t   press_start_time;
+    rt_bool_t   event_sent_short;   // 短按事件是否已发送
+    rt_bool_t   event_sent_long;    // 长按事件是否已发送
+} touch_key_t;
+
+static touch_key_t touch_keys[TOUCH_KEY_TOTAL] = {0};
+
+static const struct {
+    GPIO_TypeDef* port;
+    uint16_t      pin;
+    Touch_Type_et key_id;
+} touch_pins[TOUCH_KEY_TOTAL] = {
+    { TOUCH_IN1_GPIO_Port,  TOUCH_IN1_Pin,  TOUCH_START },
+    { TOUCH_IN2_GPIO_Port,  TOUCH_IN2_Pin,  TOUCH_TRAIN },
+    { TOUCH_IN3_GPIO_Port,  TOUCH_IN3_Pin,  TOUCH_ASSESS },
+    { TOUCH_IN4_GPIO_Port,  TOUCH_IN4_Pin,  TOUCH_COMPETITION },
+    { TOUCH_IN5_GPIO_Port,  TOUCH_IN5_Pin,  TOUCH_MINUS },
+    { TOUCH_IN6_GPIO_Port,  TOUCH_IN6_Pin,  TOUCH_PLUS },
+    { TOUCH_IN7_GPIO_Port,  TOUCH_IN7_Pin,  TOUCH_RESET },
+    { TOUCH_IN8_GPIO_Port,  TOUCH_IN8_Pin,  TOUCH_PRINTER },
+    { TOUCH_IN9_GPIO_Port,  TOUCH_IN9_Pin,  TOUCH_SETTING },
+    { TOUCH_IN10_GPIO_Port, TOUCH_IN10_Pin, TOUCH_REMOVE_FOREIGN },
+    { TOUCH_IN11_GPIO_Port, TOUCH_IN11_Pin, TOUCH_EMERGENCY_CALL },
+    { TOUCH_IN12_GPIO_Port, TOUCH_IN12_Pin, TOUCH_CHECK_BREATH },
+    { TOUCH_IN13_GPIO_Port, TOUCH_IN13_Pin, TOUCH_SPHYMOSCOPY },
+    { TOUCH_IN14_GPIO_Port, TOUCH_IN14_Pin, TOUCH_CONSCIOUS_JUDGMENT },
+};
+
+
+
+/* 外部声明，你需要在别的文件中处理这些事件 */
+extern void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event);
+// event: 1=短按抬起  2=长按触发  3=长按持续（可重复触发）
+
+static void touch_scan(void)
+{
+    rt_tick_t now = rt_tick_get();
+
+    for(int i = 0; i < TOUCH_KEY_TOTAL; i++)
+    {
+        rt_uint8_t level = HAL_GPIO_ReadPin(touch_pins[i].port, touch_pins[i].pin);
+        touch_key_t *k = &touch_keys[i];
+
+        switch(k->state)
+        {
+            case KEY_STATE_IDLE:
+                if(level == GPIO_PIN_SET)  // 检测到按下
+                {
+                    k->state = KEY_STATE_DEBOUNCE;
+                    k->last_change_time = now;
+                    k->press_start_time = now;
+                    k->event_sent_short = RT_FALSE;
+                    k->event_sent_long  = RT_FALSE;
+                }
+                break;
+
+            case KEY_STATE_DEBOUNCE:
+                if(now - k->last_change_time >= rt_tick_from_millisecond(DEBOUNCE_TIME_MS))
+                {
+                    rt_uint8_t level_now = HAL_GPIO_ReadPin(touch_pins[i].port, touch_pins[i].pin);
+                    if(level_now == GPIO_PIN_SET)
+                    {
+                        k->state = KEY_STATE_PRESSED;
+                        // 按下瞬间可以在这里发按下事件
+                    }
+                    else
+                    {
+                        k->state = KEY_STATE_IDLE;  // 抖动，放弃
+                    }
+                }
+                break;
+
+            case KEY_STATE_PRESSED:
+                if(level == GPIO_PIN_RESET)  // 抬起
+                {
+                    if(!k->event_sent_short && !k->event_sent_long)
+                    {
+                        // 短按抬起事件
+                        Touch_Key_Event_Handler(touch_pins[i].key_id, 1);
+                    }
+                    k->state = KEY_STATE_IDLE;
+                }
+                else
+                {
+                    // 还在按着，检查长按
+                    if(now - k->press_start_time >= rt_tick_from_millisecond(LONG_PRESS_TIME_MS))
+                    {
+                        if(!k->event_sent_long)
+                        {
+                            Touch_Key_Event_Handler(touch_pins[i].key_id, 2);  // 长按第一次触发
+                            k->event_sent_long = RT_TRUE;
+                        }
+                        k->state = KEY_STATE_LONG_PRESS;
+                    }
+                }
+                break;
+
+            case KEY_STATE_LONG_PRESS:
+                if(level == GPIO_PIN_RESET)
+                {
+                    k->state = KEY_STATE_IDLE;
+                }
+                else
+                {
+                    // 长按持续中，可重复触发（比如加减键连续加减）
+                    if(now - k->last_change_time >= rt_tick_from_millisecond(200)) // 每200ms触发一次
+                    {
+                        Touch_Key_Event_Handler(touch_pins[i].key_id, 3);
+                        k->last_change_time = now;
+                    }
+                }
+                break;
+        }
+    }
+}
+
+
+
+void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
+{
+    switch(event)
+    {
+        case 1: rt_kprintf("Key Short Press: %d\n", key); break;
+        case 2: rt_kprintf("Key Long Press Start: %d\n", key); break;
+        case 3: rt_kprintf("Key Long Press Hold: %d\n", key); break;
+    }
+
+    // 设置按键-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == TOUCH_TRAIN)
+    {
+        MySysCfg.setting_mode = 1;
+    }
+
+
+    // -------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_PLUS)
+    {
+        MySysCfg.params[MySysCfg.current_mode].Number_CountDown += 10;
+    }
 
 
 
 
+
+}
 
 
 
@@ -25,14 +180,17 @@ void Touch_Thread_entry(void* parameter)
 {
 
 
+    /* 可选：初始化所有按键结构体 */
+    for(int i=0; i<TOUCH_KEY_TOTAL; i++)
+    {
+        touch_keys[i].state = KEY_STATE_IDLE;
+    }
 
     for(;;)
     {
-
-
+        touch_scan();
         rt_thread_mdelay(20);
     }
-
 }
 
 

@@ -9,7 +9,6 @@
  */
 #include "bsp_nrf24l01_message.h"
 #include "bsp_nrf24l01_driver.h"
-#include "macLOG.h"
 
 
 /*****************************************************************************
@@ -272,7 +271,6 @@ void nrf24l01_order_to_pipe(uint8_t order, nrf24_pipe_et pipe_num)
             emptyBuf[0] = FRAME_NRF24_CONNECT_CTRL_PANEL_CMD;
             package_len = nrf24l01_build_frame(FRAME_TYPE_ACT,FRAME_STATE_ACK,emptyBuf,1,frame_package);
             nRF24L01_Send_Packet(_nrf24, frame_package, package_len, pipe_num, nRF24_SEND_NO_ACK);
-            STM32_LOG_COLOR(STM32_LOG_INFO, "SendBack" ,COL_GRN);
         }break;
 
 

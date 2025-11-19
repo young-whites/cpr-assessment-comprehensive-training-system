@@ -55,7 +55,6 @@ DMA_HandleTypeDef hdma_usart3_tx;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -328,11 +327,11 @@ void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
@@ -363,6 +362,14 @@ void MX_GPIO_Init(void)
                           |LED_BODY3_Pin|LED_BODY4_Pin|LED_BODY5_Pin|LED_BODY6_Pin
                           |LED_BODY7_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pins : TOUCH_IN10_Pin TOUCH_IN11_Pin TOUCH_IN12_Pin TOUCH_IN13_Pin
+                           TOUCH_IN14_Pin */
+  GPIO_InitStruct.Pin = TOUCH_IN10_Pin|TOUCH_IN11_Pin|TOUCH_IN12_Pin|TOUCH_IN13_Pin
+                          |TOUCH_IN14_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
   /*Configure GPIO pins : LED_REMOVE_FOREIGN_Pin LED_EMERGENCY_CALL_Pin LED_CHECK_BREATH_Pin WT588D_CS_Pin
                            WT588D_CLK_Pin */
   GPIO_InitStruct.Pin = LED_REMOVE_FOREIGN_Pin|LED_EMERGENCY_CALL_Pin|LED_CHECK_BREATH_Pin|WT588D_CS_Pin
@@ -389,7 +396,7 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pins : TOUCH_IN7_Pin TOUCH_IN9_Pin TOUCH_IN6_Pin */
   GPIO_InitStruct.Pin = TOUCH_IN7_Pin|TOUCH_IN9_Pin|TOUCH_IN6_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pins : TOUCH_IN4_Pin TOUCH_IN2_Pin TOUCH_IN3_Pin TOUCH_IN5_Pin
@@ -397,7 +404,7 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = TOUCH_IN4_Pin|TOUCH_IN2_Pin|TOUCH_IN3_Pin|TOUCH_IN5_Pin
                           |TOUCH_IN8_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_ASSESS_Pin LED_START_Pin LED_MINUS_Pin TM1629A_A_DIO_Pin
@@ -436,7 +443,7 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin : TOUCH_IN1_Pin */
   GPIO_InitStruct.Pin = TOUCH_IN1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(TOUCH_IN1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_PLUS_Pin LED_COMPETITION_Pin LED_TRAIN_Pin LED_BODY2_Pin
@@ -470,6 +477,8 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+
 
 #ifdef  USE_FULL_ASSERT
 /**

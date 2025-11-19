@@ -440,15 +440,6 @@ void NixieTube_Thread_entry(void* parameter)
     // 设置显示开，亮度最高
     TM1629A_Set_Cmd(TM1629A_B, 0x8F);
 
-    Record.Number_CountDown = 156;
-    Record.Number_Press_Frequency = 128;
-    Record.Number_Press_Correct = 0;
-    Record.Number_Press_Error = 0;
-
-    Record.Number_Cycle = 1;
-    Record.Number_Blow_Time = 18;
-    Record.Number_Blow_Correct = 26;
-    Record.Number_Blow_Error = 91;
 
     /* 用于存储拼接后得到的数字字符串数组 */
     char press_string_buf[16] = {0};
@@ -469,13 +460,13 @@ void NixieTube_Thread_entry(void* parameter)
     uint8_t blow_matrix_to_hex_buf[8*2];
     for(;;)
     {
-        press_digital_splicing(press_string_buf,Record.Number_CountDown,Record.Number_Press_Frequency,Record.Number_Press_Correct,Record.Number_Press_Error);
+//        press_digital_splicing(press_string_buf,Record.Number_CountDown,Record.Number_Press_Frequency,Record.Number_Press_Correct,Record.Number_Press_Error);
         split_to_digits(press_string_buf,press_single_digit_buf);
         build_digit_matrix(press_single_digit_buf,press_matrix);
         matrix_to_hex(press_matrix,press_matrix_to_hex_buf);
         TM1629A_Show_Number(TM1629A_A,press_matrix_to_hex_buf);
 
-        blow_digital_splicing(blow_string_buf,Record.Number_Blow_Time,Record.Number_Blow_Correct,Record.Number_Blow_Error,Record.Number_Cycle);
+//        blow_digital_splicing(blow_string_buf,Record.Number_Blow_Time,Record.Number_Blow_Correct,Record.Number_Blow_Error,Record.Number_Cycle);
         split_to_digits(blow_string_buf,blow_single_digit_buf);
         build_digit_matrix(blow_single_digit_buf,blow_matrix);
         matrix_to_hex(blow_matrix,blow_matrix_to_hex_buf);

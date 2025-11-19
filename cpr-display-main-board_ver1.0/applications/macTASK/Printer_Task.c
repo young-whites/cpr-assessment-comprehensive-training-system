@@ -95,7 +95,7 @@ static int rs232_printer_task_init(void)
 
     return(RT_EOK);
 }
-INIT_APP_EXPORT(rs232_printer_task_init);
+//INIT_APP_EXPORT(rs232_printer_task_init);
 
 
 

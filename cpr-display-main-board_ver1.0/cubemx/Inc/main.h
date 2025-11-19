@@ -71,6 +71,16 @@ void MX_SPI2_Init(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define TOUCH_IN10_Pin GPIO_PIN_2
+#define TOUCH_IN10_GPIO_Port GPIOE
+#define TOUCH_IN11_Pin GPIO_PIN_3
+#define TOUCH_IN11_GPIO_Port GPIOE
+#define TOUCH_IN12_Pin GPIO_PIN_4
+#define TOUCH_IN12_GPIO_Port GPIOE
+#define TOUCH_IN13_Pin GPIO_PIN_5
+#define TOUCH_IN13_GPIO_Port GPIOE
+#define TOUCH_IN14_Pin GPIO_PIN_6
+#define TOUCH_IN14_GPIO_Port GPIOE
 #define LED_REMOVE_FOREIGN_Pin GPIO_PIN_13
 #define LED_REMOVE_FOREIGN_GPIO_Port GPIOC
 #define LED_EMERGENCY_CALL_Pin GPIO_PIN_14

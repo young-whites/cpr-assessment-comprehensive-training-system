@@ -43,7 +43,6 @@
 
 /* macSYS文件 */
 #include "bsp_typedef.h"
-#include "macLOG.h"
 #include "rtt_system_work.h"
 
 
