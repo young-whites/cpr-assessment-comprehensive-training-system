@@ -8,6 +8,7 @@
  * 2025-08-05     18452       the first version
  */
 #ifndef __BSP_SYS_H
+
 #define __BSP_SYS_H
 
 
@@ -30,6 +31,7 @@
 /* macBSP文件 */
 #include "bsp_led.h"
 #include "bsp_rs232_drv.h"
+#include "bsp_rs232_dev.h"
 #include "bsp_rs485_drv.h"
 #include "bsp_rs485_dev.h"
 #include "bsp_rs485_message.h"

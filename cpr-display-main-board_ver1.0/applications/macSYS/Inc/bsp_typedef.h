@@ -20,6 +20,7 @@ typedef struct {
     rt_uint16_t  ulog_cnt;                       // 用于日志序列
     //------------------------------------------------------------
     rt_uint8_t  nRF24_tx_pending;                // 接收到信号后，发送回调
+    rt_uint8_t  touch_set_cnt;                   // 按下次数：设置按键
 
 }RecordStruct;
 extern RecordStruct Record;
@@ -115,11 +116,15 @@ typedef struct {
 
 typedef struct {
     System_Mode_t current_mode;     // 当前模式（默认训练）
-    uint8_t       setting_mode;     // 0=正常 1=参数设置模式
+    uint8_t       start_status;     // 开始状态(0：未开始       1：已开始)
+    uint8_t       setting_mode;     // 设置状态(0：正常模式   1：设置模式 )
     uint8_t       edit_index;       // 当前正在编辑哪个参数（0=倒计时，1=按压率，2=潮气率）
     Mode_Params_t params[MODE_MAX];
 } System_Config_t;
 extern System_Config_t MySysCfg;
+
+
+void system_params_init(void);
 
 
 

@@ -36,6 +36,8 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+
+
 extern SPI_HandleTypeDef hspi2;
 
 extern UART_HandleTypeDef huart4;
@@ -43,8 +45,6 @@ extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 extern DMA_HandleTypeDef hdma_uart4_rx;
 extern DMA_HandleTypeDef hdma_uart4_tx;
-extern DMA_HandleTypeDef hdma_usart3_rx;
-extern DMA_HandleTypeDef hdma_usart3_tx;
 
 /* USER CODE END ET */
 

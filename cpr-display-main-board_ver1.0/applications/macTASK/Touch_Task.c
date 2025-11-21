@@ -150,24 +150,141 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         case 2: rt_kprintf("Key Long Press Start: %d\n", key); break;
         case 3: rt_kprintf("Key Long Press Hold: %d\n", key); break;
     }
-
-    // 设置按键-------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == TOUCH_TRAIN)
+    // 开始按键-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_START)
     {
-        MySysCfg.setting_mode = 1;
+        MySysCfg.start_status = 1;
+        // 语音播报：开始工作
+
+        // 开始状态下，除了开始LED，把其他灯都先熄灭
+        LED_On(LED_Name_Start);
+        LED_Off(LED_Name_Reset);
+        /***
+         * !开始状态下不允许设置、打印、加、减、切换模式
+         * !允许复位、
+         */
     }
+    // 复位按键-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_RESET)
+    {
+        MySysCfg.start_status = 0;
+        // 语音播报：复位
 
+        // 复位状态下，除了复位LED，把其他灯都先熄灭
+        LED_Off(LED_Name_Start);
+        LED_On(LED_Name_Reset);
 
+    }
+    // 训练模式按键：未开始状态下可以切换模式-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_TRAIN && MySysCfg.start_status == 0)
+    {
+        MySysCfg.current_mode = MODE_TRAIN;
+        // 语音播报：训练模式
+        LED_On(LED_Name_Train);
+        LED_Off(LED_Name_Assess);
+        LED_Off(LED_Name_Competition);
+    }
+    // 考核模式按键：未开始状态下可以切换模式-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_TRAIN && MySysCfg.start_status == 0)
+    {
+        MySysCfg.current_mode = MODE_ASSESS;
+        // 语音播报：考核模式
+        LED_Off(LED_Name_Train);
+        LED_On(LED_Name_Assess);
+        LED_Off(LED_Name_Competition);
+    }
+    // 竞赛模式按键：未开始状态下可以切换模式-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_TRAIN && MySysCfg.start_status == 0)
+    {
+        MySysCfg.current_mode = MODE_COMPETE;
+        // 语音播报：竞赛模式
+        LED_Off(LED_Name_Train);
+        LED_Off(LED_Name_Assess);
+        LED_On(LED_Name_Competition);
+    }
+    // 设置按键-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == MODE_TRAIN)
+    {
+        Record.touch_set_cnt ++;
+        if(Record.touch_set_cnt == 1){
+            MySysCfg.setting_mode = 1;
+            // 语音播报：进入设置模式，请设置工作时间、达标率等参数
+            LED_On(LED_Name_Setting);
+        }
+        else{
+            Record.touch_set_cnt = 0;
+            MySysCfg.setting_mode = 0;
+            // 语音播报：退出设置模式
+            LED_Off(LED_Name_Setting);
+        }
+    }
+    else if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == MODE_ASSESS)
+    {
+        Record.touch_set_cnt++;
+        if(Record.touch_set_cnt == 1){
+            MySysCfg.setting_mode = 1;
+            // 语音播报：进入设置模式，请设置工作时间、达标率等参数
+            LED_On(LED_Name_Setting);
+        }
+        else{
+            Record.touch_set_cnt = 0;
+            MySysCfg.setting_mode = 0;
+            // 语音播报：退出设置模式
+            LED_Off(LED_Name_Setting);
+        }
+    }
+    else if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == MODE_COMPETE)
+    {
+        Record.touch_set_cnt++;
+        if(Record.touch_set_cnt == 1){
+            MySysCfg.setting_mode = 1;
+            // 语音播报：进入设置模式，请设置工作时间、达标率等参数
+            LED_On(LED_Name_Setting);
+        }
+        else{
+            Record.touch_set_cnt = 0;
+            MySysCfg.setting_mode = 0;
+            // 语音播报：退出设置模式
+            LED_Off(LED_Name_Setting);
+        }
+    }
     // -------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_PLUS)
+    if(event == 1 && key == TOUCH_PLUS && MySysCfg.setting_mode == 1)
     {
         MySysCfg.params[MySysCfg.current_mode].Number_CountDown += 10;
+        LED_Blink(LED_Name_Plus_Sign, 1, 0, 0);
     }
+    // -------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_MINUS && MySysCfg.setting_mode == 1)
+    {
+        MySysCfg.params[MySysCfg.current_mode].Number_CountDown -= 10;
+        LED_Blink(LED_Name_Minus_Sign, 1, 0, 0);
+    }
+    // 打印触摸按键：这个功能只有在完成一次完整的流程后才会触发-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_PRINTER)
+    {
+       rt_kprintf("Function now is printing in progress.\n");
+    }
+    // 清除异物按键-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_REMOVE_FOREIGN)
+    {
 
+    }
+    // 急救呼叫按键-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_EMERGENCY_CALL)
+    {
 
+    }
+    // 脉搏检测按键-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_SPHYMOSCOPY)
+    {
 
+    }
+    // 意识判断按键-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_CONSCIOUS_JUDGMENT)
+    {
 
-
+    }
 }
 
 

@@ -8,9 +8,10 @@
  * 2025-11-07     18452       the first version
  */
 #include "rd_dm32_printer.h"
-#include "bsp_rs232_drv.h"
 
 
+
+#if 0
 extern rs232_inst_t *printer_hinst;
 
 
@@ -509,4 +510,4 @@ void rd_printer_select_6X8_character_2(void)
 }
 
 
-
+#endif

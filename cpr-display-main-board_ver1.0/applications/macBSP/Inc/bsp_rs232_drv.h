@@ -5,94 +5,147 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2025-11-04     Administrator       the first version
+ * 2025-11-21     18452       the first version
  */
 #ifndef APPLICATIONS_MACBSP_INC_BSP_RS232_DRV_H_
 #define APPLICATIONS_MACBSP_INC_BSP_RS232_DRV_H_
+
 #include "bsp_sys.h"
 
 
-/* 定义最小和最大字节超时时间，用于接收数据时的间隔超时控制 */
-#define RS232_BYTE_TMO_MIN      2
-#define RS232_BYTE_TMO_MAX      15
-
-
-/* RS232 实例结构体定义，用于管理串口设备的状态和资源 */
-typedef struct rs232_inst
+#ifdef __cplusplus
+extern "C"
 {
-    rt_device_t serial;             /* 串口设备句柄 */
-    rt_timer_t received_over_timer; /* 接收超时定时器，用于检测字节间隔超时 */
-    rt_mutex_t lock;                /* 互斥锁，用于同步访问 */
-    struct rt_semaphore rx_sem;     /* 接收信号量，用于通知接收完成 */
-    rt_uint8_t status;              /* 连接状态：0 - 未连接，1 - 已连接 */
-    rt_int32_t byte_tmo;            /* 字节间隔超时时间（ms） */
-    rt_uint8_t *received_buf;       /* 接收缓冲区指针 */
-    rt_uint32_t received_len;       /* 当前已接收的数据长度 */
-    rt_uint32_t received_max_len;   /* 接收缓冲区最大长度 */
-}rs232_inst_t;
+#endif
+
+
+//#define RS232_USING_TEST            //使用测试功能
+//#define RS232_USING_SAMPLE_SLAVE    //使用从机示例
+//#define RS232_USING_SAMPLE_MASTER   //使用主机示例
+#define RS232_USING_DMA_RX          //使用DMA接收
+//#define RS232_USING_INT_TX          //使用中断发送
+#define RS232_USING_DMA_TX          //使用DMA发送
+
+
+#ifndef RS232_SW_DLY_US
+#define RS232_SW_DLY_US             0    //发送引脚控制切换延时
+#endif
+
+#define RS232_TX_COMP_TMO_MAX       (3 * RT_TICK_PER_SECOND)//最大DMA传输完成超时
+#define RS232_BYTE_TMO_MIN          2     //最小字节超时
+#define RS232_BYTE_TMO_MAX          200   //最大字节超时
 
 
 
-/* 创建 RS232 实例
- * @param serial   串口设备名称（如 "uart2"）
- * @param baudrate 波特率
- * @param parity   奇偶校验（0: 无，1: 奇，2: 偶）
- * @return         RS232 实例句柄，或 NULL 表示失败
+// 创建RS458实例(instance)
+typedef struct rs232_inst rs232_inst_t;
+
+#ifdef RS485_USING_DEV
+#include <rs232_dev.h>
+#endif
+
+/*
+ * @brief   create rs232 instance dynamically
+ * @param   serial      - serial device name
+ * @param   baudrate    - serial baud rate
+ * @param   parity      - serial parity mode
+ * @param   pin         - mode contrle pin
+ * @param   level       - send mode level
+ * @retval  instance handle
  */
 rs232_inst_t * rs232_create(const char *serial, int baudrate, int parity);
 
-
-/* 销毁 RS232 实例
- * @param hinst    RS232 实例句柄
- * @return         RT_EOK 表示成功，否则失败
+/*
+ * @brief   destory rs232 instance created dynamically
+ * @param   hinst       - instance handle
+ * @retval  0 - success, other - error
  */
 int rs232_destory(rs232_inst_t * hinst);
 
-
-/* 配置 RS232 参数
- * @param hinst    RS232 实例句柄
- * @param baudrate 波特率
- * @param databits 数据位（5~8）
- * @param parity   奇偶校验（0: 无，1: 奇，2: 偶）
- * @param stopbits 停止位（0: 1位，1: 2位）
- * @return         RT_EOK 表示成功，否则失败
+/*
+ * @brief   config rs232 params
+ * @param   hinst       - instance handle
+ * @param   baudrate    - baudrate of communication
+ * @param   databits    - data bits, 5~8
+ * @param   parity      - parity bit, 0~2, 0 - none, 1 - odd, 2 - even
+ * @param   stopbits    - stop bits, 0~1, 0 - 1 stop bit, 1 - 2 stop bits
+ * @retval  0 - success, other - error
  */
 int rs232_config(rs232_inst_t * hinst, int baudrate, int databits, int parity, int stopbits);
 
-/* 设置字节间隔超时
- * @param hinst    RS232 实例句柄
- * @param tmo_ms   超时时间（ms），默认根据波特率计算
- * @return         RT_EOK 表示成功，否则失败
+/*
+ * @brief   set wait datas timeout for receiving
+ * @param   hinst       - instance handle
+ * @param   tmo_ms      - receive wait timeout, 0--no wait, <0--wait forever, >0--wait timeout, default = 0
+ * @retval  0 - success, other - error
+ */
+int rs232_set_recv_tmo(rs232_inst_t * hinst, int tmo_ms);
+
+/*
+ * @brief   set byte interval timeout for receiving
+ * @param   hinst       - instance handle
+ * @param   tmo_ms      - byte interval timeout, default is calculated from baudrate
+ * @retval  0 - success, other - error
  */
 int rs232_set_byte_tmo(rs232_inst_t * hinst, int tmo_ms);
 
-/* 连接（打开）RS232
- * @param hinst    RS232 实例句柄
- * @return         RT_EOK 表示成功，否则失败
+/*
+ * @brief   open rs232 connect
+ * @param   hinst       - instance handle
+ * @retval  0 - success, other - error
  */
 int rs232_connect(rs232_inst_t * hinst);
 
-/* 断开（关闭）RS232
- * @param hinst    RS232 实例句柄
- * @return         RT_EOK 表示成功，否则失败
+/*
+ * @brief   close rs232 connect
+ * @param   hinst       - instance handle
+ * @retval  0 - success, other - error
  */
 int rs232_disconn(rs232_inst_t * hinst);
 
-/* 接收数据
- * @param hinst    RS232 实例句柄
- * @param buf      接收缓冲区
- * @param size     最大接收长度
- * @return         实际接收长度，或 <0 表示错误
+/*
+ * @brief   receive datas from rs232
+ * @param   hinst       - instance handle
+ * @param   buf         - buffer addr
+ * @param   size        - maximum length of received datas
+ * @retval  >=0 - length of received datas, <0 - error
  */
 int rs232_recv(rs232_inst_t * hinst, void *buf, int size);
 
-/* 发送数据
- * @param hinst    RS232 实例句柄
- * @param buf      发送缓冲区
- * @param size     发送长度
- * @return         实际发送长度，或 <0 表示错误
+/*
+ * @brief   send datas to rs485
+ * @param   hinst       - instance handle
+ * @param   buf         - buffer addr
+ * @param   size        - length of send datas
+ * @retval  >=0 - length of sent datas, <0 - error
  */
 int rs232_send(rs232_inst_t * hinst, void *buf, int size);
+
+/*
+ * @brief   break rs232 receive wait
+ * @param   hinst       - instance handle
+ * @retval  0 - success, other - error
+ */
+int rs232_break_recv(rs232_inst_t * hinst);
+
+/*
+ * @brief   send data to rs232 and then receive response data from rs232
+ * @param   hinst       - instance handle
+ * @param   send_buf    - send buffer addr
+ * @param   send_len    - length of send datas
+ * @param   recv_buf    - recv buffer addr
+ * @param   recv_size   - maximum length of received datas
+ * @retval  >=0 - length of received datas, <0 - error
+ */
+int rs232_send_then_recv(rs232_inst_t * hinst, void *send_buf, int send_len, void *recv_buf, int recv_size);
+
+
+
+#ifdef __cplusplus
+}
+
+#endif
+
 
 
 

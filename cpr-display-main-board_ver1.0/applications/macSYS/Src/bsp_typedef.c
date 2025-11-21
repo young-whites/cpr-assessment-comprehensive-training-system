@@ -20,7 +20,7 @@ System_Config_t MySysCfg = {
     .edit_index   = 0,
     .setting_mode = 0,
     .params = {
-        [MODE_TRAIN]   = {  .Number_CountDown = 120,
+        [MODE_TRAIN]   = {  .Number_CountDown = 320,
                             .Number_Press_Frequency = 0,
                             .Number_Press_Correct = 0,
                             .Number_Press_Error = 0,
@@ -33,7 +33,7 @@ System_Config_t MySysCfg = {
                            },
 
 
-        [MODE_ASSESS]  = {  .Number_CountDown = 120,
+        [MODE_ASSESS]  = {  .Number_CountDown = 230,
                             .Number_Press_Frequency = 0,
                             .Number_Press_Correct = 0,
                             .Number_Press_Error = 0,
@@ -63,6 +63,15 @@ System_Config_t MySysCfg = {
 
 
 
+void system_params_init(void)
+{
+    Record.touch_set_cnt = 0;
+}
 
 
+
+void system_events_init(void)
+{
+    LED_On(LED_Name_Train);
+}
 

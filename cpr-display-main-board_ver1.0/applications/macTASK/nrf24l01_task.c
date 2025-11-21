@@ -127,7 +127,7 @@ void nRF24L01_Thread_entry(void* parameter)
     _nrf24->nrf24_ops.nrf24_set_ce();
     LOG_I("LOG:%d. Successfully initialized",Record.ulog_cnt++);
     rt_kprintf("----------------------------------\r\n");
-    rt_kprintf("running receiver.\r\n");
+    rt_kprintf("nrf24l01 running receiver.\r\n");
 
 
     for(;;)
