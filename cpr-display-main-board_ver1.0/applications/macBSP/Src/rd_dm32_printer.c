@@ -11,7 +11,7 @@
 
 
 
-#if 0
+#if 1
 extern rs232_inst_t *printer_hinst;
 
 
