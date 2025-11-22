@@ -199,6 +199,7 @@ rs232_inst_t * rs232_create(const char *name, int baudrate, int parity)
 }
 
 
+
 /*
  * @brief   destory rs232 instance created dynamically
  * @param   hinst       - instance handle
