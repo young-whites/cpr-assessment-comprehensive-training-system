@@ -10,7 +10,7 @@
 #define MACBSP_INC_BSP_LED_H_
 #include "bsp_sys.h"
 
-#define             LED_NUM             (4)
+#define             LED_NUM             (30)
 /****************************** LED 函数宏定义***************************************/
 #define             macLED_GREEN_OFF()                          HAL_GPIO_WritePin ( LED_GREEN_GPIO_Port, LED_GREEN_Pin , GPIO_PIN_RESET )
 #define             macLED_GREEN_ON()                           HAL_GPIO_WritePin ( LED_GREEN_GPIO_Port, LED_GREEN_Pin , GPIO_PIN_SET )

@@ -58,10 +58,8 @@ typedef struct
     lv_obj_t *screen_data_circle_5;
     lv_obj_t *screen_data_circle_6;
     lv_obj_t *screen_data_circle_7;
-    lv_obj_t *screen_data_bar_left_cont;   // 左边进度条容器（带边框）
-    lv_obj_t *screen_data_bar_left_img;    // 左边渐变图片
-    lv_obj_t *screen_data_bar_right_cont;  // 右边进度条容器
-    lv_obj_t *screen_data_bar_right_img;   // 右边渐变图片
+    lv_obj_t *screen_data_bar_left_grid;   // 左边 50 个小格的父容器
+    lv_obj_t *screen_data_bar_right_grid;  // 右边 50 个小格的父容器
     lv_obj_t *screen_setting;
     bool screen_setting_del;
     lv_obj_t *screen_setting_cont_setting;

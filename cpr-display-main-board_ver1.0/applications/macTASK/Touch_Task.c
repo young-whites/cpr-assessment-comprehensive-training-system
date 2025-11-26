@@ -185,7 +185,7 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         LED_Off(LED_Name_Competition);
     }
     // 考核模式按键：未开始状态下可以切换模式-------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_TRAIN && MySysCfg.start_status == 0)
+    if(event == 1 && key == TOUCH_ASSESS && MySysCfg.start_status == 0)
     {
         MySysCfg.current_mode = MODE_ASSESS;
         // 语音播报：考核模式
@@ -194,7 +194,7 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         LED_Off(LED_Name_Competition);
     }
     // 竞赛模式按键：未开始状态下可以切换模式-------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_TRAIN && MySysCfg.start_status == 0)
+    if(event == 1 && key == TOUCH_COMPETITION && MySysCfg.start_status == 0)
     {
         MySysCfg.current_mode = MODE_COMPETE;
         // 语音播报：竞赛模式
@@ -253,6 +253,7 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
     {
         MySysCfg.params[MySysCfg.current_mode].Number_CountDown += 10;
         LED_Blink(LED_Name_Plus_Sign, 1, 0, 0);
+        rt_kprintf("Number_CountDown = %d. \n",MySysCfg.params[MySysCfg.current_mode].Number_CountDown);
     }
     // -------------------------------------------------------------------------
     if(event == 1 && key == TOUCH_MINUS && MySysCfg.setting_mode == 1)
