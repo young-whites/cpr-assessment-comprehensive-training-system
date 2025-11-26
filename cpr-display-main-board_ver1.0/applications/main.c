@@ -51,7 +51,8 @@ int main(void)
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
-
+  system_params_init();
+  system_events_init();
 
   /* USER CODE END 2 */
 

@@ -125,7 +125,7 @@ extern System_Config_t MySysCfg;
 
 
 void system_params_init(void);
-
+void system_events_init(void);
 
 
 #endif /* APPLICATIONS_MACSYS_INC_BSP_TYPEDEF_H_ */

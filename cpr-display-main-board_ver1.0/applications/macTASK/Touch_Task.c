@@ -163,6 +163,9 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
          * !开始状态下不允许设置、打印、加、减、切换模式
          * !允许复位、
          */
+
+
+
     }
     // 复位按键-------------------------------------------------------------------------
     if(event == 1 && key == TOUCH_RESET)
@@ -173,8 +176,10 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         // 复位状态下，除了复位LED，把其他灯都先熄灭
         LED_Off(LED_Name_Start);
         LED_On(LED_Name_Reset);
-
     }
+
+
+
     // 训练模式按键：未开始状态下可以切换模式-------------------------------------------------------------------------
     if(event == 1 && key == TOUCH_TRAIN && MySysCfg.start_status == 0)
     {
@@ -252,14 +257,19 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
     if(event == 1 && key == TOUCH_PLUS && MySysCfg.setting_mode == 1)
     {
         MySysCfg.params[MySysCfg.current_mode].Number_CountDown += 10;
-        LED_Blink(LED_Name_Plus_Sign, 1, 0, 0);
-        rt_kprintf("Number_CountDown = %d. \n",MySysCfg.params[MySysCfg.current_mode].Number_CountDown);
+
+        LED_On(LED_Name_Plus_Sign);
+        rt_thread_mdelay(200);
+        LED_Off(LED_Name_Plus_Sign);
     }
     // -------------------------------------------------------------------------
     if(event == 1 && key == TOUCH_MINUS && MySysCfg.setting_mode == 1)
     {
         MySysCfg.params[MySysCfg.current_mode].Number_CountDown -= 10;
-        LED_Blink(LED_Name_Minus_Sign, 1, 0, 0);
+
+        LED_On(LED_Name_Minus_Sign);
+        rt_thread_mdelay(200);
+        LED_Off(LED_Name_Minus_Sign);
     }
     // 打印触摸按键：这个功能只有在完成一次完整的流程后才会触发-------------------------------------------------------------------------
     if(event == 1 && key == TOUCH_PRINTER)

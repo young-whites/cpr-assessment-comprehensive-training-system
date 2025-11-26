@@ -66,12 +66,45 @@ System_Config_t MySysCfg = {
 void system_params_init(void)
 {
     Record.touch_set_cnt = 0;
+    MySysCfg.start_status = 0;
+
+    // 训练模式数据初始化
+    MySysCfg.params[MODE_TRAIN].Number_CountDown = 300;
+    MySysCfg.params[MODE_TRAIN].Number_Press_Frequency = 0;
+    MySysCfg.params[MODE_TRAIN].Number_Press_Correct = 0;
+    MySysCfg.params[MODE_TRAIN].Number_Press_Error = 0;
+    MySysCfg.params[MODE_TRAIN].Number_Blow_Time = 0;
+    MySysCfg.params[MODE_TRAIN].Number_Blow_Correct = 0;
+    MySysCfg.params[MODE_TRAIN].Number_Blow_Error = 0;
+
+    // 考核模式数据初始化
+    MySysCfg.params[MODE_ASSESS].Number_CountDown = 150;
+    MySysCfg.params[MODE_ASSESS].Number_Press_Frequency = 0;
+    MySysCfg.params[MODE_ASSESS].Number_Press_Correct = 0;
+    MySysCfg.params[MODE_ASSESS].Number_Press_Error = 0;
+    MySysCfg.params[MODE_ASSESS].Number_Blow_Time = 0;
+    MySysCfg.params[MODE_ASSESS].Number_Blow_Correct = 0;
+    MySysCfg.params[MODE_ASSESS].Number_Blow_Error = 0;
+
+    // 竞赛模式数据初始化
+    MySysCfg.params[MODE_COMPETE].Number_CountDown = 200;
+    MySysCfg.params[MODE_COMPETE].Number_Press_Frequency = 0;
+    MySysCfg.params[MODE_COMPETE].Number_Press_Correct = 0;
+    MySysCfg.params[MODE_COMPETE].Number_Press_Error = 0;
+    MySysCfg.params[MODE_COMPETE].Number_Blow_Time = 0;
+    MySysCfg.params[MODE_COMPETE].Number_Blow_Correct = 0;
+    MySysCfg.params[MODE_COMPETE].Number_Blow_Error = 0;
 }
 
 
 
 void system_events_init(void)
 {
-    LED_On(LED_Name_Train);
+    // 初始处于复位状态
+    if(MySysCfg.start_status == 0)
+    {
+        LED_Off(LED_Name_Start);
+        LED_On(LED_Name_Reset);
+    }
 }
 
