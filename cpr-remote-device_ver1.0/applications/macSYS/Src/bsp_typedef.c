@@ -26,9 +26,6 @@ rt_event_t nrf24l01_events;
 void system_param_init(void)
 {
     Record.nrf_if_connected = 0;
-    Record.work_time = 200;
-    Record.press_rate = 70;
-    Record.air_rate = 50;
 
     Record.menu_index = 0;
 }

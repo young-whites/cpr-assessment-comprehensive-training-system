@@ -363,21 +363,21 @@ static void screen_setting_btn_plus_event_handler (lv_event_t *e)
     {
         if(lv_obj_has_state(ui->screen_setting_btn_1_time_set, LV_STATE_CHECKED))
         {
-            Record.work_time += 10;
-            if (Record.work_time > 990) Record.work_time = 990;
-            lv_label_set_text_fmt(ui->screen_setting_label_time_value, "%ds", Record.work_time);
+            Record.set_work_time += 10;
+            if (Record.set_work_time > 990) Record.set_work_time = 990;
+            lv_label_set_text_fmt(ui->screen_setting_label_time_value, "%ds", Record.set_work_time);
         }
         else if(lv_obj_has_state(ui->screen_setting_btn_2_press_rate, LV_STATE_CHECKED))
         {
-            Record.press_rate += 1;
-            if (Record.press_rate >= 100) Record.press_rate = 100;
-            lv_label_set_text_fmt(ui->screen_setting_label_press_rate, "%d%%", Record.press_rate);
+            Record.set_press_rate += 1;
+            if (Record.set_press_rate >= 100) Record.set_press_rate = 100;
+            lv_label_set_text_fmt(ui->screen_setting_label_press_rate, "%d%%", Record.set_press_rate);
         }
         else if(lv_obj_has_state(ui->screen_setting_btn_3_air_rate, LV_STATE_CHECKED))
         {
-            Record.air_rate += 1;
-            if (Record.air_rate > 100) Record.air_rate = 100;
-            lv_label_set_text_fmt(ui->screen_setting_label_air_rate, "%d%%", Record.air_rate);
+            Record.set_air_rate += 1;
+            if (Record.set_air_rate > 100) Record.set_air_rate = 100;
+            lv_label_set_text_fmt(ui->screen_setting_label_air_rate, "%d%%", Record.set_air_rate);
         }
 
         break;
@@ -398,21 +398,21 @@ static void screen_setting_btn_minus_event_handler (lv_event_t *e)
     {
         if(lv_obj_has_state(ui->screen_setting_btn_1_time_set, LV_STATE_CHECKED))
         {
-            Record.work_time -= 10;
-            if (Record.work_time <= 10) Record.work_time = 10;
-            lv_label_set_text_fmt(ui->screen_setting_label_time_value, "%ds", Record.work_time);
+            Record.set_work_time -= 10;
+            if (Record.set_work_time <= 10) Record.set_work_time = 10;
+            lv_label_set_text_fmt(ui->screen_setting_label_time_value, "%ds", Record.set_work_time);
         }
         else if(lv_obj_has_state(ui->screen_setting_btn_2_press_rate, LV_STATE_CHECKED))
         {
-            Record.press_rate -= 1;
-            if (Record.press_rate <= 1) Record.press_rate = 1;
-            lv_label_set_text_fmt(ui->screen_setting_label_press_rate, "%d%%", Record.press_rate);
+            Record.set_press_rate -= 1;
+            if (Record.set_press_rate <= 1) Record.set_press_rate = 1;
+            lv_label_set_text_fmt(ui->screen_setting_label_press_rate, "%d%%", Record.set_press_rate);
         }
         else if(lv_obj_has_state(ui->screen_setting_btn_3_air_rate, LV_STATE_CHECKED))
         {
-            Record.air_rate -= 1;
-            if (Record.air_rate <= 1) Record.air_rate = 1;
-            lv_label_set_text_fmt(ui->screen_setting_label_air_rate, "%d%%", Record.air_rate);
+            Record.set_air_rate -= 1;
+            if (Record.set_air_rate <= 1) Record.set_air_rate = 1;
+            lv_label_set_text_fmt(ui->screen_setting_label_air_rate, "%d%%", Record.set_air_rate);
         }
         break;
     }

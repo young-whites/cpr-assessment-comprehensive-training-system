@@ -130,24 +130,24 @@ void MyCustomKeyHandler(key_event_t event) {
         }
 
         //-------------------------------------------------------------------------------------------------------------------------
-        // 新增逻辑：在设置模式，且数值选中可调，按键键值为 '4' 时，对设置数值增加
+        // 在设置模式，且数值选中可调，按键键值为 '4' 时，对设置数值增加
         if(key_value == '4' && Record.setting_mode == 1 && Record.nrf_if_connected == 1)
         {
             if(Flag.air_rate_set == 1){
                 Record.set_air_rate += 1;
-                if (Record.air_rate > 100) Record.air_rate = 100;
-                lv_label_set_text_fmt(ui->screen_setting_label_air_rate, "%d%%", Record.air_rate);
+                if (Record.set_air_rate > 100) Record.set_air_rate = 100;
+                lv_label_set_text_fmt(guider_lvgl.screen_setting_label_air_rate, "%d%%", Record.set_air_rate);
 
             }
             else if(Flag.press_rate_set == 1){
                 Record.set_press_rate += 1;
-                if (Record.press_rate >= 100) Record.press_rate = 100;
-                lv_label_set_text_fmt(ui->screen_setting_label_press_rate, "%d%%", Record.press_rate);
+                if (Record.set_press_rate >= 100) Record.set_press_rate = 100;
+                lv_label_set_text_fmt(guider_lvgl.screen_setting_label_press_rate, "%d%%", Record.set_press_rate);
             }
             else if(Flag.work_time_set == 1){
                 Record.set_work_time +=10;
-                if (Record.work_time > 990) Record.work_time = 990;
-                lv_label_set_text_fmt(ui->screen_setting_label_time_value, "%ds", Record.work_time);
+                if (Record.set_work_time > 990) Record.set_work_time = 990;
+                lv_label_set_text_fmt(guider_lvgl.screen_setting_label_time_value, "%ds", Record.set_work_time);
 
             }
         }
@@ -169,18 +169,18 @@ void MyCustomKeyHandler(key_event_t event) {
         {
             if(Flag.air_rate_set == 1){
                 Record.set_air_rate -= 1;
-                if (Record.air_rate <= 1) Record.air_rate = 1;
-                lv_label_set_text_fmt(ui->screen_setting_label_air_rate, "%d%%", Record.air_rate);
+                if (Record.set_air_rate <= 1) Record.set_air_rate = 1;
+                lv_label_set_text_fmt(guider_lvgl.screen_setting_label_air_rate, "%d%%", Record.set_air_rate);
             }
             else if(Flag.press_rate_set == 1){
                 Record.set_press_rate -= 1;
-                if (Record.press_rate <= 1) Record.press_rate = 1;
-                lv_label_set_text_fmt(ui->screen_setting_label_press_rate, "%d%%", Record.press_rate);
+                if (Record.set_press_rate <= 1) Record.set_press_rate = 1;
+                lv_label_set_text_fmt(guider_lvgl.screen_setting_label_press_rate, "%d%%", Record.set_press_rate);
             }
             else if(Flag.work_time_set == 1){
                 Record.set_work_time -=10;
-                if (Record.work_time <= 10) Record.work_time = 10;
-                lv_label_set_text_fmt(ui->screen_setting_label_time_value, "%ds", Record.work_time);
+                if (Record.set_work_time <= 10) Record.set_work_time = 10;
+                lv_label_set_text_fmt(guider_lvgl.screen_setting_label_time_value, "%ds", Record.set_work_time);
             }
         }
         //-------------------------------------------------------------------------------------------------------------------------
