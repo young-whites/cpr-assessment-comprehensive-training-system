@@ -168,7 +168,10 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
 
     }
     // 复位按键-------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_RESET && MySysCfg.start_status == 1 && MySysCfg.start_press_cnt == 1 && MySysCfg.reset_press_cnt == 0)
+    if(event == 1 && key == TOUCH_RESET && \
+       (MySysCfg.start_status == 1 || MySysCfg.start_status == 2) && \
+       MySysCfg.start_press_cnt == 1 && \
+       MySysCfg.reset_press_cnt == 0)
     {
         MySysCfg.start_status = 0;
         MySysCfg.start_press_cnt = 0;
@@ -274,7 +277,7 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         LED_Off(LED_Name_Minus_Sign);
     }
     // 打印触摸按键：这个功能只有在完成一次完整的流程后才会触发-------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_PRINTER)
+    if(event == 1 && key == TOUCH_PRINTER && MySysCfg.start_status == 2)
     {
        rt_kprintf("Function now is printing in progress.\n");
     }

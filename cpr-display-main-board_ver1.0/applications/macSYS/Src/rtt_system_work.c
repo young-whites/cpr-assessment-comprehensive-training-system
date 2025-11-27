@@ -47,15 +47,26 @@ static void Timing_1s(void)
 {
     if(MySysCfg.current_mode == MODE_TRAIN  && MySysCfg.start_status == 1)
     {
-        // 开始以后
-    }
-    else if(MySysCfg.current_mode == MODE_ASSESS)
-    {
+        if(MySysCfg.params[MODE_TRAIN].Number_CountDown >= 1){
+            MySysCfg.params[MODE_TRAIN].Number_CountDown--;
+            MySysCfg.start_status = 2;
+        }
 
     }
-    else if(MySysCfg.current_mode == MODE_COMPETE)
+    else if(MySysCfg.current_mode == MODE_ASSESS && MySysCfg.start_status == 1 )
     {
+        if(MySysCfg.params[MODE_ASSESS].Number_CountDown >= 1){
+            MySysCfg.params[MODE_ASSESS].Number_CountDown--;
+            MySysCfg.start_status = 2;
+        }
 
+    }
+    else if(MySysCfg.current_mode == MODE_COMPETE && MySysCfg.start_status == 1 )
+    {
+        if(MySysCfg.params[MODE_COMPETE].Number_CountDown >= 1){
+            MySysCfg.params[MODE_COMPETE].Number_CountDown--;
+            MySysCfg.start_status = 2;
+        }
     }
 }
 

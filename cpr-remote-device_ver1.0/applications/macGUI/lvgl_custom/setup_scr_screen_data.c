@@ -12,6 +12,14 @@
 
 
 
+#define GRID_COUNT      50      // 一共 50 格（每格代表 2%）
+#define GRID_HEIGHT     4       // 每格高度 4px
+#define GRID_GAP        2       // 格子间距 2px（总占用高度 = 4+2=6px）
+#define GRID_TOTAL_H    (GRID_HEIGHT + GRID_GAP)  // 每格总高度
+#define BAR_WIDTH       20
+
+
+
 
 
 void setup_scr_screen_data(lvgl_ui_t *ui)
@@ -97,14 +105,44 @@ void setup_scr_screen_data(lvgl_ui_t *ui)
     lv_obj_set_size(ui->screen_data_circle_7, 25, 25);
     SET_CIRCLE_STYLE(ui->screen_data_circle_7);
 
-
-
-
     // ==================== 左右两个进度条 ====================
+
+
+
 
     // ==================== 更新布局 ====================
     lv_obj_update_layout(ui->screen_data);
 }
 
 
+
+
+
+// ==================== 创建充电格进度条（替换原来的 bar 部分）================
+void create_battery_grid_bar(lv_obj_t *parent, lv_obj_t **grid_cont, int x, int y)
+{
+    *grid_cont = lv_obj_create(parent);
+    lv_obj_set_pos(*grid_cont, x, y);
+    lv_obj_set_size(*grid_cont, BAR_WIDTH, GRID_COUNT * GRID_TOTAL_H);
+    lv_obj_set_style_bg_opa(*grid_cont, 0, 0);
+    lv_obj_set_style_border_width(*grid_cont, 1, 0);
+    lv_obj_set_style_border_color(*grid_cont, lv_color_hex(0x000000), 0);
+    lv_obj_clear_flag(*grid_cont, LV_OBJ_FLAG_SCROLLABLE);
+
+    for (int i = 0; i < GRID_COUNT; i++) {
+        lv_obj_t *cell = lv_obj_create(*grid_cont);
+        lv_obj_set_size(cell, BAR_WIDTH - 4, GRID_HEIGHT);           // 左右留2px边距
+        lv_obj_set_pos(cell, 2, i * GRID_TOTAL_H + 1);               // 垂直排列 + 间距
+        lv_obj_set_style_radius(cell, 2, 0);                         // 小圆角更精致
+        lv_obj_set_style_border_width(cell, 0, 0);
+        lv_obj_set_style_shadow_width(cell, 0, 0);
+
+        // 默认未充满：浅灰色半透明（空心感）
+        lv_obj_set_style_bg_color(cell, lv_color_hex(0xDDDDDD), 0);
+        lv_obj_set_style_bg_opa(cell, 100, 0);
+
+        // 给每个格子加个 tag，方便后面批量改色
+        lv_obj_set_user_data(cell, (void*)(intptr_t)i);
+    }
+}
 
