@@ -45,7 +45,18 @@ static void Timing_500ms(void)
 
 static void Timing_1s(void)
 {
+    if(MySysCfg.current_mode == MODE_TRAIN  && MySysCfg.start_status == 1)
+    {
+        // 开始以后
+    }
+    else if(MySysCfg.current_mode == MODE_ASSESS)
+    {
 
+    }
+    else if(MySysCfg.current_mode == MODE_COMPETE)
+    {
+
+    }
 }
 
 

@@ -150,10 +150,12 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         case 2: rt_kprintf("Key Long Press Start: %d\n", key); break;
         case 3: rt_kprintf("Key Long Press Hold: %d\n", key); break;
     }
-    // 开始按键-------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_START)
+    // 开始按键一次都没按下-------------------------------------------------------------------------
+    if(event == 1 && key == TOUCH_START && MySysCfg.start_status == 0 && MySysCfg.start_press_cnt == 0 && MySysCfg.reset_press_cnt == 1)
     {
         MySysCfg.start_status = 1;
+        MySysCfg.start_press_cnt = 1;
+        MySysCfg.reset_press_cnt = 0;
         // 语音播报：开始工作
 
         // 开始状态下，除了开始LED，把其他灯都先熄灭
@@ -164,13 +166,13 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
          * !允许复位、
          */
 
-
-
     }
     // 复位按键-------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_RESET)
+    if(event == 1 && key == TOUCH_RESET && MySysCfg.start_status == 1 && MySysCfg.start_press_cnt == 1 && MySysCfg.reset_press_cnt == 0)
     {
         MySysCfg.start_status = 0;
+        MySysCfg.start_press_cnt = 0;
+        MySysCfg.reset_press_cnt = 1;
         // 语音播报：复位
 
         // 复位状态下，除了复位LED，把其他灯都先熄灭
@@ -208,7 +210,7 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         LED_On(LED_Name_Competition);
     }
     // 设置按键-------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == MODE_TRAIN)
+    if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == MODE_TRAIN && MySysCfg.start_status == 0)
     {
         Record.touch_set_cnt ++;
         if(Record.touch_set_cnt == 1){
@@ -223,7 +225,7 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
             LED_Off(LED_Name_Setting);
         }
     }
-    else if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == MODE_ASSESS)
+    else if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == MODE_ASSESS && MySysCfg.start_status == 0)
     {
         Record.touch_set_cnt++;
         if(Record.touch_set_cnt == 1){
@@ -238,7 +240,7 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
             LED_Off(LED_Name_Setting);
         }
     }
-    else if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == MODE_COMPETE)
+    else if(event == 1 && key == TOUCH_SETTING && MySysCfg.current_mode == MODE_COMPETE && MySysCfg.start_status == 0)
     {
         Record.touch_set_cnt++;
         if(Record.touch_set_cnt == 1){
@@ -254,7 +256,7 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         }
     }
     // -------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_PLUS && MySysCfg.setting_mode == 1)
+    if(event == 1 && key == TOUCH_PLUS && MySysCfg.setting_mode == 1 && MySysCfg.start_status == 0)
     {
         MySysCfg.params[MySysCfg.current_mode].Number_CountDown += 10;
 
@@ -263,7 +265,7 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         LED_Off(LED_Name_Plus_Sign);
     }
     // -------------------------------------------------------------------------
-    if(event == 1 && key == TOUCH_MINUS && MySysCfg.setting_mode == 1)
+    if(event == 1 && key == TOUCH_MINUS && MySysCfg.setting_mode == 1 && MySysCfg.start_status == 0)
     {
         MySysCfg.params[MySysCfg.current_mode].Number_CountDown -= 10;
 

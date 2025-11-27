@@ -67,6 +67,8 @@ void system_params_init(void)
 {
     Record.touch_set_cnt = 0;
     MySysCfg.start_status = 0;
+    MySysCfg.start_press_cnt = 0;
+    MySysCfg.reset_press_cnt = 1;
 
     // 训练模式数据初始化
     MySysCfg.params[MODE_TRAIN].Number_CountDown = 300;
