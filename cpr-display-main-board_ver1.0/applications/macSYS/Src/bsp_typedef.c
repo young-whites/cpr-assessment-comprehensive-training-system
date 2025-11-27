@@ -107,6 +107,7 @@ void system_events_init(void)
     {
         LED_Off(LED_Name_Start);
         LED_On(LED_Name_Reset);
+        LED_On(LED_Name_Train);
     }
 }
 

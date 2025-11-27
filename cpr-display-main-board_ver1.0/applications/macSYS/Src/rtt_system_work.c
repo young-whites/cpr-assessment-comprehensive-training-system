@@ -49,7 +49,10 @@ static void Timing_1s(void)
     {
         if(MySysCfg.params[MODE_TRAIN].Number_CountDown >= 1){
             MySysCfg.params[MODE_TRAIN].Number_CountDown--;
-            MySysCfg.start_status = 2;
+            if(MySysCfg.params[MODE_TRAIN].Number_CountDown == 0){
+                MySysCfg.start_status = 2;
+                LOG_I("Work down!");
+            }
         }
 
     }
@@ -57,7 +60,10 @@ static void Timing_1s(void)
     {
         if(MySysCfg.params[MODE_ASSESS].Number_CountDown >= 1){
             MySysCfg.params[MODE_ASSESS].Number_CountDown--;
-            MySysCfg.start_status = 2;
+            if(MySysCfg.params[MODE_ASSESS].Number_CountDown == 0){
+                MySysCfg.start_status = 2;
+                LOG_I("Work down!");
+            }
         }
 
     }
@@ -65,7 +71,10 @@ static void Timing_1s(void)
     {
         if(MySysCfg.params[MODE_COMPETE].Number_CountDown >= 1){
             MySysCfg.params[MODE_COMPETE].Number_CountDown--;
-            MySysCfg.start_status = 2;
+            if(MySysCfg.params[MODE_COMPETE].Number_CountDown == 0){
+                MySysCfg.start_status = 2;
+                LOG_I("Work down!");
+            }
         }
     }
 }

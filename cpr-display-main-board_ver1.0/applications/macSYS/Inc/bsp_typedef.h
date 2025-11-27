@@ -99,7 +99,7 @@ typedef enum {
 
 
 typedef struct {
-    rt_uint16_t Number_CountDown;                // 倒计时
+    rt_int16_t Number_CountDown;                // 倒计时
     rt_uint16_t Number_Press_Frequency;          // 按压-频率
     rt_uint16_t Number_Press_Correct;            // 按压-正确计数
     rt_uint16_t Number_Press_Error;              // 按压-错误计数

@@ -156,11 +156,14 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         MySysCfg.start_status = 1;
         MySysCfg.start_press_cnt = 1;
         MySysCfg.reset_press_cnt = 0;
+        MySysCfg.setting_mode = 0;
+
         // 语音播报：开始工作
 
         // 开始状态下，除了开始LED，把其他灯都先熄灭
         LED_On(LED_Name_Start);
         LED_Off(LED_Name_Reset);
+        LED_Off(LED_Name_Setting);
         /***
          * !开始状态下不允许设置、打印、加、减、切换模式
          * !允许复位、
@@ -181,6 +184,9 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
         // 复位状态下，除了复位LED，把其他灯都先熄灭
         LED_Off(LED_Name_Start);
         LED_On(LED_Name_Reset);
+        // 数值重置
+        system_params_init();
+
     }
 
 
@@ -262,6 +268,9 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
     if(event == 1 && key == TOUCH_PLUS && MySysCfg.setting_mode == 1 && MySysCfg.start_status == 0)
     {
         MySysCfg.params[MySysCfg.current_mode].Number_CountDown += 10;
+        if(MySysCfg.params[MySysCfg.current_mode].Number_CountDown >= 990){
+            MySysCfg.params[MySysCfg.current_mode].Number_CountDown = 990;
+        }
 
         LED_On(LED_Name_Plus_Sign);
         rt_thread_mdelay(200);
@@ -272,6 +281,11 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
     {
         MySysCfg.params[MySysCfg.current_mode].Number_CountDown -= 10;
 
+        if(MySysCfg.params[MySysCfg.current_mode].Number_CountDown <= 0){
+            MySysCfg.params[MySysCfg.current_mode].Number_CountDown = 0;
+        }
+
+
         LED_On(LED_Name_Minus_Sign);
         rt_thread_mdelay(200);
         LED_Off(LED_Name_Minus_Sign);
@@ -279,6 +293,8 @@ void Touch_Key_Event_Handler(Touch_Type_et key, rt_uint8_t event)
     // 打印触摸按键：这个功能只有在完成一次完整的流程后才会触发-------------------------------------------------------------------------
     if(event == 1 && key == TOUCH_PRINTER && MySysCfg.start_status == 2)
     {
+
+
        rt_kprintf("Function now is printing in progress.\n");
     }
     // 清除异物按键-------------------------------------------------------------------------
