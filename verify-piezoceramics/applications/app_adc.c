@@ -10,7 +10,6 @@
 #include "app_sys.h"
 
 
-rt_uint16_t kprintf_cnt;
 
 #define ADC1_DEVICE_NAME    "adc1"  /* 设备名称 */
 #define ADC_CH1_CHANNEL     1       /* 震动传感器ADC输出通道 */
@@ -53,10 +52,10 @@ int ADC_Init(void)
 
     adc_dev1.adc_dev = (struct rt_device_adc*)rt_device_find(adc_dev1.adc_dev1_name);
     if(adc_dev1.adc_dev != RT_NULL){
-        rt_kprintf("PRINTF:%d. adc1 device is created !! \r\n",kprintf_cnt++);
+        rt_kprintf("PRINTF:%d. adc1 device is created !! \r\n",Record.kprintf_cnt++);
     }
     else {
-        rt_kprintf("PRINTF:%d. adc1 device created failed !! \r\n",kprintf_cnt++);
+        rt_kprintf("PRINTF:%d. adc1 device created failed !! \r\n",Record.kprintf_cnt++);
         return RT_ERROR;
     }
 
@@ -73,7 +72,7 @@ void adc_thread_entry(void* parameter)
     while(1)
     {
         adc_val = rt_adc_read((rt_adc_device_t)adc_dev1.adc_dev, adc_dev1.adc_channel_1);
-        rt_kprintf("<any>:%d\n",adc_val);
+//        rt_kprintf("<any>:%d\n",adc_val);
         rt_thread_mdelay(10);
     }
 }
@@ -87,12 +86,12 @@ int ADC_Thread_Init(void)
 {
     ADC_Thread_Handle = rt_thread_create("adc_thread_entry", adc_thread_entry, RT_NULL, 1024, 11, 300);
     if(ADC_Thread_Handle != RT_NULL){
-        rt_kprintf("PRINTF:%d. ADC Thread is created!!\r\n",kprintf_cnt++);
+        rt_kprintf("PRINTF:%d. ADC Thread is created!!\r\n",Record.kprintf_cnt++);
         ADC_Init();
         rt_thread_startup(ADC_Thread_Handle);
     }
     else {
-        rt_kprintf("PRINTF:%d. ADC Thread is not created!!\r\n",kprintf_cnt++);
+        rt_kprintf("PRINTF:%d. ADC Thread is not created!!\r\n",Record.kprintf_cnt++);
     }
 
     return RT_EOK;

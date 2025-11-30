@@ -22,6 +22,26 @@
 
 #include "main.h"
 
-extern rt_uint16_t kprintf_cnt;
+
+
+typedef struct {
+    rt_uint8_t   Empty;
+    rt_uint16_t  kprintf_cnt;
+    rt_uint16_t  ulog_cnt;
+    //------------------------------------------------------------
+
+}RecordStruct;
+extern RecordStruct Record;
+
+
+
+
+typedef enum
+{
+  OFF = 0u,
+  ON
+} SWITCH_T;
+
+
 
 #endif /* APPLICATIONS_APP_SYS_H_ */

@@ -12,7 +12,7 @@
 
 
 
-
+RecordStruct Record;
 
 
 

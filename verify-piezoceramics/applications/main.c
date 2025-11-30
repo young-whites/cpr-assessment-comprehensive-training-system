@@ -9,6 +9,8 @@
  */
 
 #include <rtthread.h>
+#include "app_sys.h"
+
 
 #define DBG_TAG "main"
 #define DBG_LVL DBG_LOG
@@ -45,6 +47,7 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   MX_USART1_UART_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
