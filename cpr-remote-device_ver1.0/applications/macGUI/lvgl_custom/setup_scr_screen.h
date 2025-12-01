@@ -104,8 +104,6 @@ typedef struct
     lv_obj_t *screen_operation_btn_opera_1_label;
 
 
-
-
 }lvgl_ui_t;
 extern lvgl_ui_t guider_lvgl;
 
