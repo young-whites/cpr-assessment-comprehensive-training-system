@@ -46,7 +46,7 @@
 /* macSYS文件 */
 #include "bsp_typedef.h"
 #include "rtt_system_work.h"
-
+#include "rd_dm32_printer.h"
 
 
 #endif /* __BSP_SYS_H */

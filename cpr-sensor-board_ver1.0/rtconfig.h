@@ -5,7 +5,7 @@
 
 /* RT-Thread Kernel */
 
-#define RT_NAME_MAX 8
+#define RT_NAME_MAX 30
 #define RT_ALIGN_SIZE 4
 #define RT_THREAD_PRIORITY_32
 #define RT_THREAD_PRIORITY_MAX 32
@@ -15,10 +15,10 @@
 #define RT_HOOK_USING_FUNC_PTR
 #define RT_USING_IDLE_HOOK
 #define RT_IDLE_HOOK_LIST_SIZE 4
-#define IDLE_THREAD_STACK_SIZE 256
+#define IDLE_THREAD_STACK_SIZE 1024
 #define RT_USING_TIMER_SOFT
 #define RT_TIMER_THREAD_PRIO 4
-#define RT_TIMER_THREAD_STACK_SIZE 512
+#define RT_TIMER_THREAD_STACK_SIZE 1024
 
 /* kservice optimization */
 
@@ -47,7 +47,7 @@
 
 #define RT_USING_DEVICE
 #define RT_USING_CONSOLE
-#define RT_CONSOLEBUF_SIZE 256
+#define RT_CONSOLEBUF_SIZE 1024
 #define RT_CONSOLE_DEVICE_NAME "uart1"
 /* end of Kernel Device Object */
 #define RT_VER_NUM 0x40100
@@ -82,8 +82,12 @@
 #define RT_USING_DEVICE_IPC
 #define RT_USING_SERIAL
 #define RT_USING_SERIAL_V1
-#define RT_SERIAL_RB_BUFSZ 64
+#define RT_SERIAL_RB_BUFSZ 512
+#define RT_USING_I2C
+#define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
+#define RT_USING_ADC
+#define RT_USING_SPI
 
 /* Using USB */
 
@@ -112,6 +116,20 @@
 
 /* Utilities */
 
+#define RT_USING_ULOG
+#define ULOG_OUTPUT_LVL_D
+#define ULOG_OUTPUT_LVL 7
+#define ULOG_ASSERT_ENABLE
+#define ULOG_LINE_BUF_SIZE 128
+
+/* log format */
+
+#define ULOG_USING_COLOR
+#define ULOG_OUTPUT_TIME
+#define ULOG_OUTPUT_LEVEL
+#define ULOG_OUTPUT_TAG
+/* end of log format */
+#define ULOG_BACKEND_USING_CONSOLE
 /* end of Utilities */
 /* end of RT-Thread Components */
 
