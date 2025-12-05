@@ -380,7 +380,7 @@ void rd_printer_set_alignment_cmd(rt_uint8_t n)
 
 
 /**
- * @brief 选择对齐方式
+ * @brief 选择上下标
  * @param ASCII -> FS   r    n（0 ≤ n ≤ 1）
  * @param HEX   -> 1C   72   n（0 ≤ n ≤ 1）
  * @note  n =0 选择上标，一行字符图形顶部对齐

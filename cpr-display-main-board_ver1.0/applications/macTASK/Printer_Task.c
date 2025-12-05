@@ -9,7 +9,7 @@
  */
 #include "bsp_sys.h"
 
-rs232_inst_t *rs232_printer_hinst;
+rs232_inst_t *printer_hinst;
 
 /**
   * @brief  This thread entry is used for printer
@@ -29,13 +29,21 @@ void Printer_Thread_entry(void* parameter)
         goto _err;
     }
     rs232_dev_t *pdev = (rs232_dev_t *)rs232_printer_dev;
-    rs232_printer_hinst = pdev->hinst;
+    printer_hinst = pdev->hinst;
     rs232_dev_tmo_param_t tmo = { .ack_tmo_ms = 500, .byte_tmo_ms = 10 };
     rt_device_control(rs232_printer_dev, RS232_CTRL_SET_TMO, &tmo);
 
+    //------------------------------------------------------------------------
+    // 初始化打印机
+    rd_printer_reset_cmd();
+    // 进入汉字模式
+    rd_printer_enter_chinese_mode_cmd();
+
+
     for(;;)
     {
-        rs232_send(rs232_printer_hinst, "Hello\n", 6);
+        rs232_send(printer_hinst, "Hello\n", 6);
+
         rt_thread_mdelay(500);
     }
 
@@ -71,3 +79,30 @@ int Printer_Thread_Init(void)
     return RT_EOK;
 }
 INIT_APP_EXPORT(Printer_Thread_Init);
+
+
+
+
+
+
+
+static int rd_test_print(void)
+{
+    char ch_buf_1[] = "心肺复苏操作训练考核\n";
+    rd_printer_set_alignment_cmd(1);
+    rs232_send(printer_hinst, ch_buf_1, strlen(ch_buf_1));
+
+    char ch_buf_2[] = "场次号：";
+    rd_printer_set_alignment_cmd(0);
+    rs232_send(printer_hinst, ch_buf_2, strlen(ch_buf_2));
+
+    return RT_EOK;
+}
+MSH_CMD_EXPORT(rd_test_print,print_test);
+
+
+
+
+
+
+

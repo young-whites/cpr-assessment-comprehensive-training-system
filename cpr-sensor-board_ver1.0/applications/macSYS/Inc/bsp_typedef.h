@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2006-2021, RT-Thread Development Team
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2025-05-15     teati       the first version
+ */
+#ifndef APPLICATIONS_MACSYS_INC_BSP_TYPEDEF_H_
+#define APPLICATIONS_MACSYS_INC_BSP_TYPEDEF_H_
+
+#include "bsp_sys.h"
+
+
+// 以下为移植时必须需要的结构体等的初始化---------------------------------------------------------------------------------------------------------
+typedef struct {
+    rt_uint8_t   Empty;                          // 空值
+    rt_uint16_t  kprintf_cnt;                    // 用于打印序列
+    rt_uint32_t  ulog_cnt;                       // ulog打印序列
+    //------------------------------------------------------------
+    rt_uint8_t  touch_down_flag;                 // 触摸按下标志
+    rt_uint8_t  touch_fingers;                   // 触摸报点数
+    rt_uint8_t  nrf_if_connected;                // 是否建立连接(0：未建立连接  1：已建立连接)
+    rt_uint8_t  nrf_sending;                     // 正在发送标志(0：发送完    1：已发送)
+    //------------------------------------------------------------
+    rt_uint8_t  menu_index;                      // 菜单页面索引(0：主页面  1：菜单页面  2：其他子页面)
+    rt_uint16_t set_work_time;                   // 需要设置的工作时间(在设置页面设置)
+    rt_uint16_t set_air_rate;                    // 需要设置的潮气达标率
+    rt_uint16_t set_press_rate;                  // 需要设置的按压达标率
+
+    rt_uint8_t  setting_mode;                    // 设置模式(0：不处于设置模式   1：处于设置模式)
+    rt_uint8_t  working_mode;                    // 工作模式(0：不处于工作模式   1：处于工作模式)
+
+
+}RecordStruct;
+extern RecordStruct Record;
+
+
+
+// 以下为移植时必须需要的结构体等的初始化---------------------------------------------------------------------------------------------------------
+typedef struct {
+    rt_uint8_t   air_rate_set;      // 潮气达标率设置标志(0：未处于设置状态   1：处于设置状态)
+    rt_uint8_t   work_time_set;     // 工作时间设置标志(0：未处于设置状态   1：处于设置状态)
+    rt_uint8_t   press_rate_set;    // 按压达标率设置标志(0：未处于设置状态   1：处于设置状态)
+
+}FlagStruct;
+extern FlagStruct Flag;
+
+
+void system_param_init(void);
+
+extern rt_event_t nrf24l01_events;
+
+
+
+
+#endif /* APPLICATIONS_MACSYS_INC_BSP_TYPEDEF_H_ */
