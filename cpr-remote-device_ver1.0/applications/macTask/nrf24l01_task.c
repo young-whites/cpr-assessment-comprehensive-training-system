@@ -133,21 +133,17 @@ void nRF24L01_Thread_entry(void* parameter)
     LOG_I("LOG:%d. Successfully initialized",Record.ulog_cnt++);
     rt_kprintf("running transmitter.\r\n");
 
-    rt_uint8_t lll = 0;
     for(;;)
     {
         /* 尚未连接则持续广播 */
         if(Record.nrf_if_connected == 0){
             /* ----------  1. PTX 发送  ---------- */
-            if(lll == 0){
-                _nrf24->nrf24_ops.nrf24_reset_ce();
-                nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
-                nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
-                _nrf24->nrf24_ops.nrf24_set_ce();
-                rt_thread_mdelay(1);
-                _nrf24->nrf24_ops.nrf24_reset_ce();
-                lll = 1;
-            }
+            _nrf24->nrf24_ops.nrf24_reset_ce();
+            nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
+            nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
+            _nrf24->nrf24_ops.nrf24_set_ce();
+            rt_thread_mdelay(1);
+            _nrf24->nrf24_ops.nrf24_reset_ce();
 
             /* ----------  2. 立即进入 PRX 接收窗口  ---------- */
             nRF24L01_Set_Role_Mode(_nrf24, ROLE_PRX);          /* 切 PRX */
@@ -202,16 +198,12 @@ void nRF24L01_Thread_entry(void* parameter)
             {
                 // 超时重新请求
                 LOG_W("RX window timeout.");
-                lll = 0;
-                if(lll == 0){
-                    _nrf24->nrf24_ops.nrf24_reset_ce();
-                    nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
-                    nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
-                    _nrf24->nrf24_ops.nrf24_set_ce();
-                    rt_thread_mdelay(1);
-                    _nrf24->nrf24_ops.nrf24_reset_ce();
-                    lll = 1;
-                }
+                _nrf24->nrf24_ops.nrf24_reset_ce();
+                nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
+                nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_ASK_Connect_Control_Panel,NRF24_PIPE_2);
+                _nrf24->nrf24_ops.nrf24_set_ce();
+                rt_thread_mdelay(1);
+                _nrf24->nrf24_ops.nrf24_reset_ce();
 
             }
             /* ----------  5. 窗口结束，切回 PTX  ---------- */
@@ -250,7 +242,7 @@ int nRF24L01_Thread_Init(void)
 
     return RT_EOK;
 }
-INIT_APP_EXPORT(nRF24L01_Thread_Init);
+//INIT_APP_EXPORT(nRF24L01_Thread_Init);
 
 
 

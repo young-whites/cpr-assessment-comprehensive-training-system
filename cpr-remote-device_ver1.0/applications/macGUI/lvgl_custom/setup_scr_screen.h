@@ -115,10 +115,18 @@ typedef void (*ui_setup_scr_t)(lvgl_ui_t * ui);
 /* lvgl_gui.c文件 */
 void ui_load_scr_animation(lvgl_ui_t *ui, lv_obj_t ** new_scr, bool new_scr_del, bool * old_scr_del, ui_setup_scr_t setup_scr,
                            lv_scr_load_anim_t anim_type, uint32_t time, uint32_t delay, bool is_clean, bool auto_del);
-
 void init_scr_del_flag(lvgl_ui_t *ui);
 void lv_user_gui_init(void);
 
+
+/* setup_scr_screen_data.c文件 */
+/* 圆环颜色定义 */
+#define CIRCLE_COLOR_WHITE   0
+#define CIRCLE_COLOR_RED     1
+#define CIRCLE_COLOR_YELLOW  2
+#define CIRCLE_COLOR_GREEN   3
+void update_circle_color(lv_obj_t *circle, int color_type);
+void update_circle_by_index(lvgl_ui_t *ui, int index, int color_type);
 
 
 /* setup_scr_screen.c文件 */
@@ -136,6 +144,9 @@ void events_init_screen_operation(lvgl_ui_t *ui);
 
 /* gui_custom.c文件 */
 void lock_screen_input(void);
+
+
+
 
 LV_IMG_DECLARE(_competation_alpha_50x50);
 LV_IMG_DECLARE(_train_alpha_50x50);
