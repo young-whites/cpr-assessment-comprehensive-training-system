@@ -193,7 +193,7 @@ void MyCustomKeyHandler(key_event_t event) {
 
 
     }
-    else if (event.state == KEY_RELEASE) {
+    else if (event.state == KEY_RELEASE && Record.nrf_if_connected) {
         rt_kprintf("Custom Handler: Key '%c' released at Row %d, Col %d\n", key_value, event.row, event.col);
     }
 }

@@ -16,6 +16,7 @@ void update_left_bar(lvgl_ui_t *ui, int percentage);
 void update_right_bar(lvgl_ui_t *ui, int percentage);
 lv_color_t get_gradient_color(int percentage);
 
+static void test_anim_timer_cb(lv_timer_t *t);
 
 void setup_scr_screen_data(lvgl_ui_t *ui)
 {
@@ -138,9 +139,9 @@ void setup_scr_screen_data(lvgl_ui_t *ui)
             lv_obj_set_style_border_width(cell, 0, 0);
             lv_obj_set_style_shadow_width(cell, 0, 0);
 
-            // 默认未点亮：浅灰半透明
-            lv_obj_set_style_bg_color(cell, lv_color_hex(0xDDDDDD), 0);
-            lv_obj_set_style_bg_opa(cell, 100, 0);
+            // 默认未点亮：深灰不透明
+            lv_obj_set_style_bg_color(cell, lv_color_hex(0x444444), 0);
+            lv_obj_set_style_bg_opa(cell, 255, 0);
 
             // 存格子序号，方便后面快速取（可选）
             lv_obj_set_user_data(cell, (void*)(intptr_t)i);
@@ -150,6 +151,10 @@ void setup_scr_screen_data(lvgl_ui_t *ui)
     // ==================== 初始化为0% ====================
     update_left_bar(ui, 100);
     update_right_bar(ui, 50);
+
+    // ==================== 启动动画测试 Demo (50ms刷新) ====================
+    lv_timer_create(test_anim_timer_cb, 50, ui);
+
     // ==================== 更新布局 ====================
     lv_obj_update_layout(ui->screen_data);
 }
@@ -164,33 +169,33 @@ lv_color_t get_gradient_color(int percentage)
     if (percentage > 100) percentage = 100;
 
     // 定义关键颜色点 (R, G, B)
-    // 浅绿 (0%) - 假设 R:150, G:255, B:150 (柔和绿)
-    // 深绿 (50%) - 假设 R:0, G:100, B:0 (深苔绿)
-    // 黄色 (75%) - 假设 R:255, G:255, B:0 (纯黄)
-    // 红色 (100%) - 假设 R:255, G:0, B:0 (纯红)
+    // 浅绿 (0%) - R:0, G:120, B:0 (深草绿)
+    // 深绿 (50%) - R:0, G:50, B:0 (墨绿)
+    // 黄色 (75%) - R:160, G:120, B:0 (暗金/褐黄)
+    // 红色 (100%) - R:140, G:0, B:0 (深红/酒红)
 
     if (percentage <= 50) {
-        // 0% (浅绿) -> 50% (深绿)
+        // 0% (深草绿) -> 50% (墨绿)
         float factor = (float)percentage / 50.0f; // 0.0 -> 1.0
 
-        int r = (int)(150 - (150 - 0) * factor);
-        int g = (int)(255 - (255 - 100) * factor);
-        int b = (int)(150 - (150 - 0) * factor);
+        int r = (int)(0 - (0 - 0) * factor);
+        int g = (int)(120 - (120 - 50) * factor);
+        int b = (int)(0 - (0 - 0) * factor);
         return lv_color_make(r, g, b);
     } else if (percentage <= 75) {
-        // 50% (深绿) -> 75% (纯黄)
+        // 50% (墨绿) -> 75% (暗金)
         float factor = ((float)percentage - 50.0f) / 25.0f; // 0.0 -> 1.0
 
-        int r = (int)(0 + (255 - 0) * factor);
-        int g = (int)(100 + (255 - 100) * factor);
+        int r = (int)(0 + (160 - 0) * factor);
+        int g = (int)(50 + (120 - 50) * factor);
         int b = (int)(0 + (0 - 0) * factor); // 保持 B 不变
         return lv_color_make(r, g, b);
     } else { // 75% 到 100%
-        // 75% (纯黄) -> 100% (纯红)
+        // 75% (暗金) -> 100% (深红)
         float factor = ((float)percentage - 75.0f) / 25.0f; // 0.0 -> 1.0
 
-        int r = (int)(255 + (255 - 255) * factor); // 保持 R 不变
-        int g = (int)(255 - (255 - 0) * factor);
+        int r = (int)(160 + (140 - 160) * factor);
+        int g = (int)(120 - (120 - 0) * factor);
         int b = (int)(0 + (0 - 0) * factor); // 保持 B 不变
         return lv_color_make(r, g, b);
     }
@@ -225,7 +230,7 @@ static void cell_light_up(lv_obj_t *cell)
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, cell);
-    lv_anim_set_values(&a, 80, 255);
+    lv_anim_set_values(&a, 255, 255);
     lv_anim_set_time(&a, 200);
     lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_style_bg_opa);
     lv_anim_set_path_cb(&a, lv_anim_path_ease_out);
@@ -247,7 +252,7 @@ static void cell_light_down(lv_obj_t *cell)
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, cell);
-    lv_anim_set_values(&a, 255, 80);
+    lv_anim_set_values(&a, 255, 255);
     lv_anim_set_time(&a, 180);
     lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_style_bg_opa);
     lv_anim_set_path_cb(&a, lv_anim_path_ease_in);
@@ -278,7 +283,7 @@ static void left_timer_cb(lv_timer_t *t)
         lv_obj_set_style_bg_color(cell, get_gradient_color(pct), 0);
         cell_light_up(cell);
     } else {
-        lv_obj_set_style_bg_color(cell, lv_color_hex(0xDDDDDD), 0);
+        lv_obj_set_style_bg_color(cell, lv_color_hex(0x444444), 0);
         cell_light_down(cell);
     }
 }
@@ -306,7 +311,7 @@ static void right_timer_cb(lv_timer_t *t)
         lv_obj_set_style_bg_color(cell, get_gradient_color(pct), 0);
         cell_light_up(cell);
     } else {
-        lv_obj_set_style_bg_color(cell, lv_color_hex(0xDDDDDD), 0);
+        lv_obj_set_style_bg_color(cell, lv_color_hex(0x444444), 0);
         cell_light_down(cell);
     }
 }
@@ -320,18 +325,19 @@ void update_left_bar(lvgl_ui_t *ui, int percentage)
     if (percentage > 100) percentage = 100;
     int target = percentage * GRID_COUNT / 100;
 
-    if (anim_left.anim_running) {
-        lv_timer_del(anim_left.timer);
-    }
-    if (target == anim_left.current_filled) return;
+    anim_left.target_filled = target;
 
-    anim_left.target_filled   = target;
-    anim_left.anim_running    = true;
-
-    int diff = abs(target - anim_left.current_filled);
+    int diff = abs(anim_left.target_filled - anim_left.current_filled);
     int period = (diff <= 5) ? 80 : (diff <= 15) ? 50 : 25;
 
-    anim_left.timer = lv_timer_create(left_timer_cb, period, &anim_left);
+    if (anim_left.anim_running) {
+        lv_timer_set_period(anim_left.timer, period);
+    } else {
+        if (anim_left.current_filled != anim_left.target_filled) {
+            anim_left.anim_running = true;
+            anim_left.timer = lv_timer_create(left_timer_cb, period, &anim_left);
+        }
+    }
 }
 
 /* 更新右边条：按压频率（0~100）*/
@@ -341,16 +347,88 @@ void update_right_bar(lvgl_ui_t *ui, int percentage)
     if (percentage > 100) percentage = 100;
     int target = percentage * GRID_COUNT / 100;
 
-    if (anim_right.anim_running) {
-        lv_timer_del(anim_right.timer);
-    }
-    if (target == anim_right.current_filled) return;
+    anim_right.target_filled = target;
 
-    anim_right.target_filled  = target;
-    anim_right.anim_running   = true;
-
-    int diff = abs(target - anim_right.current_filled);
+    int diff = abs(anim_right.target_filled - anim_right.current_filled);
     int period = (diff <= 5) ? 80 : (diff <= 15) ? 50 : 25;
 
-    anim_right.timer = lv_timer_create(right_timer_cb, period, &anim_right);
+    if (anim_right.anim_running) {
+        lv_timer_set_period(anim_right.timer, period);
+    } else {
+        if (anim_right.current_filled != anim_right.target_filled) {
+            anim_right.anim_running = true;
+            anim_right.timer = lv_timer_create(right_timer_cb, period, &anim_right);
+        }
+    }
+}
+
+/*========================== 10. 圆环颜色更新接口 ==========================*/
+void update_circle_color(lv_obj_t *circle, int color_type)
+{
+    if (!circle) return;
+
+    lv_color_t color;
+    switch(color_type) {
+        case CIRCLE_COLOR_RED:    color = lv_color_hex(0xFF0000); break; // 纯红
+        case CIRCLE_COLOR_YELLOW: color = lv_color_hex(0xFFFF00); break; // 纯黄
+        case CIRCLE_COLOR_GREEN:  color = lv_color_hex(0x00FF00); break; // 纯绿
+        case CIRCLE_COLOR_WHITE:
+        default:                  color = lv_color_hex(0xFFFFFF); break; // 纯白
+    }
+    lv_obj_set_style_bg_color(circle, color, LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    // 如果是白色，确保不透明度是255（背景也是白的）
+    // 如果是彩色，也确保不透明度255
+    lv_obj_set_style_bg_opa(circle, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+}
+
+void update_circle_by_index(lvgl_ui_t *ui, int index, int color_type)
+{
+    lv_obj_t *circle = NULL;
+    switch(index) {
+        case 1: circle = ui->screen_data_circle_1; break;
+        case 2: circle = ui->screen_data_circle_2; break;
+        case 3: circle = ui->screen_data_circle_3; break;
+        case 4: circle = ui->screen_data_circle_4; break;
+        case 5: circle = ui->screen_data_circle_5; break;
+        case 6: circle = ui->screen_data_circle_6; break;
+        case 7: circle = ui->screen_data_circle_7; break;
+        default: return; // 索引越界
+    }
+    update_circle_color(circle, color_type);
+}
+
+/*========================== 9. 动画测试 Demo ==========================*/
+static void test_anim_timer_cb(lv_timer_t *t)
+{
+    lvgl_ui_t *ui = (lvgl_ui_t *)t->user_data;
+    
+    // 静态变量保存状态
+    static int16_t val_left = 0;
+    static int16_t step_left = 5;
+    
+    static int16_t val_right = 100;
+    static int16_t step_right = -8;
+
+    // 左边：0 -> 100 -> 0 往复运动
+    val_left += step_left;
+    if (val_left >= 100) {
+        val_left = 100;
+        step_left = -5;
+    } else if (val_left <= 0) {
+        val_left = 0;
+        step_left = 5;
+    }
+    update_left_bar(ui, val_left);
+
+    // 右边：100 -> 0 -> 100 往复运动，步长不同
+    val_right += step_right;
+    if (val_right >= 100) {
+        val_right = 100;
+        step_right = -8;
+    } else if (val_right <= 0) {
+        val_right = 0;
+        step_right = 8;
+    }
+    update_right_bar(ui, val_right);
 }
