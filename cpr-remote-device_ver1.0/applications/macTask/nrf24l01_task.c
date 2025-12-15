@@ -184,7 +184,7 @@ void nRF24L01_Thread_entry(void* parameter)
                 if(_nrf24->nrf24_flags.status & NRF24BITMASK_TX_DS)
                 {
                     rt_thread_mdelay(100);
-                    LOG_I("TX done.");
+//                    LOG_I("TX done.");
                 }
 
                 /* 4.3 重发超限 */
@@ -242,7 +242,7 @@ int nRF24L01_Thread_Init(void)
 
     return RT_EOK;
 }
-//INIT_APP_EXPORT(nRF24L01_Thread_Init);
+INIT_APP_EXPORT(nRF24L01_Thread_Init);
 
 
 

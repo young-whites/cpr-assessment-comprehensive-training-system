@@ -37,7 +37,12 @@ static void Timing_50ms(void)
 
 static void Timing_500ms(void)
 {
-
+    // 连接失败，就不停扫描是否连接成功
+    if(Record.nrf_connect_failed == 1 && Record.nrf_if_connected == 1){
+        Record.nrf_connect_failed = 0;
+        ui_load_scr_animation(&guider_lvgl, &guider_lvgl.screen_menu, guider_lvgl.screen_menu_del, &guider_lvgl.screen_main_del, setup_scr_screen_menu, LV_SCR_LOAD_ANIM_NONE, 0, 100, true, true);
+        Record.menu_index = 1;
+    }
 }
 
 

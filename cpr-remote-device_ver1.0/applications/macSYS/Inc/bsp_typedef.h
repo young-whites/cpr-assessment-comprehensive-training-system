@@ -22,7 +22,8 @@ typedef struct {
     rt_uint8_t  touch_down_flag;                 // 触摸按下标志
     rt_uint8_t  touch_fingers;                   // 触摸报点数
     rt_uint8_t  nrf_if_connected;                // 是否建立连接(0：未建立连接  1：已建立连接)
-    rt_uint8_t  nrf_sending;                     // 正在发送标志(0：发送完    1：已发送)
+    rt_uint8_t  nrf_sending;                     // 正在发送标志(0：未发送          1：已发送)
+    rt_uint8_t  nrf_connect_failed;              // 连接失败标志(0: 未进行连接  1：连接失败)
     //------------------------------------------------------------
     rt_uint8_t  menu_index;                      // 菜单页面索引(0：主页面  1：菜单页面  2：其他子页面)
     rt_uint16_t set_work_time;                   // 需要设置的工作时间(在设置页面设置)
@@ -43,6 +44,7 @@ typedef struct {
     rt_uint8_t   air_rate_set;      // 潮气达标率设置标志(0：未处于设置状态   1：处于设置状态)
     rt_uint8_t   work_time_set;     // 工作时间设置标志(0：未处于设置状态   1：处于设置状态)
     rt_uint8_t   press_rate_set;    // 按压达标率设置标志(0：未处于设置状态   1：处于设置状态)
+
 
 }FlagStruct;
 extern FlagStruct Flag;
