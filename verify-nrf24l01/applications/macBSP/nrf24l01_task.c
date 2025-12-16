@@ -27,7 +27,7 @@ void nRF24L01_Thread_entry(void* parameter)
 {
 
     /* 0. 给nrf24开创一个实际空间 */
-    nrf24_t _nrf24 = malloc(sizeof(nrf24_t));
+    _nrf24 = malloc(sizeof(nrf24_t));
     if (_nrf24 == NULL) {
         LOG_E("LOG:%d. nrf24 malloc error.",Record.ulog_cnt++);
     }
@@ -132,11 +132,68 @@ void nRF24L01_Thread_entry(void* parameter)
     rt_kprintf("----------------------------------\r\n");
     rt_kprintf("[nrf24/demo] running transmitter.\r\n");
 
-    nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_Connect_Control_Panel, NRF24_DEFAULT_PIPE);
+//    nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_Connect_Control_Panel, NRF24_DEFAULT_PIPE);
 
     for(;;)
     {
-        nRF24L01_Run(_nrf24);
+
+        // 1. 如果使用IRQ中断，则获取信号量等待释放
+        if(_nrf24->nrf24_flags.using_irq == RT_TRUE){
+            rt_sem_take(nrf24_irq_sem, RT_WAITING_FOREVER);
+        }
+
+        // 2. 读取status状态标志，并清除中断触发标志位
+        _nrf24->nrf24_flags.status = nRF24L01_Read_Status_Register(_nrf24);
+        nRF24L01_Clear_Status_Register(_nrf24, NRF24BITMASK_RX_DR | NRF24BITMASK_TX_DS | NRF24BITMASK_MAX_RT);
+
+        // 3. 分析哪条信道接收的数据
+        uint8_t pipe = (_nrf24->nrf24_flags.status & NRF24BITMASK_RX_P_NO) >> 1;
+
+        // 4. 角色 = 发送端（PTX）
+        if(_nrf24->nrf24_cfg.config.prim_rx == ROLE_PTX)
+        {
+            // 4.1 读取status寄存器的 NRF24BITMASK_MAX_RT位，如果为1，说明达到最大重发次数，发送失败
+            if(_nrf24->nrf24_flags.status & NRF24BITMASK_MAX_RT){
+                nRF24L01_Flush_TX_FIFO(_nrf24);
+                nRF24L01_Clear_Status_Register(_nrf24, NRF24BITMASK_MAX_RT);
+                if(_nrf24->nrf24_cb.nrf24l01_tx_done){
+                    _nrf24->nrf24_cb.nrf24l01_tx_done(_nrf24, NRF24_PIPE_NONE);
+                }
+            }
+
+            /* 4.2 收到 ACK 带载荷（PTX 也能收） */
+            if(_nrf24->nrf24_flags.status & NRF24BITMASK_RX_DR){
+                uint8_t rec_data[32];
+                uint8_t len = nRF24L01_Read_Top_RXFIFO_Width(_nrf24);
+                nRF24L01_Read_Rx_Payload(_nrf24, rec_data, len);
+                if(_nrf24->nrf24_cb.nrf24l01_rx_ind){
+                    _nrf24->nrf24_cb.nrf24l01_rx_ind(_nrf24, rec_data, len, pipe);
+                }
+            }
+
+            /* 4.3 发送完成 */
+            if(_nrf24->nrf24_flags.status & NRF24BITMASK_TX_DS){
+                if(_nrf24->nrf24_cb.nrf24l01_tx_done){
+                    _nrf24->nrf24_cb.nrf24l01_tx_done(_nrf24, pipe);
+                }
+            }
+        }
+
+        // 5. 角色 = 接收端（PRX）
+        if(_nrf24->nrf24_cfg.config.prim_rx == ROLE_PRX)
+        {
+            if(pipe < 5){
+                uint8_t data_buf[32];
+                uint8_t length = nRF24L01_Read_Top_RXFIFO_Width(_nrf24);
+                nRF24L01_Read_Rx_Payload(_nrf24, data_buf, length);
+
+
+                if(_nrf24->nrf24_cb.nrf24l01_rx_ind){
+                    _nrf24->nrf24_cb.nrf24l01_rx_ind(_nrf24, data_buf, length, pipe);
+                }
+            }
+        }
+
         rt_thread_mdelay(500);
     }
 }
@@ -164,9 +221,6 @@ int nRF24L01_Thread_Init(void)
     return RT_EOK;
 }
 INIT_APP_EXPORT(nRF24L01_Thread_Init);
-
-
-
 
 
 
