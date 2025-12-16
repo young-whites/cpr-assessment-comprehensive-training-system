@@ -132,7 +132,6 @@ void nRF24L01_Thread_entry(void* parameter)
     rt_kprintf("----------------------------------\r\n");
     rt_kprintf("[nrf24/demo] running transmitter.\r\n");
 
-//    nrf24l01_order_to_pipe(_nrf24, Order_nRF24L01_Connect_Control_Panel, NRF24_DEFAULT_PIPE);
 
     for(;;)
     {
@@ -187,6 +186,12 @@ void nRF24L01_Thread_entry(void* parameter)
                 uint8_t length = nRF24L01_Read_Top_RXFIFO_Width(_nrf24);
                 nRF24L01_Read_Rx_Payload(_nrf24, data_buf, length);
 
+                if(nrf24l01_portocol_get_command(data_buf,length)){
+                    rt_kprintf("Analysis completed!\n");
+                }
+                else{
+                    rt_kprintf("Analysis failed!\n");
+                }
 
                 if(_nrf24->nrf24_cb.nrf24l01_rx_ind){
                     _nrf24->nrf24_cb.nrf24l01_rx_ind(_nrf24, data_buf, length, pipe);
@@ -197,6 +202,37 @@ void nRF24L01_Thread_entry(void* parameter)
         rt_thread_mdelay(500);
     }
 }
+
+
+
+
+
+void nRF24L01_Decode_Thread_entry(void* parameter)
+{
+
+    for(;;)
+    {
+        /* 主循环 PTX 段末尾（发完询问包之后） */
+        if (Record.nRF24_tx_pending) {
+            Record.nRF24_tx_pending = 0;              /* 先清标志，防止重入 */
+
+            _nrf24->nrf24_ops.nrf24_reset_ce();
+            nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
+
+            nrf24l01_order_to_pipe(Order_nRF24L01_ACK_Connect_Control_Panel, NRF24_PIPE_2);
+
+            _nrf24->nrf24_ops.nrf24_set_ce();
+            rt_thread_mdelay(1);             /* 1 ms 足够发完 */
+            _nrf24->nrf24_ops.nrf24_reset_ce();
+            nRF24L01_Set_Role_Mode(_nrf24, ROLE_PRX);
+            _nrf24->nrf24_ops.nrf24_set_ce();
+            /* 后面继续正常 PRX 窗口即可 */
+        }
+        rt_thread_mdelay(200);
+    }
+}
+
+
 
 
 
@@ -216,6 +252,19 @@ int nRF24L01_Thread_Init(void)
     }
     else {
         LOG_E("[nRF24L01]nRF24L01_Thread_entry is Failed \r\n");
+    }
+
+
+
+    nRF24L01_Decode_Task_Handle = rt_thread_create("nRF24L01_Decode_Thread_entry", nRF24L01_Decode_Thread_entry, RT_NULL, 4096, 9, 50);
+    /* 检查是否创建成功,成功就启动线程 */
+    if(nRF24L01_Decode_Task_Handle != RT_NULL)
+    {
+        LOG_I("[nRF24L01]nRF24L01_Decode_Thread_entry is Succeed!! \r\n");
+        rt_thread_startup(nRF24L01_Decode_Task_Handle);
+    }
+    else {
+        LOG_E("[nRF24L01]nRF24L01_Decode_Thread_entry is Failed \r\n");
     }
 
     return RT_EOK;
@@ -242,10 +291,6 @@ static void nrf24l01_tx_done(nrf24_t nrf24, rt_uint8_t pipe)
         else{
             rt_kprintf("tx_done ok");
         }
-    }
-    else
-    {
-        rt_kprintf("tx_done ok");
     }
 }
 

@@ -19,6 +19,8 @@ typedef struct {
     rt_uint16_t  kprintf_cnt;                    // 用于打印序列
     rt_uint32_t  ulog_cnt;                       // ulog打印序列
     //------------------------------------------------------------
+    rt_uint8_t   nrf_connected;
+    rt_uint8_t   nrf_sending;
 
 }RecordStruct;
 extern RecordStruct Record;
