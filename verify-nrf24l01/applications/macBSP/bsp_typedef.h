@@ -20,7 +20,7 @@ typedef struct {
     rt_uint32_t  ulog_cnt;                       // ulog打印序列
     //------------------------------------------------------------
     rt_uint8_t   nrf_connected;
-    rt_uint8_t   nrf_sending;
+    rt_uint8_t   nRF24_tx_pending;
 
 }RecordStruct;
 extern RecordStruct Record;

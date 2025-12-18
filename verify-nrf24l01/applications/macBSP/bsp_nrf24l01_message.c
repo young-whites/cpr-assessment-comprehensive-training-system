@@ -233,7 +233,7 @@ void nrf24l01_protocol_operation(uint8_t* CmdBuf)
                 case FRAME_NRF24_CONNECT_CTRL_PANEL_CMD:
                 {
                     Record.nrf_connected = 1;
-                    Record.nrf_sending = 1;
+                    Record.nRF24_tx_pending = 1;
 
                 }break;
                 //----------------------------------------------------------------------------------------------------
@@ -266,7 +266,7 @@ void nrf24l01_order_to_pipe(uint8_t order, nrf24_pipe_et pipe_num)
     switch(order)
     {
         //  回复请求连接指令： 55 AA 05 00 04 31 01 91 7D
-        case Order_nRF24L01_Connect_Control_Panel:
+        case Order_nRF24L01_ACK_Connect_Control_Panel:
         {
             rt_memset(emptyBuf, 0, sizeof(emptyBuf));
             emptyBuf[0] = FRAME_NRF24_CONNECT_CTRL_PANEL_CMD;

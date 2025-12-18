@@ -33,7 +33,7 @@ int nRF24L01_Param_Config(nrf24_param_t param)
     /* EN_AA */
     param->en_aa.p0 = 1;
     param->en_aa.p1 = 1;
-    param->en_aa.p2 = 0;
+    param->en_aa.p2 = 1;
     param->en_aa.p3 = 0;
     param->en_aa.p4 = 0;
     param->en_aa.p5 = 0;
@@ -41,7 +41,7 @@ int nRF24L01_Param_Config(nrf24_param_t param)
     /* EN_RXADDR */
     param->en_rxaddr.p0 = RT_TRUE;
     param->en_rxaddr.p1 = RT_TRUE;
-    param->en_rxaddr.p2 = RT_FALSE;
+    param->en_rxaddr.p2 = RT_TRUE;
     param->en_rxaddr.p3 = RT_FALSE;
     param->en_rxaddr.p4 = RT_FALSE;
     param->en_rxaddr.p5 = RT_FALSE;
@@ -77,15 +77,19 @@ int nRF24L01_Param_Config(nrf24_param_t param)
     param->feature.en_dpl     = 1;
 
 
+    rt_uint8_t tx_addr[5] = { 0x55, 0x0A, 0x01, 0x89, 0x03 };
+    rt_uint8_t rx_addr_pipe0[5] = { 0x55, 0x0A, 0x01, 0x89, 0x99 };
+    rt_uint8_t rx_addr_pipe1[5] = { 0x55, 0x0A, 0x01, 0x89, 0x01 };
     for(int16_t i = 0; i < 5; i++){
-        param->txaddr[i] = i;
-        param->rx_addr_p0[i] = i;
-        param->rx_addr_p1[i] = i + 1;
+        param->txaddr[i] = tx_addr[i];
+        param->rx_addr_p0[i] = rx_addr_pipe0[i];
+        param->rx_addr_p1[i] = rx_addr_pipe1[i];
     }
     param->rx_addr_p2 = 2;
-    param->rx_addr_p3 = 3;
-    param->rx_addr_p4 = 4;
-    param->rx_addr_p5 = 5;
+
+    param->rx_addr_p3 = 9;
+    param->rx_addr_p4 = 9;
+    param->rx_addr_p5 = 9;
 
     return RT_EOK;
 

@@ -105,7 +105,6 @@ void nRF24L01_Thread_entry(void* parameter)
         LOG_E("LOG:%d. nRF24L01 update_onchip_config false.",Record.ulog_cnt++);
     }
     else{
-        nRF24L01_Set_Role_Mode(_nrf24, ROLE_PTX);
         LOG_I("LOG:%d. nRF24L01 update_onchip_config successful.",Record.ulog_cnt++);
     }
 
@@ -241,6 +240,7 @@ void nRF24L01_Decode_Thread_entry(void* parameter)
   * @retval int
   */
 rt_thread_t nRF24L01_Task_Handle = RT_NULL;
+rt_thread_t nRF24L01_Decode_Task_Handle = RT_NULL;
 int nRF24L01_Thread_Init(void)
 {
     nRF24L01_Task_Handle = rt_thread_create("nRF24L01_Thread_entry", nRF24L01_Thread_entry, RT_NULL, 4096, 9, 50);
