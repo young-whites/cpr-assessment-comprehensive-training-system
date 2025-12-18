@@ -67,7 +67,8 @@ typedef enum
   */
 typedef enum
 {
-    Order_nRF24L01_Connect_Control_Panel = 0,
+    Order_nRF24L01_ACK_Connect_Control_Panel = 0,
+
 
 
 }nRF24L01_Order_StructType;
